@@ -1,0 +1,51 @@
+{
+  "name": "@kasflow/passkey-wallet",
+  "version": "0.1.0",
+  "description": "Passkey-powered wallet SDK for Kaspa blockchain",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest"
+  },
+  "keywords": [
+    "kaspa",
+    "passkey",
+    "wallet",
+    "webauthn",
+    "cryptocurrency",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@kluster/kaspa-address": "^0.1.5",
+    "@simplewebauthn/browser": "^13.2.2",
+    "idb-keyval": "^6.2.2",
+    "kaspa-wasm32-sdk": "^0.15.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/kasflow"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

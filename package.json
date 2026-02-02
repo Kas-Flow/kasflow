@@ -1,0 +1,31 @@
+{
+  "name": "kasflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "KasFlow - Instant Kaspa Payments with Passkey Wallet SDK",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspaces --if-present",
+    "build:sdk": "npm run build --workspace=packages/passkey-wallet",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules"
+  },
+  "keywords": [
+    "kaspa",
+    "passkey",
+    "wallet",
+    "payment",
+    "cryptocurrency",
+    "webauthn"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
