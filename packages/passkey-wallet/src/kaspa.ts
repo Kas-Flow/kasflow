@@ -1,6 +1,6 @@
 /**
  * Kaspa utilities for @kasflow/passkey-wallet
- * Uses kaspa-wasm32-sdk for all Kaspa operations
+ * Uses @onekeyfe/kaspa-wasm for all Kaspa operations
  */
 
 import {
@@ -14,11 +14,12 @@ import {
   sompiToKaspaString as wasmSompiToKaspaString,
   sompiToKaspaStringWithSuffix as wasmSompiToKaspaStringWithSuffix,
   createAddress,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
 
 import { KaspaAddress, KaspaAddressVersion, KaspaPrefix } from '@kluster/kaspa-address';
 import { NETWORK_ID, SOMPI_PER_KAS, ERROR_MESSAGES, type NetworkId } from './constants';
 import { generateRandomBytes, uint8ArrayToHex, hexToUint8Array } from './crypto';
+import { ensureWasmInitialized } from './wasm-init';
 
 // =============================================================================
 // Re-export WASM types for convenience
@@ -67,14 +68,16 @@ export const generatePrivateKey = (): string => {
 /**
  * Create a PrivateKey instance from hex string
  */
-export const createPrivateKey = (privateKeyHex: string): PrivateKey => {
+export const createPrivateKey = async (privateKeyHex: string): Promise<PrivateKey> => {
+  await ensureWasmInitialized();
   return new PrivateKey(privateKeyHex);
 };
 
 /**
  * Get public key hex from private key hex
  */
-export const getPublicKeyHex = (privateKeyHex: string): string => {
+export const getPublicKeyHex = async (privateKeyHex: string): Promise<string> => {
+  await ensureWasmInitialized();
   const privateKey = new PrivateKey(privateKeyHex);
   return privateKey.toPublicKey().toString();
 };
@@ -82,7 +85,8 @@ export const getPublicKeyHex = (privateKeyHex: string): string => {
 /**
  * Get Kaspa address from private key
  */
-export const getAddressFromPrivateKey = (privateKeyHex: string, network: NetworkId): string => {
+export const getAddressFromPrivateKey = async (privateKeyHex: string, network: NetworkId): Promise<string> => {
+  await ensureWasmInitialized();
   const privateKey = new PrivateKey(privateKeyHex);
   const networkType = getNetworkType(network);
   return privateKey.toAddress(networkType).toString();
@@ -91,7 +95,8 @@ export const getAddressFromPrivateKey = (privateKeyHex: string, network: Network
 /**
  * Validate a private key hex string
  */
-export const isValidPrivateKey = (privateKeyHex: string): boolean => {
+export const isValidPrivateKey = async (privateKeyHex: string): Promise<boolean> => {
+  await ensureWasmInitialized();
   try {
     new PrivateKey(privateKeyHex);
     return true;
@@ -107,7 +112,8 @@ export const isValidPrivateKey = (privateKeyHex: string): boolean => {
 /**
  * Create a Kaspa address from a public key
  */
-export const publicKeyToAddress = (publicKeyHex: string, network: NetworkId): string => {
+export const publicKeyToAddress = async (publicKeyHex: string, network: NetworkId): Promise<string> => {
+  await ensureWasmInitialized();
   const networkType = getNetworkType(network);
   const address = createAddress(publicKeyHex, networkType);
   return address.toString();
@@ -168,7 +174,8 @@ export const getNetworkFromAddress = (address: string): NetworkId => {
  * @param privateKeyHex - Private key as hex string
  * @returns Signature as hex string
  */
-export const signMessageWithKey = (message: string, privateKeyHex: string): string => {
+export const signMessageWithKey = async (message: string, privateKeyHex: string): Promise<string> => {
+  await ensureWasmInitialized();
   const privateKey = new PrivateKey(privateKeyHex);
   return wasmSignMessage({
     message,
@@ -188,11 +195,12 @@ export const signMessageWithKey = (message: string, privateKeyHex: string): stri
  * @param privateKeys - Array of private key hex strings or PrivateKey instances
  * @param verifySig - Whether to verify signatures after signing
  */
-export const signTransaction = (
+export const signTransaction = async (
   transaction: any,
   privateKeys: (string | PrivateKey)[],
   verifySig: boolean = true
-): any => {
+): Promise<any> => {
+  await ensureWasmInitialized();
   const keys = privateKeys.map((k) => (typeof k === 'string' ? new PrivateKey(k) : k));
   return wasmSignTransaction(transaction, keys, verifySig);
 };

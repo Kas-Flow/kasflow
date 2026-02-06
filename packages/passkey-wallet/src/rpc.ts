@@ -1,18 +1,18 @@
 /**
  * RPC client for Kaspa network operations
- * Wraps kaspa-wasm32-sdk RpcClient with a simpler API
+ * Wraps @onekeyfe/kaspa-wasm RpcClient with a simpler API
  */
 
 import {
   RpcClient,
   Resolver,
   UtxoEntryReference,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
 
 import type {
   ISubmitTransactionRequest,
   ISubmitTransactionResponse,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
 
 import {
   ERROR_MESSAGES,
@@ -21,6 +21,7 @@ import {
 } from './constants';
 import { getNetworkType } from './kaspa';
 import type { BalanceInfo } from './types';
+import { ensureWasmInitialized } from './wasm-init';
 
 // =============================================================================
 // Types
@@ -101,6 +102,8 @@ export class KaspaRpc {
    * @throws Error if connection fails
    */
   async connect(options: RpcConnectionOptions): Promise<void> {
+    await ensureWasmInitialized();
+
     const { network, url, timeout = RPC_TIMEOUT_MS } = options;
     const networkType = getNetworkType(network);
 

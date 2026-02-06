@@ -58,7 +58,7 @@ export const NETWORK_ID = {
 export type NetworkId = (typeof NETWORK_ID)[keyof typeof NETWORK_ID];
 
 /** Default network for development */
-export const DEFAULT_NETWORK: NetworkId = NETWORK_ID.TESTNET_11;
+export const DEFAULT_NETWORK: NetworkId = NETWORK_ID.TESTNET_10;
 
 // Note: Address prefixes are provided by @kluster/kaspa-address (KaspaPrefix enum)
 // Do not redefine here - use KaspaPrefix.MAINNET, KaspaPrefix.TESTNET instead

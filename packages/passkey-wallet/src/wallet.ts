@@ -132,10 +132,13 @@ export class PasskeyWallet {
    * @returns Result containing the wallet instance or error
    */
   static async create(options: CreateWalletOptions = {}): Promise<Result<PasskeyWallet>> {
+    console.log('[PasskeyWallet] create() called with options:', options);
     const { name = 'KasFlow Wallet', network = DEFAULT_NETWORK } = options;
 
     // Check if wallet already exists
+    console.log('[PasskeyWallet] Checking if wallet already exists...');
     if (await hasStoredWallet()) {
+      console.warn('[PasskeyWallet] Wallet already exists in storage');
       return {
         success: false,
         error: ERROR_MESSAGES.WALLET_ALREADY_EXISTS,
@@ -143,16 +146,27 @@ export class PasskeyWallet {
     }
 
     // Check WebAuthn support
+    console.log('[PasskeyWallet] Checking WebAuthn support...');
     if (!isWebAuthnSupported()) {
+      console.error('[PasskeyWallet] WebAuthn not supported');
       return {
         success: false,
         error: ERROR_MESSAGES.WEBAUTHN_NOT_SUPPORTED,
       };
     }
+    console.log('[PasskeyWallet] WebAuthn is supported');
 
     // Register passkey
+    console.log('[PasskeyWallet] Starting passkey registration...');
     const registration = await registerPasskey(name);
+    console.log('[PasskeyWallet] Registration result:', {
+      success: registration.success,
+      hasCredential: !!registration.credential,
+      error: registration.error
+    });
+
     if (!registration.success || !registration.credential) {
+      console.error('[PasskeyWallet] Passkey registration failed:', registration.error);
       return {
         success: false,
         error: registration.error ?? ERROR_MESSAGES.PASSKEY_REGISTRATION_FAILED,
@@ -160,8 +174,17 @@ export class PasskeyWallet {
     }
 
     // Authenticate immediately to get key material for encryption
+    console.log('[PasskeyWallet] Authenticating with newly created passkey...');
     const auth = await authenticateWithPasskey(registration.credential.id);
+    console.log('[PasskeyWallet] Authentication result:', {
+      success: auth.success,
+      hasAuthData: !!auth.authenticatorData,
+      hasClientData: !!auth.clientDataJSON,
+      error: auth.error
+    });
+
     if (!auth.success || !auth.authenticatorData || !auth.clientDataJSON) {
+      console.error('[PasskeyWallet] Passkey authentication failed:', auth.error);
       return {
         success: false,
         error: auth.error ?? ERROR_MESSAGES.PASSKEY_AUTHENTICATION_FAILED,
@@ -169,9 +192,13 @@ export class PasskeyWallet {
     }
 
     // Generate Kaspa keypair
+    console.log('[PasskeyWallet] Generating Kaspa keypair...');
     const privateKeyHex = generatePrivateKey();
-    const publicKeyHex = getPublicKeyHex(privateKeyHex);
-    const address = getAddressFromPrivateKey(privateKeyHex, network);
+    console.log('[PasskeyWallet] Private key generated, deriving public key...');
+    const publicKeyHex = await getPublicKeyHex(privateKeyHex);
+    console.log('[PasskeyWallet] Public key derived, generating address...');
+    const address = await getAddressFromPrivateKey(privateKeyHex, network);
+    console.log('[PasskeyWallet] Address generated:', address);
 
     // Create wallet data
     const walletData: WalletData = {
@@ -183,21 +210,26 @@ export class PasskeyWallet {
     };
 
     // Encrypt and store wallet data
+    console.log('[PasskeyWallet] Encrypting wallet data...');
     const encrypted = await encryptWalletData(
       JSON.stringify(walletData),
       auth.authenticatorData,
       auth.clientDataJSON
     );
+    console.log('[PasskeyWallet] Wallet data encrypted, storing...');
 
     await storeWalletData(
       createEncryptedWalletData(encrypted.ciphertext, encrypted.iv, encrypted.salt)
     );
     await storeCredentialId(registration.credential.id);
+    console.log('[PasskeyWallet] Wallet data stored successfully');
 
     // Create and return wallet instance
+    console.log('[PasskeyWallet] Creating wallet instance...');
     const wallet = new PasskeyWallet(privateKeyHex, publicKeyHex, address, network);
     wallet.emit({ type: 'connected', address });
 
+    console.log('[PasskeyWallet] Wallet created successfully!');
     return {
       success: true,
       data: wallet,
@@ -313,8 +345,8 @@ export class PasskeyWallet {
    * @param message - Message to sign
    * @returns Signature as hex string
    */
-  signMessage(message: string): string {
-    return signMessageWithKey(message, this.privateKeyHex);
+  async signMessage(message: string): Promise<string> {
+    return await signMessageWithKey(message, this.privateKeyHex);
   }
 
   /**

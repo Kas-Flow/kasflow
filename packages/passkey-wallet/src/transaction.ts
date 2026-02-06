@@ -1,6 +1,6 @@
 /**
  * Transaction building and signing utilities for @kasflow/passkey-wallet
- * Uses kaspa-wasm32-sdk Generator and createTransactions
+ * Uses @onekeyfe/kaspa-wasm Generator and createTransactions
  */
 
 import {
@@ -11,11 +11,12 @@ import {
   UtxoEntryReference,
   type IGeneratorSettingsObject,
   type IPaymentOutput,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
 
 import { DEFAULT_PRIORITY_FEE_SOMPI, ERROR_MESSAGES, type NetworkId } from './constants';
 import { createPrivateKey, getNetworkType } from './kaspa';
 import { KaspaRpc } from './rpc';
+import { ensureWasmInitialized } from './wasm-init';
 
 // =============================================================================
 // Types
@@ -79,6 +80,8 @@ export const buildTransactions = async (
     finalAmount: bigint | undefined;
   };
 }> => {
+  await ensureWasmInitialized();
+
   const settings: IGeneratorSettingsObject = {
     outputs,
     changeAddress,
@@ -116,6 +119,8 @@ export const estimateFee = async (
   priorityFee: bigint = DEFAULT_PRIORITY_FEE_SOMPI,
   network: NetworkId
 ): Promise<TransactionEstimate> => {
+  await ensureWasmInitialized();
+
   const settings: IGeneratorSettingsObject = {
     outputs,
     changeAddress,
@@ -142,11 +147,12 @@ export const estimateFee = async (
  * @param privateKeyHex - Private key as hex string
  * @returns Array of signed transactions (same array, mutated)
  */
-export const signTransactions = (
+export const signTransactions = async (
   transactions: PendingTransaction[],
   privateKeyHex: string
-): PendingTransaction[] => {
-  const privateKey = createPrivateKey(privateKeyHex);
+): Promise<PendingTransaction[]> => {
+  await ensureWasmInitialized();
+  const privateKey = await createPrivateKey(privateKeyHex);
 
   // PendingTransaction.sign() modifies the transaction in place
   for (const tx of transactions) {
@@ -204,6 +210,8 @@ export const sendTransaction = async (
   rpc: KaspaRpc,
   network: NetworkId
 ): Promise<SendResult> => {
+  await ensureWasmInitialized();
+
   const { to, amount, priorityFee = DEFAULT_PRIORITY_FEE_SOMPI } = options;
 
   // Validate we have a connected RPC
@@ -227,7 +235,7 @@ export const sendTransaction = async (
   }
 
   // Sign the transactions
-  const signedTransactions = signTransactions(transactions, privateKeyHex);
+  const signedTransactions = await signTransactions(transactions, privateKeyHex);
 
   // Submit to network
   const transactionIds = await submitTransactions(signedTransactions, rpc);
@@ -251,7 +259,8 @@ export const sendTransaction = async (
  * @param settings - Generator settings
  * @returns Generator instance
  */
-export const createGenerator = (settings: IGeneratorSettingsObject): Generator => {
+export const createGenerator = async (settings: IGeneratorSettingsObject): Promise<Generator> => {
+  await ensureWasmInitialized();
   return new Generator(settings);
 };
 
@@ -259,5 +268,5 @@ export const createGenerator = (settings: IGeneratorSettingsObject): Generator =
 // Re-exports
 // =============================================================================
 
-export { PendingTransaction, Generator } from 'kaspa-wasm32-sdk';
+export { PendingTransaction, Generator } from '@onekeyfe/kaspa-wasm';
 export type { IGeneratorSettingsObject, IPaymentOutput };

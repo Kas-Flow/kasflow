@@ -34,9 +34,9 @@
   "license": "MIT",
   "dependencies": {
     "@kluster/kaspa-address": "^0.1.5",
+    "@onekeyfe/kaspa-wasm": "^1.0.2",
     "@simplewebauthn/browser": "^13.2.2",
-    "idb-keyval": "^6.2.2",
-    "kaspa-wasm32-sdk": "^0.15.2"
+    "idb-keyval": "^6.2.2"
   },
   "repository": {
     "type": "git",

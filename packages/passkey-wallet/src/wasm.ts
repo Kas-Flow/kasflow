@@ -1,6 +1,6 @@
 /**
  * WASM SDK re-exports for @kasflow/passkey-wallet
- * Re-exports commonly used types and functions from kaspa-wasm32-sdk
+ * Re-exports commonly used types and functions from @onekeyfe/kaspa-wasm
  */
 
 // Re-export core classes
@@ -31,7 +31,7 @@ export {
   // Panic hooks for debugging
   initConsolePanicHook,
   initBrowserPanicHook,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
 
 // Type exports
 export type {
@@ -44,13 +44,16 @@ export type {
   IGetBalanceByAddressResponse,
   IGetUtxosByAddressesRequest,
   IGetUtxosByAddressesResponse,
-} from 'kaspa-wasm32-sdk';
+} from '@onekeyfe/kaspa-wasm';
+
+// Export WASM initialization utilities
+export { ensureWasmInitialized, isWasmInitialized } from './wasm-init';
 
 /**
  * Initialize console panic hook for better debugging
  * Call this in development to see WASM panic messages
  */
 export const initDebugMode = async (): Promise<void> => {
-  const { initConsolePanicHook } = await import('kaspa-wasm32-sdk');
+  const { initConsolePanicHook } = await import('@onekeyfe/kaspa-wasm');
   initConsolePanicHook();
 };

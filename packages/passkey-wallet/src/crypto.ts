@@ -53,6 +53,23 @@ export const base64ToUint8Array = (base64: string): Uint8Array => {
 };
 
 /**
+ * Convert base64url string to Uint8Array
+ * Base64url uses '-' and '_' instead of '+' and '/', and has no padding
+ */
+export const base64urlToUint8Array = (base64url: string): Uint8Array => {
+  // Convert base64url to standard base64
+  let base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+
+  // Add padding if needed
+  while (base64.length % 4 !== 0) {
+    base64 += '=';
+  }
+
+  // Decode using standard base64 decoder
+  return base64ToUint8Array(base64);
+};
+
+/**
  * Convert Uint8Array to hex string
  */
 export const uint8ArrayToHex = (bytes: Uint8Array): string => {
