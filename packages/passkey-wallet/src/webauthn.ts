@@ -122,6 +122,7 @@ export const registerPasskey = async (
     return {
       success: true,
       credential: storedCredential,
+      userId: userId, // Return userId for key derivation
     };
   } catch (error) {
     console.error('[WebAuthn] Registration failed with error:', error);

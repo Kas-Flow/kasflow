@@ -117,6 +117,8 @@ export interface RegistrationResult {
   success: boolean;
   /** Stored credential (if successful) */
   credential?: StoredCredential;
+  /** User ID used for registration (for key derivation) */
+  userId?: Uint8Array;
   /** Error message (if failed) */
   error?: string;
 }

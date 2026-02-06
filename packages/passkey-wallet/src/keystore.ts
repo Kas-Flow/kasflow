@@ -10,6 +10,7 @@ import {
   IDB_STORE_NAME,
   STORAGE_KEY_WALLET,
   STORAGE_KEY_CREDENTIAL_ID,
+  STORAGE_KEY_USER_ID,
   ERROR_MESSAGES,
 } from './constants';
 import type { EncryptedWalletData } from './types';
@@ -109,6 +110,36 @@ export const deleteCredentialId = async (): Promise<void> => {
 };
 
 // =============================================================================
+// User ID Operations (for stable key derivation)
+// =============================================================================
+
+/**
+ * Store the user ID for stable key derivation
+ */
+export const storeUserId = async (userId: string): Promise<void> => {
+  await set(STORAGE_KEY_USER_ID, userId, getStore());
+};
+
+/**
+ * Retrieve the stored user ID
+ */
+export const getUserId = async (): Promise<string | null> => {
+  try {
+    const id = await get<string>(STORAGE_KEY_USER_ID, getStore());
+    return id ?? null;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Delete the user ID from storage
+ */
+export const deleteUserId = async (): Promise<void> => {
+  await del(STORAGE_KEY_USER_ID, getStore());
+};
+
+// =============================================================================
 // Full Cleanup
 // =============================================================================
 
@@ -117,7 +148,7 @@ export const deleteCredentialId = async (): Promise<void> => {
  * Used when resetting the wallet
  */
 export const clearAllData = async (): Promise<void> => {
-  await Promise.all([deleteWalletData(), deleteCredentialId()]);
+  await Promise.all([deleteWalletData(), deleteCredentialId(), deleteUserId()]);
 };
 
 // =============================================================================

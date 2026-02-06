@@ -4,7 +4,7 @@
  */
 
 import { DEFAULT_NETWORK, ERROR_MESSAGES, type NetworkId } from './constants';
-import { encryptWalletData, decryptWalletData } from './crypto';
+import { encryptWalletData, decryptWalletData, uint8ArrayToBase64, base64ToUint8Array } from './crypto';
 import {
   generatePrivateKey,
   getAddressFromPrivateKey,
@@ -19,6 +19,8 @@ import {
   clearAllData,
   storeCredentialId,
   getCredentialId,
+  storeUserId,
+  getUserId,
   createEncryptedWalletData,
 } from './keystore';
 import { KaspaRpc, type RpcConnectionOptions } from './rpc';
@@ -162,32 +164,15 @@ export class PasskeyWallet {
     console.log('[PasskeyWallet] Registration result:', {
       success: registration.success,
       hasCredential: !!registration.credential,
+      hasUserId: !!registration.userId,
       error: registration.error
     });
 
-    if (!registration.success || !registration.credential) {
+    if (!registration.success || !registration.credential || !registration.userId) {
       console.error('[PasskeyWallet] Passkey registration failed:', registration.error);
       return {
         success: false,
         error: registration.error ?? ERROR_MESSAGES.PASSKEY_REGISTRATION_FAILED,
-      };
-    }
-
-    // Authenticate immediately to get key material for encryption
-    console.log('[PasskeyWallet] Authenticating with newly created passkey...');
-    const auth = await authenticateWithPasskey(registration.credential.id);
-    console.log('[PasskeyWallet] Authentication result:', {
-      success: auth.success,
-      hasAuthData: !!auth.authenticatorData,
-      hasClientData: !!auth.clientDataJSON,
-      error: auth.error
-    });
-
-    if (!auth.success || !auth.authenticatorData || !auth.clientDataJSON) {
-      console.error('[PasskeyWallet] Passkey authentication failed:', auth.error);
-      return {
-        success: false,
-        error: auth.error ?? ERROR_MESSAGES.PASSKEY_AUTHENTICATION_FAILED,
       };
     }
 
@@ -209,19 +194,20 @@ export class PasskeyWallet {
       createdAt: Date.now(),
     };
 
-    // Encrypt and store wallet data
-    console.log('[PasskeyWallet] Encrypting wallet data...');
+    // Encrypt and store wallet data using stable user ID
+    console.log('[PasskeyWallet] Encrypting wallet data with user ID...');
     const encrypted = await encryptWalletData(
       JSON.stringify(walletData),
-      auth.authenticatorData,
-      auth.clientDataJSON
+      registration.userId
     );
     console.log('[PasskeyWallet] Wallet data encrypted, storing...');
 
+    // Store encrypted wallet data, credential ID, and user ID
     await storeWalletData(
       createEncryptedWalletData(encrypted.ciphertext, encrypted.iv, encrypted.salt)
     );
     await storeCredentialId(registration.credential.id);
+    await storeUserId(uint8ArrayToBase64(registration.userId));
     console.log('[PasskeyWallet] Wallet data stored successfully');
 
     // Create and return wallet instance
@@ -243,20 +229,44 @@ export class PasskeyWallet {
    * @returns Result containing the wallet instance or error
    */
   static async unlock(options: UnlockWalletOptions = {}): Promise<Result<PasskeyWallet>> {
+    console.log('[PasskeyWallet] unlock() called with options:', options);
+
     // Check if wallet exists
+    console.log('[PasskeyWallet] Checking if wallet exists in storage...');
     if (!(await hasStoredWallet())) {
+      console.error('[PasskeyWallet] No wallet found in storage');
+      return {
+        success: false,
+        error: ERROR_MESSAGES.WALLET_NOT_FOUND,
+      };
+    }
+    console.log('[PasskeyWallet] Wallet exists in storage');
+
+    // Get stored credential ID and user ID
+    console.log('[PasskeyWallet] Getting stored credential ID and user ID...');
+    const credentialId = await getCredentialId();
+    const userIdBase64 = await getUserId();
+    console.log('[PasskeyWallet] Stored credential ID:', credentialId);
+    console.log('[PasskeyWallet] Stored user ID:', userIdBase64 ? 'found' : 'not found');
+
+    if (!userIdBase64) {
+      console.error('[PasskeyWallet] No user ID found in storage');
       return {
         success: false,
         error: ERROR_MESSAGES.WALLET_NOT_FOUND,
       };
     }
 
-    // Get stored credential ID for faster lookup
-    const credentialId = await getCredentialId();
-
-    // Authenticate with passkey
+    // Authenticate with passkey (just to verify user has access)
+    console.log('[PasskeyWallet] Authenticating with passkey...');
     const auth = await authenticateWithPasskey(credentialId ?? undefined);
-    if (!auth.success || !auth.authenticatorData || !auth.clientDataJSON) {
+    console.log('[PasskeyWallet] Authentication result:', {
+      success: auth.success,
+      error: auth.error
+    });
+
+    if (!auth.success) {
+      console.error('[PasskeyWallet] Passkey authentication failed:', auth.error);
       return {
         success: false,
         error: auth.error ?? ERROR_MESSAGES.PASSKEY_AUTHENTICATION_FAILED,
@@ -264,25 +274,31 @@ export class PasskeyWallet {
     }
 
     // Get encrypted wallet data
+    console.log('[PasskeyWallet] Getting encrypted wallet data...');
     const encryptedData = await getWalletData();
     if (!encryptedData) {
+      console.error('[PasskeyWallet] No encrypted wallet data found');
       return {
         success: false,
         error: ERROR_MESSAGES.WALLET_NOT_FOUND,
       };
     }
+    console.log('[PasskeyWallet] Encrypted wallet data retrieved');
 
-    // Decrypt wallet data
+    // Decrypt wallet data using the stored user ID
+    console.log('[PasskeyWallet] Decrypting wallet data with user ID...');
     try {
+      const userId = base64ToUint8Array(userIdBase64);
       const decrypted = await decryptWalletData(
         encryptedData,
-        auth.authenticatorData,
-        auth.clientDataJSON
+        userId
       );
+      console.log('[PasskeyWallet] Wallet data decrypted successfully');
 
       const walletData: WalletData = JSON.parse(decrypted);
       const network = options.network ?? walletData.network;
 
+      console.log('[PasskeyWallet] Creating wallet instance from decrypted data...');
       // Create wallet instance
       const wallet = new PasskeyWallet(
         walletData.privateKey,
@@ -292,11 +308,13 @@ export class PasskeyWallet {
       );
       wallet.emit({ type: 'connected', address: walletData.address });
 
+      console.log('[PasskeyWallet] Wallet unlocked successfully!');
       return {
         success: true,
         data: wallet,
       };
-    } catch {
+    } catch (error) {
+      console.error('[PasskeyWallet] Failed to decrypt wallet data:', error);
       return {
         success: false,
         error: ERROR_MESSAGES.DECRYPTION_FAILED,

@@ -96,6 +96,7 @@ export const hexToUint8Array = (hex: string): Uint8Array => {
 /**
  * Derive an encryption key from passkey authentication result
  * Uses PBKDF2 with the authenticator signature as input
+ * @deprecated Use deriveKeyFromUserId instead for stable key derivation
  */
 export const deriveKeyFromPasskey = async (
   authenticatorData: Uint8Array,
@@ -119,6 +120,43 @@ export const deriveKeyFromPasskey = async (
     {
       name: 'PBKDF2',
       salt: salt.buffer as ArrayBuffer,
+      iterations: PBKDF2_ITERATIONS,
+      hash: 'SHA-256',
+    },
+    baseKey,
+    {
+      name: 'AES-GCM',
+      length: ENCRYPTION_KEY_LENGTH,
+    },
+    false, // not extractable
+    ['encrypt', 'decrypt']
+  );
+
+  return derivedKey;
+};
+
+/**
+ * Derive an encryption key from a stable user ID
+ * This ensures the same key is derived on every unlock
+ */
+export const deriveKeyFromUserId = async (
+  userId: Uint8Array,
+  salt: Uint8Array
+): Promise<CryptoKey> => {
+  // Import user ID as raw key material
+  const baseKey = await crypto.subtle.importKey(
+    'raw',
+    userId as BufferSource,
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  // Derive AES-GCM key using PBKDF2
+  const derivedKey = await crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: salt as BufferSource,
       iterations: PBKDF2_ITERATIONS,
       hash: 'SHA-256',
     },
@@ -192,24 +230,24 @@ export const decrypt = async (
 };
 
 /**
- * Encrypt wallet data with passkey-derived key
+ * Encrypt wallet data with user-ID-derived key
+ * Uses stable user ID for consistent key derivation
  */
 export const encryptWalletData = async (
   data: string,
-  authenticatorData: Uint8Array,
-  clientDataJSON: Uint8Array
+  userId: Uint8Array
 ): Promise<{ ciphertext: string; iv: string; salt: string }> => {
   const salt = generateRandomBytes(SALT_LENGTH);
-  const key = await deriveKeyFromPasskey(authenticatorData, clientDataJSON, salt);
+  const key = await deriveKeyFromUserId(userId, salt);
 
   const iv = generateRandomBytes(ENCRYPTION_IV_LENGTH);
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(data);
 
   const ciphertext = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv: iv.buffer as ArrayBuffer },
+    { name: 'AES-GCM', iv: iv as BufferSource },
     key,
-    encodedData
+    encodedData as BufferSource
   );
 
   return {
@@ -220,24 +258,24 @@ export const encryptWalletData = async (
 };
 
 /**
- * Decrypt wallet data with passkey-derived key
+ * Decrypt wallet data with user-ID-derived key
+ * Uses stable user ID for consistent key derivation
  */
 export const decryptWalletData = async (
   encryptedData: { ciphertext: string; iv: string; salt: string },
-  authenticatorData: Uint8Array,
-  clientDataJSON: Uint8Array
+  userId: Uint8Array
 ): Promise<string> => {
   const salt = base64ToUint8Array(encryptedData.salt);
-  const key = await deriveKeyFromPasskey(authenticatorData, clientDataJSON, salt);
+  const key = await deriveKeyFromUserId(userId, salt);
 
   const ciphertext = base64ToUint8Array(encryptedData.ciphertext);
   const iv = base64ToUint8Array(encryptedData.iv);
 
   try {
     const decrypted = await crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv.buffer as ArrayBuffer },
+      { name: 'AES-GCM', iv: iv as BufferSource },
       key,
-      ciphertext.buffer as ArrayBuffer
+      ciphertext as BufferSource
     );
 
     const decoder = new TextDecoder();

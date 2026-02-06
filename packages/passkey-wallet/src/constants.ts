@@ -44,6 +44,9 @@ export const STORAGE_KEY_WALLET = 'wallet';
 /** Key for storing credential ID */
 export const STORAGE_KEY_CREDENTIAL_ID = 'credential-id';
 
+/** Key for storing user ID (for key derivation) */
+export const STORAGE_KEY_USER_ID = 'user-id';
+
 // =============================================================================
 // Kaspa Network
 // =============================================================================

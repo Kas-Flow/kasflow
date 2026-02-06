@@ -98,8 +98,11 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
     try {
       setError(null);
       setLoading(true);
+      console.log('[WalletModal] Unlocking wallet...');
       await unlockWallet();
+      console.log('[WalletModal] Wallet unlocked successfully');
     } catch (err) {
+      console.error('[WalletModal] Failed to unlock wallet:', err);
       const message = err instanceof Error ? err.message : 'Failed to unlock wallet';
       setError(message);
       setLoading(false);

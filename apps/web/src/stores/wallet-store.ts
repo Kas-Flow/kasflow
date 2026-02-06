@@ -160,11 +160,16 @@ export const useWalletStore = create<WalletState>()(
        */
       unlockWallet: async () => {
         try {
+          console.log('[WalletStore] Starting wallet unlock...');
           set({ status: 'connecting', error: null });
 
           // Check if wallet exists
+          console.log('[WalletStore] Checking if wallet exists...');
           const exists = await PasskeyWallet.exists();
+          console.log('[WalletStore] Wallet exists check result:', exists);
+
           if (!exists) {
+            console.warn('[WalletStore] No wallet found');
             set({
               status: 'error',
               error: 'No wallet found. Please create one first.'
@@ -173,8 +178,14 @@ export const useWalletStore = create<WalletState>()(
           }
 
           // Unlock wallet
+          console.log('[WalletStore] Calling PasskeyWallet.unlock()...');
           const result = await PasskeyWallet.unlock({
             network: get().network,
+          });
+          console.log('[WalletStore] PasskeyWallet.unlock() result:', {
+            success: result.success,
+            hasData: !!result.data,
+            error: result.error
           });
 
           if (!result.success || !result.data) {
@@ -182,6 +193,7 @@ export const useWalletStore = create<WalletState>()(
           }
 
           const wallet = result.data;
+          console.log('[WalletStore] Wallet unlocked successfully, updating state...');
 
           // Update state
           set({
@@ -192,10 +204,13 @@ export const useWalletStore = create<WalletState>()(
             error: null,
           });
 
+          console.log('[WalletStore] State updated, connecting to network...');
           // Auto-connect to network
           await get().connectToNetwork();
+          console.log('[WalletStore] Connected to network successfully');
 
         } catch (error) {
+          console.error('[WalletStore] Failed to unlock wallet:', error);
           const message = error instanceof Error ? error.message : 'Failed to unlock wallet';
           set({
             status: 'error',
