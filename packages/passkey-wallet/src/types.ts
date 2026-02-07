@@ -22,30 +22,16 @@ export interface UnlockWalletOptions {
   network?: NetworkId;
 }
 
-/** Wallet data stored in encrypted form */
-export interface WalletData {
-  /** Private key as hex string */
-  privateKey: string;
-  /** Public key as hex string */
-  publicKey: string;
-  /** Kaspa address */
+/** Wallet metadata stored in IndexedDB (no sensitive data) */
+export interface WalletMetadata {
+  /** Passkey public key (for deterministic key derivation) */
+  passkeyPublicKey: string; // base64 encoded
+  /** Wallet address (for verification) */
   address: string;
-  /** Network the wallet was created for */
+  /** Network */
   network: NetworkId;
-  /** Timestamp when wallet was created */
+  /** Creation timestamp */
   createdAt: number;
-}
-
-/** Encrypted wallet storage format */
-export interface EncryptedWalletData {
-  /** Encrypted data as base64 */
-  ciphertext: string;
-  /** Initialization vector as base64 */
-  iv: string;
-  /** Salt used for key derivation as base64 */
-  salt: string;
-  /** Version for future migrations */
-  version: number;
 }
 
 // =============================================================================
@@ -119,6 +105,8 @@ export interface RegistrationResult {
   credential?: StoredCredential;
   /** User ID used for registration (for key derivation) */
   userId?: Uint8Array;
+  /** Passkey's public key extracted from attestation (for deterministic key derivation) */
+  passkeyPublicKey?: Uint8Array;
   /** Error message (if failed) */
   error?: string;
 }

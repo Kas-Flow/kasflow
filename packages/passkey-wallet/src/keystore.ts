@@ -1,6 +1,6 @@
 /**
  * Keystore for @kasflow/passkey-wallet
- * Handles encrypted storage using IndexedDB
+ * Handles storage using IndexedDB
  */
 
 import { get, set, del, createStore, type UseStore } from 'idb-keyval';
@@ -8,19 +8,14 @@ import { get, set, del, createStore, type UseStore } from 'idb-keyval';
 import {
   IDB_DATABASE_NAME,
   IDB_STORE_NAME,
-  STORAGE_KEY_WALLET,
   STORAGE_KEY_CREDENTIAL_ID,
-  STORAGE_KEY_USER_ID,
-  ERROR_MESSAGES,
+  STORAGE_KEY_METADATA,
 } from './constants';
-import type { EncryptedWalletData } from './types';
+import type { WalletMetadata } from './types';
 
 // =============================================================================
 // Store Initialization
 // =============================================================================
-
-/** Current storage version for migrations */
-const STORAGE_VERSION = 1;
 
 /** Custom IndexedDB store instance */
 let customStore: UseStore | null = null;
@@ -36,7 +31,7 @@ const getStore = (): UseStore => {
 };
 
 // =============================================================================
-// Wallet Data Operations
+// Wallet Metadata Operations
 // =============================================================================
 
 /**
@@ -44,28 +39,28 @@ const getStore = (): UseStore => {
  */
 export const hasStoredWallet = async (): Promise<boolean> => {
   try {
-    const data = await get<EncryptedWalletData>(STORAGE_KEY_WALLET, getStore());
-    return data !== undefined;
+    const metadata = await get<WalletMetadata>(STORAGE_KEY_METADATA, getStore());
+    return metadata !== undefined;
   } catch {
     return false;
   }
 };
 
 /**
- * Store encrypted wallet data
+ * Store wallet metadata (passkey public key, address, network)
  */
-export const storeWalletData = async (
-  encryptedData: EncryptedWalletData
+export const storeWalletMetadata = async (
+  metadata: WalletMetadata
 ): Promise<void> => {
-  await set(STORAGE_KEY_WALLET, encryptedData, getStore());
+  await set(STORAGE_KEY_METADATA, metadata, getStore());
 };
 
 /**
- * Retrieve encrypted wallet data
+ * Retrieve wallet metadata
  */
-export const getWalletData = async (): Promise<EncryptedWalletData | null> => {
+export const getWalletMetadata = async (): Promise<WalletMetadata | null> => {
   try {
-    const data = await get<EncryptedWalletData>(STORAGE_KEY_WALLET, getStore());
+    const data = await get<WalletMetadata>(STORAGE_KEY_METADATA, getStore());
     return data ?? null;
   } catch {
     return null;
@@ -73,10 +68,10 @@ export const getWalletData = async (): Promise<EncryptedWalletData | null> => {
 };
 
 /**
- * Delete wallet data from storage
+ * Delete wallet metadata
  */
-export const deleteWalletData = async (): Promise<void> => {
-  await del(STORAGE_KEY_WALLET, getStore());
+export const deleteWalletMetadata = async (): Promise<void> => {
+  await del(STORAGE_KEY_METADATA, getStore());
 };
 
 // =============================================================================
@@ -110,63 +105,15 @@ export const deleteCredentialId = async (): Promise<void> => {
 };
 
 // =============================================================================
-// User ID Operations (for stable key derivation)
-// =============================================================================
-
-/**
- * Store the user ID for stable key derivation
- */
-export const storeUserId = async (userId: string): Promise<void> => {
-  await set(STORAGE_KEY_USER_ID, userId, getStore());
-};
-
-/**
- * Retrieve the stored user ID
- */
-export const getUserId = async (): Promise<string | null> => {
-  try {
-    const id = await get<string>(STORAGE_KEY_USER_ID, getStore());
-    return id ?? null;
-  } catch {
-    return null;
-  }
-};
-
-/**
- * Delete the user ID from storage
- */
-export const deleteUserId = async (): Promise<void> => {
-  await del(STORAGE_KEY_USER_ID, getStore());
-};
-
-// =============================================================================
 // Full Cleanup
 // =============================================================================
 
 /**
  * Delete all wallet-related data from storage
- * Used when resetting the wallet
  */
 export const clearAllData = async (): Promise<void> => {
-  await Promise.all([deleteWalletData(), deleteCredentialId(), deleteUserId()]);
-};
-
-// =============================================================================
-// Storage Utilities
-// =============================================================================
-
-/**
- * Create encrypted wallet data object with version
- */
-export const createEncryptedWalletData = (
-  ciphertext: string,
-  iv: string,
-  salt: string
-): EncryptedWalletData => {
-  return {
-    ciphertext,
-    iv,
-    salt,
-    version: STORAGE_VERSION,
-  };
+  await Promise.all([
+    deleteWalletMetadata(),
+    deleteCredentialId(),
+  ]);
 };

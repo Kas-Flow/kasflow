@@ -58,8 +58,7 @@ export type { SendOptions, SendResult, TransactionEstimate } from './transaction
 export type {
   CreateWalletOptions,
   UnlockWalletOptions,
-  WalletData,
-  EncryptedWalletData,
+  WalletMetadata,
   TransactionInput,
   TransactionOutput,
   UnsignedTransaction,
@@ -125,6 +124,15 @@ export {
 
 // WebAuthn utilities (for custom implementations)
 export { isWebAuthnSupported } from './webauthn';
+
+// COSE parser for extracting public keys from attestation
+export { extractPublicKeyFromAttestation } from './cose-parser';
+
+// Deterministic key derivation from passkey public keys
+export { deriveKaspaKeysFromPasskey, verifyDeterminism } from './deterministic-keys';
+
+// Logger utility
+export { createLogger } from './logger';
 
 // Re-export commonly used WASM SDK types for transaction building
 export {

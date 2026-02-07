@@ -11,7 +11,7 @@ export const NETWORK_ID = {
 export type NetworkId = (typeof NETWORK_ID)[keyof typeof NETWORK_ID];
 
 /** Number of sompi (smallest unit) per KAS */
-export const SOMPI_PER_KAS = 100_000_000n;
+export const SOMPI_PER_KAS = BigInt(100_000_000);
 
 /**
  * Convert KAS to sompi

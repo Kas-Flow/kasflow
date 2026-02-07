@@ -25,7 +25,16 @@ interface PaymentStatusProps {
 // Status Config
 // =============================================================================
 
-const STATUS_CONFIG = {
+interface StatusConfig {
+  icon: React.ComponentType<{ className?: string }>;
+  iconColor: string;
+  title: string;
+  description: string;
+  color: string;
+  animate?: string;
+}
+
+const STATUS_CONFIG: Record<string, StatusConfig> = {
   idle: {
     icon: Clock,
     iconColor: 'text-muted-foreground',

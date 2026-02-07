@@ -21,8 +21,8 @@ describe('Network Constants', () => {
     expect(NETWORK_ID.TESTNET_11).toBe('testnet-11');
   });
 
-  it('has testnet-11 as default network', () => {
-    expect(DEFAULT_NETWORK).toBe(NETWORK_ID.TESTNET_11);
+  it('has testnet-10 as default network', () => {
+    expect(DEFAULT_NETWORK).toBe(NETWORK_ID.TESTNET_10);
   });
 });
 
@@ -56,7 +56,6 @@ describe('Error Messages', () => {
     expect(ERROR_MESSAGES.WALLET_ALREADY_EXISTS).toBeDefined();
     expect(ERROR_MESSAGES.PASSKEY_REGISTRATION_FAILED).toBeDefined();
     expect(ERROR_MESSAGES.PASSKEY_AUTHENTICATION_FAILED).toBeDefined();
-    expect(ERROR_MESSAGES.DECRYPTION_FAILED).toBeDefined();
     expect(ERROR_MESSAGES.INVALID_ADDRESS).toBeDefined();
     expect(ERROR_MESSAGES.INSUFFICIENT_BALANCE).toBeDefined();
     expect(ERROR_MESSAGES.WEBAUTHN_NOT_SUPPORTED).toBeDefined();

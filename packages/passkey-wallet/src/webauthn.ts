@@ -19,7 +19,11 @@ import {
   ERROR_MESSAGES,
 } from './constants';
 import { generateRandomBytes, uint8ArrayToBase64, base64ToUint8Array, base64urlToUint8Array } from './crypto';
+import { extractPublicKeyFromAttestation } from './cose-parser';
+import { createLogger } from './logger';
 import type { StoredCredential, RegistrationResult, AuthenticationResult } from './types';
+
+const logger = createLogger('WebAuthn');
 
 // =============================================================================
 // Browser Support Check
@@ -43,10 +47,10 @@ export const isWebAuthnSupported = (): boolean => {
 export const registerPasskey = async (
   walletName: string
 ): Promise<RegistrationResult> => {
-  console.log('[WebAuthn] registerPasskey() called with name:', walletName);
+  logger.info('[WebAuthn] registerPasskey() called with name:', walletName);
 
   if (!isWebAuthnSupported()) {
-    console.error('[WebAuthn] WebAuthn not supported');
+    logger.error('[WebAuthn] WebAuthn not supported');
     return {
       success: false,
       error: ERROR_MESSAGES.WEBAUTHN_NOT_SUPPORTED,
@@ -54,14 +58,14 @@ export const registerPasskey = async (
   }
 
   try {
-    // Generate a unique user ID for this wallet
-    console.log('[WebAuthn] Generating user ID and challenge...');
-    const userId = generateRandomBytes(32);
-    const userIdBase64 = uint8ArrayToBase64(userId);
-
     // Generate a challenge for the registration ceremony
+    logger.info('[WebAuthn] Generating challenge...');
     const challenge = generateRandomBytes(32);
     const challengeBase64 = uint8ArrayToBase64(challenge);
+
+    // Generate a unique user ID for this wallet (required by WebAuthn spec)
+    const userId = generateRandomBytes(32);
+    const userIdBase64 = uint8ArrayToBase64(userId);
 
     // Create registration options
     const registrationOptions = {
@@ -86,7 +90,7 @@ export const registerPasskey = async (
       attestation: 'none' as const,
     };
 
-    console.log('[WebAuthn] Registration options:', {
+    logger.info('[WebAuthn] Registration options:', {
       rpName: registrationOptions.rp.name,
       rpId: registrationOptions.rp.id,
       userName: registrationOptions.user.name,
@@ -94,12 +98,13 @@ export const registerPasskey = async (
     });
 
     // Start the registration ceremony
-    console.log('[WebAuthn] Starting WebAuthn registration ceremony...');
+    logger.info('[WebAuthn] Starting WebAuthn registration ceremony...');
     const credential = await startRegistration({ optionsJSON: registrationOptions });
-    console.log('[WebAuthn] Registration ceremony completed, credential received:', {
+    logger.info('[WebAuthn] Registration ceremony completed, credential received:', {
       id: credential.id,
       type: credential.type,
       hasPublicKey: !!credential.response.publicKey,
+      hasAttestationObject: !!credential.response.attestationObject,
       rawId: credential.rawId,
     });
 
@@ -107,6 +112,20 @@ export const registerPasskey = async (
     const publicKeyBytes = credential.response.publicKey
       ? credential.response.publicKey
       : '';
+
+    // Extract passkey's public key from attestation object for deterministic key derivation
+    logger.info('[WebAuthn] Extracting passkey public key from attestation object...');
+    let passkeyPublicKey: Uint8Array | undefined;
+    try {
+      passkeyPublicKey = extractPublicKeyFromAttestation(credential.response.attestationObject);
+      logger.info('[WebAuthn] Passkey public key extracted successfully:', {
+        length: passkeyPublicKey.length,
+        prefix: passkeyPublicKey[0], // Should be 0x04 for uncompressed
+      });
+    } catch (error) {
+      logger.error('[WebAuthn] Failed to extract passkey public key:', error);
+      // Registration will fail if we can't extract the public key
+    }
 
     // Create stored credential object
     // Note: credential.rawId from @simplewebauthn/browser is base64url encoded
@@ -118,18 +137,19 @@ export const registerPasskey = async (
       transports: credential.response.transports as AuthenticatorTransport[] | undefined,
     };
 
-    console.log('[WebAuthn] Passkey registered successfully');
+    logger.info('[WebAuthn] Passkey registered successfully');
     return {
       success: true,
       credential: storedCredential,
-      userId: userId, // Return userId for key derivation
+      userId: userId, // Included for WebAuthn spec compliance (not used for key derivation)
+      passkeyPublicKey: passkeyPublicKey, // Used for deterministic key derivation
     };
   } catch (error) {
-    console.error('[WebAuthn] Registration failed with error:', error);
+    logger.error('[WebAuthn] Registration failed with error:', error);
 
     // Handle user cancellation
     if (error instanceof Error && error.name === 'NotAllowedError') {
-      console.warn('[WebAuthn] User cancelled the registration');
+      logger.warn('[WebAuthn] User cancelled the registration');
       return {
         success: false,
         error: ERROR_MESSAGES.USER_CANCELLED,
@@ -137,7 +157,7 @@ export const registerPasskey = async (
     }
 
     if (error instanceof Error) {
-      console.error('[WebAuthn] Error details:', {
+      logger.error('[WebAuthn] Error details:', {
         name: error.name,
         message: error.message,
         stack: error.stack,
@@ -157,15 +177,15 @@ export const registerPasskey = async (
 
 /**
  * Authenticate with an existing passkey
- * Returns data needed to derive the encryption key
+ * Verifies user has access to the wallet via biometric authentication
  */
 export const authenticateWithPasskey = async (
   credentialId?: string
 ): Promise<AuthenticationResult> => {
-  console.log('[WebAuthn] authenticateWithPasskey() called with credentialId:', credentialId);
+  logger.info('[WebAuthn] authenticateWithPasskey() called with credentialId:', credentialId);
 
   if (!isWebAuthnSupported()) {
-    console.error('[WebAuthn] WebAuthn not supported');
+    logger.error('[WebAuthn] WebAuthn not supported');
     return {
       success: false,
       error: ERROR_MESSAGES.WEBAUTHN_NOT_SUPPORTED,
@@ -174,7 +194,7 @@ export const authenticateWithPasskey = async (
 
   try {
     // Generate a challenge for the authentication ceremony
-    console.log('[WebAuthn] Generating challenge for authentication...');
+    logger.info('[WebAuthn] Generating challenge for authentication...');
     const challenge = generateRandomBytes(32);
     const challengeBase64 = uint8ArrayToBase64(challenge);
 
@@ -197,16 +217,16 @@ export const authenticateWithPasskey = async (
       allowCredentials,
     };
 
-    console.log('[WebAuthn] Authentication options:', {
+    logger.info('[WebAuthn] Authentication options:', {
       rpId: authenticationOptions.rpId,
       timeout: authenticationOptions.timeout,
       hasAllowedCredentials: !!allowCredentials,
     });
 
     // Start the authentication ceremony
-    console.log('[WebAuthn] Starting WebAuthn authentication ceremony...');
+    logger.info('[WebAuthn] Starting WebAuthn authentication ceremony...');
     const assertion = await startAuthentication({ optionsJSON: authenticationOptions });
-    console.log('[WebAuthn] Authentication ceremony completed, assertion received');
+    logger.info('[WebAuthn] Authentication ceremony completed, assertion received');
 
     // Convert response data to Uint8Array for key derivation
     // Note: @simplewebauthn/browser returns all response data as base64url encoded
@@ -214,7 +234,7 @@ export const authenticateWithPasskey = async (
     const clientDataJSON = base64urlToUint8Array(assertion.response.clientDataJSON);
     const signature = base64urlToUint8Array(assertion.response.signature);
 
-    console.log('[WebAuthn] Authentication successful');
+    logger.info('[WebAuthn] Authentication successful');
     return {
       success: true,
       authenticatorData,
@@ -222,11 +242,11 @@ export const authenticateWithPasskey = async (
       signature,
     };
   } catch (error) {
-    console.error('[WebAuthn] Authentication failed with error:', error);
+    logger.error('[WebAuthn] Authentication failed with error:', error);
 
     // Handle user cancellation
     if (error instanceof Error && error.name === 'NotAllowedError') {
-      console.warn('[WebAuthn] User cancelled the authentication');
+      logger.warn('[WebAuthn] User cancelled the authentication');
       return {
         success: false,
         error: ERROR_MESSAGES.USER_CANCELLED,
@@ -234,7 +254,7 @@ export const authenticateWithPasskey = async (
     }
 
     if (error instanceof Error) {
-      console.error('[WebAuthn] Error details:', {
+      logger.error('[WebAuthn] Error details:', {
         name: error.name,
         message: error.message,
         stack: error.stack,
@@ -249,8 +269,8 @@ export const authenticateWithPasskey = async (
 };
 
 /**
- * Authenticate and get key material for encryption/decryption
- * This is used when unlocking the wallet
+ * Authenticate with passkey to verify user access
+ * Returns authenticator data for wallet unlock verification
  */
 export const getKeyMaterial = async (
   credentialId?: string

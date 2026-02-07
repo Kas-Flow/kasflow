@@ -9,11 +9,12 @@ import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/navbar';
 import { PaymentCard } from '@/components/payment/payment-card';
 import { PaymentStatus } from '@/components/payment/payment-status';
-import { decodePaymentData } from '@/lib/payment-encoding';
+import { decodePaymentLink } from '@/lib/payment';
 import { usePaymentDetection } from '@/hooks/use-payment-detection';
 import { useWalletStore, selectWallet, selectIsConnected } from '@/stores/wallet-store';
 import { toast } from 'sonner';
-import type { PaymentData } from '@/lib/payment-encoding';
+import { kasToSompi } from '@kasflow/passkey-wallet';
+import type { PaymentData } from '@/types';
 
 interface PageProps {
   params: Promise<{ paymentId: string }>;
@@ -30,12 +31,13 @@ export default function PaymentPage({ params }: PageProps) {
 
   // Decode payment data from URL
   useEffect(() => {
-    try {
-      const decoded = decodePaymentData(resolvedParams.paymentId);
-      setPaymentData(decoded);
-    } catch (err) {
-      setError('Invalid payment link');
-      toast.error('Invalid payment link');
+    const result = decodePaymentLink(`/pay/${resolvedParams.paymentId}`);
+    if (result.success) {
+      setPaymentData(result.data);
+    } else {
+      const errorMsg = result.error || 'Invalid payment link';
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   }, [resolvedParams.paymentId]);
 
@@ -46,7 +48,7 @@ export default function PaymentPage({ params }: PageProps) {
     confirmations,
     startMonitoring,
     stopMonitoring,
-  } = usePaymentDetection(paymentData?.address || '');
+  } = usePaymentDetection(paymentData?.to || '');
 
   // Start monitoring when component mounts
   useEffect(() => {
@@ -127,7 +129,7 @@ export default function PaymentPage({ params }: PageProps) {
               state={paymentState}
               transactionId={transactionId}
               confirmations={confirmations}
-              amount={paymentData.amount}
+              amount={kasToSompi(parseFloat(paymentData.amount))}
             />
           </div>
         </div>

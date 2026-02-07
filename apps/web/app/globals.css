@@ -1,70 +1,152 @@
 @import "tailwindcss";
 
 :root {
-  /* KasFlow Dark Theme (default) */
-  --background: #0a0a0a;        /* Near black */
+  /* KasFlow Neo-Brutalism Palette (Light) */
+  --background: #fff5f0;        /* Warm Cream */
+  --foreground: #000000;        /* Black */
+  
+  --neo-cyan: #22d3ee;          /* Vibrant Cyan */
+  --neo-green: #bef264;         /* Lime Green */
+  --neo-pink: #f472b6;          /* Hot Pink */
+  --neo-yellow: #fde68a;        /* Yellow */
+  --neo-purple: #a78bfa;        /* Purple */
+  
+  --border: #000000;            /* Pitch Black Borders */
+  
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #bef264;
+  --primary-foreground: #000000;
+  --secondary: #22d3ee;
+  --secondary-foreground: #000000;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f472b6;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  /* Fonts */
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-mono: var(--font-space-grotesk), monospace;
+}
+
+.dark {
+  /* KasFlow Neo-Brutalism Palette (Dark) */
+  --background: #0a0a0a;        /* Deep Black */
   --foreground: #ffffff;        /* White */
-  --kaspa-cyan: #49EACB;        /* Primary brand color */
-  --success: #22c55e;           /* Green */
-  --warning: #f59e0b;           /* Amber */
-  --error: #ef4444;             /* Red */
-  --muted: #71717a;             /* Gray-500 */
-  --muted-foreground: #a1a1aa;  /* Gray-400 */
-  --border: #27272a;            /* Gray-800 */
-  --card: #18181b;              /* Gray-900 */
-  --card-foreground: #fafafa;   /* Gray-50 */
+  
+  --neo-cyan: #06b6d4;          /* Slightly deeper cyan */
+  --neo-green: #a3e635;         /* Slightly deeper lime */
+  --neo-pink: #db2777;          /* Slightly deeper pink */
+  --neo-yellow: #fcd34d;        /* Slightly deeper yellow */
+  --neo-purple: #8b5cf6;        /* Slightly deeper purple */
+  
+  --border: #ffffff;            /* White Borders in Dark Mode */
+  
+  --card: #18181b;              /* Dark Gray Card */
+  --card-foreground: #ffffff;
+  --popover: #18181b;
+  --popover-foreground: #ffffff;
+  --primary: #a3e635;
+  --primary-foreground: #000000;
+  --secondary: #06b6d4;
+  --secondary-foreground: #000000;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #db2777;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-kaspa-cyan: var(--kaspa-cyan);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-error: var(--error);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
+  --color-neo-cyan: var(--neo-cyan);
+  --color-neo-green: var(--neo-green);
+  --color-neo-pink: var(--neo-pink);
+  --color-neo-yellow: var(--neo-yellow);
+  --color-neo-purple: var(--neo-purple);
   --color-border: var(--border);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-  antialiased: true;
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    /* Dot pattern background - adjusted for dark mode */
+    background-image: radial-gradient(var(--muted-foreground) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.8;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
 }
 
-/* Custom scrollbar for dark theme */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+@layer components {
+  /* Neo-Brutalism Utilities */
+  .neo-box {
+    @apply bg-card border-4 border-border transition-all duration-200;
+    box-shadow: 6px 6px 0px 0px var(--border);
+  }
+
+  .neo-box:hover {
+    @apply -translate-y-1 -translate-x-1;
+    box-shadow: 8px 8px 0px 0px var(--border);
+  }
+
+  .neo-card {
+    @apply bg-card border-4 border-border rounded-xl p-6;
+    box-shadow: 6px 6px 0px 0px var(--border);
+  }
+
+  .neo-input {
+    @apply bg-card border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] focus:outline-none focus:ring-4 focus:ring-neo-green/50 transition-all rounded-md px-4 py-2;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 0px rgba(0,0,0,1);
+  }
+  
+  .dark .text-shadow {
+    text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 4px;
-}
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-wiggle {
+    animation: wiggle 0.3s ease-in-out infinite;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
-}
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
 
-/* Selection color */
-::selection {
-  background-color: var(--kaspa-cyan);
-  color: var(--background);
-}
-
-/* Focus ring color */
-:focus-visible {
-  outline: 2px solid var(--kaspa-cyan);
-  outline-offset: 2px;
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
 }

@@ -11,8 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { formatKas } from '@kasflow/passkey-wallet';
-import type { PaymentData } from '@/lib/payment-encoding';
+import type { PaymentData } from '@/types';
 
 // =============================================================================
 // Types
@@ -51,7 +50,8 @@ export function PaymentCard({ paymentData, onPay }: PaymentCardProps) {
 
   // Get current URL on mount
   useEffect(() => {
-    setCurrentUrl(window.location.href);
+    const timer = setTimeout(() => setCurrentUrl(window.location.href), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Reset copied state after 2 seconds
@@ -62,14 +62,15 @@ export function PaymentCard({ paymentData, onPay }: PaymentCardProps) {
     }
   }, [copied]);
 
-  const amountKas = formatKas(paymentData.amount, 8);
+  // Convert amount string (KAS) to number for display
+  const amountKas = parseFloat(paymentData.amount).toFixed(8).replace(/\.?0+$/, '');
 
   // =============================================================================
   // Handlers
   // =============================================================================
 
   const handleCopyAddress = async () => {
-    const success = await copyToClipboard(paymentData.address);
+    const success = await copyToClipboard(paymentData.to);
     if (success) {
       setCopied(true);
       toast.success('Address copied to clipboard');
@@ -105,7 +106,7 @@ export function PaymentCard({ paymentData, onPay }: PaymentCardProps) {
   };
 
   const handleExplorer = () => {
-    const explorerUrl = `https://explorer.kaspa.org/addresses/${paymentData.address}`;
+    const explorerUrl = `https://explorer.kaspa.org/addresses/${paymentData.to}`;
     window.open(explorerUrl, '_blank');
   };
 
@@ -123,9 +124,9 @@ export function PaymentCard({ paymentData, onPay }: PaymentCardProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         {/* QR Code */}
-        <div className="flex justify-center p-6 bg-white rounded-lg">
+        <div className="flex justify-center p-6 bg-white border-4 border-black shadow-[4px_4px_0px_0px_#000] hover:shadow-[6px_6px_0px_0px_#000] transition-all">
           <QRCodeSVG
-            value={paymentData.address}
+            value={paymentData.to}
             size={256}
             level="H"
             includeMargin
@@ -150,7 +151,7 @@ export function PaymentCard({ paymentData, onPay }: PaymentCardProps) {
             <div className="text-sm text-muted-foreground">Recipient Address</div>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-sm bg-muted px-3 py-2 rounded font-mono break-all">
-                {truncateAddress(paymentData.address)}
+                {truncateAddress(paymentData.to)}
               </code>
               <Button
                 variant="outline"

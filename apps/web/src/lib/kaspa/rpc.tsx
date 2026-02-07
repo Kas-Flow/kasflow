@@ -14,6 +14,7 @@ import {
   RPC_TIMEOUT_MS,
   RPC_RETRY_INTERVAL_MS,
   MAX_RPC_RETRIES,
+  RPC_URLS,
 } from '@/lib/constants';
 
 // Dynamic import to avoid WASM loading at build time
@@ -94,9 +95,8 @@ export function RpcProvider({
           ),
         ]);
 
-        // Get connected URL
-        const rpcClient = client.getRpcClient();
-        const connectedUrl = rpcClient?.url || 'unknown';
+        // Get connected URL from network
+        const connectedUrl = RPC_URLS[networkToUse];
 
         // Update state
         setRpc(client);

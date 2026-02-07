@@ -1,6 +1,7 @@
 'use client';
 
-import { formatKas, kasToUsd, kasToSompi } from '@/lib/utils';
+import { formatKas, kasToSompi } from '@kasflow/passkey-wallet';
+import { kasToUsd } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
 interface AmountDisplayProps {

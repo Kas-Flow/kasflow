@@ -53,7 +53,7 @@ export function validatePaymentData(data: unknown): Result<PaymentData> {
 
   if (!result.success) {
     // Get first error message
-    const firstError = result.error.errors[0];
+    const firstError = result.error.issues[0];
     return {
       success: false,
       error: firstError?.message || 'Invalid payment data',

@@ -38,14 +38,11 @@ export const IDB_DATABASE_NAME = 'kasflow-wallet';
 /** IndexedDB store name */
 export const IDB_STORE_NAME = 'keystore';
 
-/** Key for storing encrypted wallet data */
-export const STORAGE_KEY_WALLET = 'wallet';
-
 /** Key for storing credential ID */
 export const STORAGE_KEY_CREDENTIAL_ID = 'credential-id';
 
-/** Key for storing user ID (for key derivation) */
-export const STORAGE_KEY_USER_ID = 'user-id';
+/** Key for storing wallet metadata (passkey public key, address, network) */
+export const STORAGE_KEY_METADATA = 'wallet-metadata';
 
 // =============================================================================
 // Kaspa Network
@@ -89,21 +86,6 @@ export const SOMPI_PER_KAS = 100_000_000n;
 /** Minimum transaction fee in sompi */
 export const MIN_FEE_SOMPI = 1000n;
 
-// =============================================================================
-// Encryption
-// =============================================================================
-
-/** AES-GCM key length in bits */
-export const ENCRYPTION_KEY_LENGTH = 256;
-
-/** AES-GCM IV length in bytes */
-export const ENCRYPTION_IV_LENGTH = 12;
-
-/** PBKDF2 iterations for key derivation */
-export const PBKDF2_ITERATIONS = 100_000;
-
-/** Salt length in bytes for key derivation */
-export const SALT_LENGTH = 16;
 
 // =============================================================================
 // Error Messages
@@ -114,7 +96,6 @@ export const ERROR_MESSAGES = {
   WALLET_ALREADY_EXISTS: 'A wallet already exists. Delete it before creating a new one.',
   PASSKEY_REGISTRATION_FAILED: 'Failed to register passkey. Please try again.',
   PASSKEY_AUTHENTICATION_FAILED: 'Failed to authenticate with passkey. Please try again.',
-  DECRYPTION_FAILED: 'Failed to decrypt wallet data. Authentication may have failed.',
   INVALID_ADDRESS: 'Invalid Kaspa address format.',
   INSUFFICIENT_BALANCE: 'Insufficient balance for this transaction.',
   WEBAUTHN_NOT_SUPPORTED: 'WebAuthn is not supported in this browser.',

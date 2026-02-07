@@ -23,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { isValidAddress } from '@kasflow/passkey-wallet';
-import { encodePaymentData } from '@/lib/payment-encoding';
+import { encodePaymentLink } from '@/lib/payment';
 
 // =============================================================================
 // Schema
@@ -65,14 +65,10 @@ export function PaymentForm() {
 
   const onSubmit = async (values: PaymentFormValues) => {
     try {
-      // Convert amount to sompi (1 KAS = 100,000,000 sompi)
-      const amountKas = parseFloat(values.amount);
-      const amountSompi = BigInt(Math.floor(amountKas * 100_000_000));
-
       // Encode payment data
-      const encoded = encodePaymentData({
-        address: values.recipientAddress,
-        amount: amountSompi,
+      const encoded = encodePaymentLink({
+        to: values.recipientAddress,
+        amount: values.amount,
         memo: values.memo || undefined,
       });
 

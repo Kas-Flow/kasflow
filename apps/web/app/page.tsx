@@ -1,158 +1,326 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Zap, Shield, Link as LinkIcon } from 'lucide-react';
+import { 
+  Zap, ArrowRight, Wallet, ShieldCheck, Globe, Coins, 
+  Link as LinkIcon, Star
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/navbar';
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  };
+
+  const floatingVariants = {
+    animate: {
+      y: [0, -15, 0],
+      rotate: [-1, 1, -1],
+      transition: {
+        duration: 5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-neo-green selection:text-black transition-colors duration-500">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-20">
-        <div className="flex flex-col items-center space-y-8 text-center max-w-3xl">
+      {/* --- HERO SECTION --- */}
+      <section className="relative pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
+        {/* Background Blobs */}
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute top-20 right-[10%] w-64 h-64 bg-neo-pink rounded-full border-4 border-black blur-3xl"
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+          className="absolute bottom-20 left-[5%] w-72 h-72 bg-neo-cyan rounded-full border-4 border-black blur-3xl"
+        />
+        
+        {/* --- FLOATING ELEMENTS --- */}
+        <motion.div 
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-32 left-[5%] hidden md:flex items-center justify-center w-24 h-24 bg-neo-yellow border-4 border-border rounded-full shadow-[6px_6px_0px_0px_var(--border)]"
+        >
+           <Zap className="w-12 h-12 text-black" fill="currentColor" />
+        </motion.div>
+
+        <motion.div 
+          animate={{ 
+            y: [0, 20, 0], 
+            rotate: [12, -5, 12],
+            transition: { duration: 7, repeat: Infinity }
+          }}
+          className="absolute top-40 right-[10%] hidden md:flex items-center justify-center w-20 h-20 bg-neo-cyan border-4 border-border rounded-full shadow-[5px_5px_0px_0px_var(--border)]"
+        >
+           <ShieldCheck className="w-10 h-10 text-black" />
+        </motion.div>
+
+        <motion.div 
+          animate={{ 
+            y: [0, -30, 0],
+            transition: { duration: 4, repeat: Infinity, ease: "easeOut" }
+          }}
+          className="absolute bottom-10 right-[5%] hidden lg:flex items-center justify-center w-32 h-32 bg-neo-green border-4 border-border rounded-full shadow-[8px_8px_0px_0px_var(--border)]"
+        >
+           <Wallet className="w-16 h-16 text-black" />
+        </motion.div>
+
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-32 left-[15%] hidden lg:flex items-center justify-center w-16 h-16 bg-neo-pink border-4 border-border rounded-full shadow-[3px_3px_0px_0px_var(--border)]"
+        >
+           <LinkIcon className="w-8 h-8 text-black" />
+        </motion.div>
+
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-7xl mx-auto px-4 relative z-10 text-center"
+        >
           {/* Badge */}
-          <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm">
-            <Zap className="w-4 h-4 mr-2 text-kaspa-blue" />
-            Instant Kaspa Payments
-          </div>
+          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 bg-card border-2 border-border px-6 py-2 rounded-full shadow-[4px_4px_0px_0px_var(--border)] mb-8 transform hover:scale-105 transition-transform cursor-default">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neo-green opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-neo-green"></span>
+            </span>
+            <span className="font-bold text-sm tracking-wide font-mono uppercase">Live on Kaspa Mainnet</span>
+          </motion.div>
 
-          {/* Heading */}
-          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            Accept{' '}
-            <span className="bg-gradient-to-r from-kaspa-blue to-kaspa-teal bg-clip-text text-transparent">
-              Kaspa
-            </span>{' '}
-            Payments in Milliseconds
-          </h1>
+          {/* Main Heading */}
+          <motion.h1 variants={itemVariants} className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8">
+            ACCEPT <br />
+            <span className="relative inline-block px-4 mx-2">
+              <motion.span 
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="absolute inset-0 bg-neo-cyan border-4 border-border transform -rotate-2 shadow-[8px_8px_0px_0px_var(--border)]"
+              ></motion.span>
+              <span className="relative text-black">KASPA</span>
+            </span>
+            <br /> IN MILLISECONDS
+          </motion.h1>
 
-          {/* Description */}
-          <p className="text-xl text-muted-foreground max-w-2xl">
-            Create payment links, showcase Kaspa's speed with real-time confirmations,
-            and get paid instantly. No backend required.
-          </p>
+          <motion.p variants={itemVariants} className="text-xl sm:text-2xl font-bold text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-sans">
+            Create payment links, showcase Kaspa&apos;s speed with
+            <span className="mx-2 bg-neo-yellow px-2 border-2 border-border rounded-md text-black shadow-[2px_2px_0px_0px_var(--border)] inline-block transform rotate-1">instant</span> 
+            confirmations. No backend needed.
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button size="lg" asChild>
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Button size="lg" variant="neo" className="h-16 px-8 text-xl" asChild>
               <Link href="/create">
                 Create Payment Link
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="ml-2 w-6 h-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            
+            <Button size="lg" variant="outline" className="h-16 px-8 text-xl bg-card" asChild>
               <Link href="/docs">
-                Learn More
+                Read Documentation
               </Link>
             </Button>
-          </div>
+          </motion.div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 pt-12 w-full max-w-2xl">
-            <div className="flex flex-col items-center space-y-2">
-              <div className="text-3xl font-bold text-kaspa-blue">~1s</div>
-              <div className="text-sm text-muted-foreground">Confirmation Time</div>
+          {/* Social Proof */}
+          <motion.div variants={itemVariants} className="mt-16 flex items-center justify-center gap-4">
+             <div className="flex items-center gap-1">
+                {[1,2,3,4,5].map(i => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 1.2 + i * 0.1 }}
+                  >
+                    <Star className="h-5 w-5 fill-neo-yellow text-black" />
+                  </motion.div>
+                ))}
+              </div>
+              <p className="font-bold text-lg">Powered by BlockDAG Technology</p>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* --- MARQUEE SECTION --- */}
+      <div className="border-y-4 border-border bg-neo-pink overflow-hidden py-6 -rotate-1 scale-105 z-20 relative">
+        <motion.div 
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="flex whitespace-nowrap"
+        >
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="flex items-center mx-8">
+              <span className="text-4xl font-black text-white stroke-black" style={{WebkitTextStroke: "2px black"}}>INSTANT FINALITY</span>
+              <Zap className="w-8 h-8 ml-8 text-black fill-neo-yellow" />
+              <span className="text-4xl font-black text-white stroke-black" style={{WebkitTextStroke: "2px black"}}>PASSKEY WALLETS</span>
+              <Wallet className="w-8 h-8 ml-8 text-black fill-neo-cyan" />
+              <span className="text-4xl font-black text-white stroke-black" style={{WebkitTextStroke: "2px black"}}>NO BACKEND</span>
+              <LinkIcon className="w-8 h-8 ml-8 text-black" />
             </div>
-            <div className="flex flex-col items-center space-y-2">
-              <div className="text-3xl font-bold text-kaspa-blue">0</div>
-              <div className="text-sm text-muted-foreground">Backend Setup</div>
-            </div>
-            <div className="flex flex-col items-center space-y-2">
-              <div className="text-3xl font-bold text-kaspa-blue">100%</div>
-              <div className="text-sm text-muted-foreground">Open Source</div>
-            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* --- FEATURES SECTION --- */}
+      <section className="py-24 px-4 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl md:text-7xl font-black mb-4">
+              WHY <span className="bg-neo-green px-4 border-4 border-border shadow-[6px_6px_0px_0px_var(--border)] inline-block transform rotate-1 text-black">KASFLOW?</span>
+            </h2>
+            <p className="text-2xl font-bold text-muted-foreground">The fastest way to accept crypto payments.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Instant Confirmations",
+                desc: "Leverage Kaspa's BlockDAG for sub-second finality. Don't make your users wait.",
+                icon: Zap,
+                color: "bg-neo-yellow",
+                rotate: 3
+              },
+              {
+                title: "Passkey Security",
+                desc: "Non-custodial wallets secured by device biometrics. No seed phrases to lose.",
+                icon: ShieldCheck,
+                color: "bg-neo-cyan",
+                rotate: -2
+              },
+              {
+                title: "Simple Links",
+                desc: "Generate payment links instantly. Share anywhere. No complex backend setup required.",
+                icon: LinkIcon,
+                color: "bg-neo-pink",
+                rotate: 2
+              }
+            ].map((feature, i) => (
+              <motion.div 
+                key={i}
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                whileHover={{ y: -10, rotate: feature.rotate }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className={`${feature.color} border-4 border-border p-8 shadow-[8px_8px_0px_0px_var(--border)] transition-all group cursor-default`}
+              >
+                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <feature.icon className={`h-8 w-8 text-black`} fill={feature.color.replace('bg-', '') === 'neo-pink' ? 'white' : 'currentColor'} />
+                </div>
+                <h3 className="text-3xl font-black mb-4 text-black">{feature.title}</h3>
+                <p className="text-lg font-bold text-black/80">
+                  {feature.desc}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="container py-20 border-t">
-        <div className="flex flex-col items-center space-y-4 text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Why KasFlow?
-          </h2>
-          <p className="text-muted-foreground max-w-2xl">
-            The fastest way to accept Kaspa payments for your business
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Feature 1 */}
-          <div className="flex flex-col items-center space-y-4 text-center p-6 rounded-lg border bg-card">
-            <div className="p-3 rounded-full bg-kaspa-blue/10">
-              <Zap className="w-6 h-6 text-kaspa-blue" />
-            </div>
-            <h3 className="text-xl font-semibold">Instant Confirmations</h3>
-            <p className="text-muted-foreground">
-              Kaspa's blockDAG technology delivers confirmations in ~1 second.
-              Showcase the speed advantage.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="flex flex-col items-center space-y-4 text-center p-6 rounded-lg border bg-card">
-            <div className="p-3 rounded-full bg-kaspa-teal/10">
-              <Shield className="w-6 h-6 text-kaspa-teal" />
-            </div>
-            <h3 className="text-xl font-semibold">Passkey Wallets</h3>
-            <p className="text-muted-foreground">
-              Create secure wallets with your device biometrics. No seed phrases to manage.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="flex flex-col items-center space-y-4 text-center p-6 rounded-lg border bg-card">
-            <div className="p-3 rounded-full bg-kaspa-blue/10">
-              <LinkIcon className="w-6 h-6 text-kaspa-blue" />
-            </div>
-            <h3 className="text-xl font-semibold">Simple Payment Links</h3>
-            <p className="text-muted-foreground">
-              Generate shareable payment links with QR codes. No backend infrastructure needed.
-            </p>
+      {/* --- STATS SECTION --- */}
+      <section className="py-24 border-t-4 border-border bg-neo-purple relative overflow-hidden">
+         {/* Background Pattern */}
+         <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(#000 2px, transparent 2px)', backgroundSize: '20px 20px'}}></div>
+         
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { label: 'Confirmation', value: '~1s', icon: Zap },
+              { label: 'Backend Code', value: '0', icon: Coins },
+              { label: 'Security', value: 'Biometric', icon: ShieldCheck },
+              { label: 'License', value: 'MIT', icon: Globe }
+            ].map((stat, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-card border-4 border-border p-6 rounded-2xl shadow-[6px_6px_0px_0px_var(--border)] hover:-translate-y-2 transition-transform"
+              >
+                <div className="flex justify-center mb-4">
+                   <stat.icon className="w-8 h-8 text-foreground" />
+                </div>
+                <div className="text-4xl md:text-5xl font-black mb-2">{stat.value}</div>
+                <div className="text-sm font-black uppercase tracking-widest text-muted-foreground">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container py-20 border-t">
-        <div className="flex flex-col items-center space-y-6 text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Ready to get started?
+      {/* --- CTA SECTION --- */}
+      <section className="py-24 px-4 bg-neo-green border-t-4 border-border">
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto text-center"
+        >
+          <h2 className="text-5xl md:text-7xl font-black mb-8 text-black">
+            READY TO START?
           </h2>
-          <p className="text-muted-foreground">
-            Create your first payment link in seconds
+          <p className="text-2xl font-bold mb-12 max-w-2xl mx-auto text-black/80">
+            Create your first Kaspa payment link in seconds. It&apos;s free and open source.
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" className="h-20 px-12 text-2xl bg-black text-white border-4 border-white hover:bg-gray-900 shadow-[8px_8px_0px_0px_#fff]" asChild>
             <Link href="/create">
-              Create Payment Link
-              <ArrowRight className="w-4 h-4 ml-2" />
+              Get Started Now
             </Link>
           </Button>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="container py-8 border-t">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            Built for the Kaspa ecosystem
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="https://github.com/yourusername/kasflow"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </Link>
-            <Link
-              href="/docs"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Documentation
-            </Link>
+      {/* --- FOOTER --- */}
+      <footer className="bg-black text-white py-12 border-t-4 border-border">
+        <div className="container flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-neo-green rounded flex items-center justify-center text-black font-black">K</div>
+            <span className="font-black text-2xl">KasFlow</span>
           </div>
+          <p className="font-bold text-gray-400">© 2026 KasFlow. Built for the Kaspathon.</p>
         </div>
       </footer>
     </div>

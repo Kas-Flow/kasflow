@@ -2,8 +2,7 @@
 
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { PaymentStatus } from '@/types';
-import { PAYMENT_STATUS } from '@/lib/constants';
+import { PAYMENT_STATUS, type PaymentStatus } from '@/lib/constants';
 
 interface StatusIndicatorProps {
   status: PaymentStatus;
