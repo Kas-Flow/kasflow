@@ -14,11 +14,16 @@ interface PaymentHeaderProps {
 
 export function PaymentHeader({ amount, recipientAddress, network, memo }: PaymentHeaderProps) {
   const networkName = NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network;
+  const isMainnet = network === 'mainnet';
 
   return (
     <div className="flex flex-col items-center text-center bg-card border-4 border-border p-8 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] relative">
-      {/* Network Badge */}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-neo-cyan text-black px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+      {/* Network Badge - Color coded */}
+      <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-black whitespace-nowrap border-2 border-border shadow-[3px_3px_0px_0px_var(--shadow-color)] ${
+        isMainnet
+          ? 'bg-neo-green text-black'
+          : 'bg-neo-yellow text-black'
+      }`}>
         {networkName}
       </div>
 
