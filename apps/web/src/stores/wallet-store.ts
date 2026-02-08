@@ -58,6 +58,7 @@ export interface WalletState {
   deleteWallet: () => Promise<void>;
 
   // Network actions
+  setNetwork: (network: NetworkId) => void;
   connectToNetwork: () => Promise<void>;
   disconnectFromNetwork: () => Promise<void>;
 
@@ -283,6 +284,14 @@ export const useWalletStore = create<WalletState>()(
           set({ error: message });
           throw error;
         }
+      },
+
+      /**
+       * Set network (must be called before creating/unlocking wallet)
+       */
+      setNetwork: (network: NetworkId) => {
+        console.log('[WalletStore] Setting network:', network);
+        set({ network });
       },
 
       /**

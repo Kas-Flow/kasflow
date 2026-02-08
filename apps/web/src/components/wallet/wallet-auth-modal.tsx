@@ -54,6 +54,7 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
     connectKIP12,
     detectUserState,
     markOnboardingComplete,
+    setNetwork,
     isFirstTimeUser,
     walletExists,
     kip12Available,
@@ -124,6 +125,12 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
     setError(null);
 
     try {
+      // Set network if provided
+      if (network) {
+        console.log('[WalletAuthModal] Setting network to:', network);
+        setNetwork(network as any); // Cast to NetworkId
+      }
+
       // Smart detection: unlock if exists, create if doesn't
       if (walletExists) {
         console.log('[WalletAuthModal] Unlocking existing wallet...');
@@ -147,6 +154,12 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
     setError(null);
 
     try {
+      // Set network if provided
+      if (network) {
+        console.log('[WalletAuthModal] Setting network to:', network);
+        setNetwork(network as any); // Cast to NetworkId
+      }
+
       // Check if window.kaspa exists
       if (typeof window === 'undefined' || !('kaspa' in window)) {
         throw new Error('No KIP-12 wallet extension detected');
