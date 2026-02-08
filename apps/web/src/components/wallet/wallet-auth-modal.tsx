@@ -1,8 +1,9 @@
 'use client';
 
 /**
- * WalletModal - Modern wallet connection modal
- * Auto-detects user state and shows appropriate auth flow
+ * WalletAuthModal - Just-in-time wallet authentication
+ * Used on payment receiver page when user clicks "Pay Now"
+ * Auto-detects user state and shows appropriate flow
  */
 
 import { useState, useEffect } from 'react';
@@ -26,18 +27,19 @@ import confetti from 'canvas-confetti';
 // Types
 // =============================================================================
 
-interface WalletModalProps {
+interface WalletAuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void; // Called after successful connection
 }
 
 type ModalView = 'welcome' | 'auth-selection' | 'authenticating' | 'success' | 'error';
 
 // =============================================================================
-// WalletModal Component
+// WalletAuthModal Component
 // =============================================================================
 
-export function WalletModal({ open, onOpenChange }: WalletModalProps) {
+export function WalletAuthModal({ open, onOpenChange, onSuccess }: WalletAuthModalProps) {
   const [view, setView] = useState<ModalView>('welcome');
   const [selectedMethod, setSelectedMethod] = useState<'passkey' | 'kip12' | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -84,10 +86,11 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
       // Close after showing success
       setTimeout(() => {
         onOpenChange(false);
+        onSuccess?.();
         resetState();
       }, 1500);
     }
-  }, [status, view, onOpenChange]);
+  }, [status, view, onOpenChange, onSuccess]);
 
   // Reset state when modal closes
   useEffect(() => {
@@ -119,15 +122,15 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
     try {
       // Smart detection: unlock if exists, create if doesn't
       if (walletExists) {
-        console.log('[WalletModal] Unlocking existing wallet...');
+        console.log('[WalletAuthModal] Unlocking existing wallet...');
         await unlockWallet();
       } else {
-        console.log('[WalletModal] Creating new wallet...');
+        console.log('[WalletAuthModal] Creating new wallet...');
         await createWallet('KasFlow Wallet');
       }
       // Success handled by useEffect watching status
     } catch (err) {
-      console.error('[WalletModal] Authentication failed:', err);
+      console.error('[WalletAuthModal] Authentication failed:', err);
       const message = err instanceof Error ? err.message : 'Authentication failed';
       setError(message);
       setView('error');
@@ -145,7 +148,7 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
         throw new Error('No KIP-12 wallet extension detected');
       }
 
-      console.log('[WalletModal] Connecting to KIP-12 wallet...');
+      console.log('[WalletAuthModal] Connecting to KIP-12 wallet...');
 
       // Call the extension's connect method
       const kaspa = (window as any).kaspa;
@@ -160,7 +163,7 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
 
       // Success handled by useEffect
     } catch (err) {
-      console.error('[WalletModal] KIP-12 connection failed:', err);
+      console.error('[WalletAuthModal] KIP-12 connection failed:', err);
       const message = err instanceof Error ? err.message : 'Failed to connect wallet extension';
       setError(message);
       setView('error');
@@ -209,7 +212,7 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
                 className="absolute inset-0 p-8 flex flex-col justify-center"
               >
                 <DialogHeader className="text-center mb-8">
-                  <DialogTitle className="text-2xl font-black">Connect Wallet</DialogTitle>
+                  <DialogTitle className="text-2xl font-black">Connect to Pay</DialogTitle>
                   <DialogDescription>
                     Choose your authentication method
                   </DialogDescription>

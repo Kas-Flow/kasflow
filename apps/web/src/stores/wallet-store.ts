@@ -23,6 +23,8 @@ export type WalletStatus =
   | 'connected'       // Wallet ready
   | 'error';          // Error state
 
+export type WalletType = 'passkey' | 'kip12' | null;
+
 export interface WalletState {
   // Wallet instance
   wallet: PasskeyWallet | null;
@@ -35,6 +37,12 @@ export interface WalletState {
   address: string | null;
   publicKey: string | null;
   network: NetworkId;
+  walletType: WalletType;
+
+  // User detection
+  isFirstTimeUser: boolean;
+  walletExists: boolean;
+  kip12Available: boolean;
 
   // Balance
   balance: BalanceInfo | null;
@@ -56,6 +64,13 @@ export interface WalletState {
   // Balance actions
   refreshBalance: () => Promise<void>;
 
+  // User detection actions
+  detectUserState: () => Promise<void>;
+  markOnboardingComplete: () => void;
+
+  // KIP-12 actions
+  connectKIP12: (address: string) => Promise<void>;
+
   // Utils
   checkWalletExists: () => Promise<boolean>;
   reset: () => void;
@@ -72,6 +87,10 @@ const initialState = {
   address: null,
   publicKey: null,
   network: DEFAULT_NETWORK,
+  walletType: null as WalletType,
+  isFirstTimeUser: false,
+  walletExists: false,
+  kip12Available: false,
   balance: null,
   balanceLoading: false,
   rpcConnected: false,
@@ -133,6 +152,7 @@ export const useWalletStore = create<WalletState>()(
             status: 'connected',
             address: wallet.getAddress(),
             publicKey: wallet.getPublicKey(),
+            walletType: 'passkey',
             error: null,
           });
 
@@ -201,6 +221,7 @@ export const useWalletStore = create<WalletState>()(
             status: 'connected',
             address: wallet.getAddress(),
             publicKey: wallet.getPublicKey(),
+            walletType: 'passkey',
             error: null,
           });
 
@@ -349,6 +370,87 @@ export const useWalletStore = create<WalletState>()(
        */
       checkWalletExists: async () => {
         return await PasskeyWallet.exists();
+      },
+
+      /**
+       * Detect user state (first-time vs returning, wallet exists, KIP-12 available)
+       */
+      detectUserState: async () => {
+        try {
+          // Check if passkey wallet exists
+          const walletExists = await PasskeyWallet.exists();
+
+          // Check if KIP-12 extension is available
+          const kip12Available = typeof window !== 'undefined' && 'kaspa' in window;
+
+          // Check localStorage for onboarding flag
+          const hasSeenWelcome = typeof window !== 'undefined' &&
+                                 localStorage.getItem('kasflow_onboarding_seen') === 'true';
+
+          set({
+            walletExists,
+            kip12Available,
+            isFirstTimeUser: !walletExists && !hasSeenWelcome,
+          });
+
+          console.log('[WalletStore] User state detected:', {
+            walletExists,
+            kip12Available,
+            isFirstTimeUser: !walletExists && !hasSeenWelcome,
+          });
+        } catch (error) {
+          console.error('[WalletStore] Failed to detect user state:', error);
+        }
+      },
+
+      /**
+       * Mark onboarding as complete (user has seen welcome screen)
+       */
+      markOnboardingComplete: () => {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('kasflow_onboarding_seen', 'true');
+        }
+        set({ isFirstTimeUser: false });
+      },
+
+      /**
+       * Connect KIP-12 wallet extension
+       */
+      connectKIP12: async (address: string) => {
+        try {
+          console.log('[WalletStore] Connecting KIP-12 wallet...');
+          set({
+            status: 'connecting',
+            error: null,
+            walletType: 'kip12',
+          });
+
+          // Validate address format
+          // TODO: Add proper address validation when KIP-12 is fully implemented
+          if (!address || !address.startsWith('kaspa:')) {
+            throw new Error('Invalid Kaspa address');
+          }
+
+          // Update state (no wallet instance for KIP-12, extension handles signing)
+          set({
+            status: 'connected',
+            address,
+            publicKey: null, // KIP-12 doesn't expose public key
+            walletType: 'kip12',
+            error: null,
+          });
+
+          console.log('[WalletStore] KIP-12 wallet connected:', address);
+        } catch (error) {
+          console.error('[WalletStore] Failed to connect KIP-12 wallet:', error);
+          const message = error instanceof Error ? error.message : 'Failed to connect KIP-12 wallet';
+          set({
+            status: 'error',
+            error: message,
+            walletType: null,
+          });
+          throw error;
+        }
       },
 
       /**

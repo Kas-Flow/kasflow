@@ -6,7 +6,7 @@ import {
   Zap, ArrowRight, Wallet, ShieldCheck, Globe, Coins, 
   Link as LinkIcon, Star
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/navbar';
 
@@ -14,7 +14,8 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!mounted) return null;
