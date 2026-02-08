@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti';
 interface PaymentData {
   address: string;
   amount: string;
+  network: string;
   memo: string;
 }
 
@@ -60,6 +61,7 @@ export function PaymentReceiver({ data }: PaymentReceiverProps) {
           <PaymentHeader
             amount={data.amount}
             recipientAddress={data.address}
+            network={data.network}
             memo={data.memo}
           />
 

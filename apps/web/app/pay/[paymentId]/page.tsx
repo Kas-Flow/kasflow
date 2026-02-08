@@ -68,6 +68,7 @@ export default function PaymentPage({ params }: PageProps) {
   const receiverData = {
     address: paymentData.to,
     amount: paymentData.amount,
+    network: paymentData.network,
     memo: paymentData.memo || ''
   };
 

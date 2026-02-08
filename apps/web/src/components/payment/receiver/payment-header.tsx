@@ -3,21 +3,30 @@
 import React from 'react';
 import { AddressAvatar } from '@/components/ui/address-avatar';
 import { motion } from 'framer-motion';
+import { NETWORK_NAMES } from '@/lib/constants/kaspa';
 
 interface PaymentHeaderProps {
   amount: string;
   recipientAddress: string;
+  network: string;
   memo?: string;
 }
 
-export function PaymentHeader({ amount, recipientAddress, memo }: PaymentHeaderProps) {
+export function PaymentHeader({ amount, recipientAddress, network, memo }: PaymentHeaderProps) {
+  const networkName = NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network;
+
   return (
-    <div className="flex flex-col items-center text-center bg-card border-4 border-border p-8 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+    <div className="flex flex-col items-center text-center bg-card border-4 border-border p-8 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] relative">
+      {/* Network Badge */}
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-neo-cyan text-black px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+        {networkName}
+      </div>
+
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-        className="mb-6 relative"
+        className="mb-6 relative mt-2"
       >
         <AddressAvatar
           address={recipientAddress}

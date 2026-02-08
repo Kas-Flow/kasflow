@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AddressStep } from './address-step';
 import { AmountStep } from './amount-step';
@@ -14,15 +14,21 @@ interface PaymentData {
   to: string;
   amount: string;
   memo: string;
+  network: string;
 }
 
-export function PaymentWizard() {
+interface PaymentWizardProps {
+  network: string;
+}
+
+export function PaymentWizard({ network }: PaymentWizardProps) {
   const [step, setStep] = useState<WizardStep>('address');
   const [direction, setDirection] = useState(1);
   const [data, setData] = useState<PaymentData>({
     to: '',
     amount: '',
-    memo: ''
+    memo: '',
+    network
   });
 
   const nextStep = (next: WizardStep) => {
@@ -38,6 +44,11 @@ export function PaymentWizard() {
   const updateData = (key: keyof PaymentData, value: string) => {
     setData(prev => ({ ...prev, [key]: value }));
   };
+
+  // Sync network prop to state when it changes
+  useEffect(() => {
+    setData(prev => ({ ...prev, network }));
+  }, [network]);
 
   const variants = {
     enter: (direction: number) => ({

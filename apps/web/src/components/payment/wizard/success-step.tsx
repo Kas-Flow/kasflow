@@ -15,6 +15,7 @@ interface SuccessStepProps {
     to: string;
     amount: string;
     memo: string;
+    network: string;
   };
   onReset: () => void;
 }
@@ -34,6 +35,7 @@ export function SuccessStep({ data, onReset }: SuccessStepProps) {
   const paymentData: PaymentData = {
     to: data.to,
     amount: data.amount,
+    network: data.network,
     memo: data.memo || undefined,
   };
 

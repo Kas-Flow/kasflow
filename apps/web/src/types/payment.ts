@@ -4,6 +4,7 @@ import type { PaymentStatus } from '@/lib/constants';
 export interface PaymentData {
   to: string;           // Recipient Kaspa address
   amount: string;       // Amount in KAS (string for URL encoding)
+  network: string;      // Network (mainnet, testnet-10, testnet-11)
   memo?: string;        // Optional memo/note
   label?: string;       // Optional label (e.g., "Buy me a coffee")
   expiresAt?: number;   // Optional expiration timestamp
