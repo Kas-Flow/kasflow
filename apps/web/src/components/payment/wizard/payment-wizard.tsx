@@ -66,9 +66,9 @@ export function PaymentWizard({ network }: PaymentWizardProps) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-lg mx-auto">
       {/* Progress Indicator */}
-      <div className="flex justify-center gap-2 mb-6">
+      <div className="flex justify-center gap-2 mb-8">
         {['address', 'amount', 'memo', 'success'].map((s, i) => {
           const isActive = s === step;
           const isDone = ['address', 'amount', 'memo', 'success'].indexOf(step) > i;
@@ -86,7 +86,7 @@ export function PaymentWizard({ network }: PaymentWizardProps) {
         })}
       </div>
 
-      <div className="relative min-h-[450px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-8">
+      <div className="relative min-h-[500px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-8">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           {step === 'address' && (
             <motion.div

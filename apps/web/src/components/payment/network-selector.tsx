@@ -14,13 +14,13 @@ interface NetworkSelectorProps {
 export function NetworkSelector({ value, onChange }: NetworkSelectorProps) {
   const networks = [
     { id: NETWORK_ID.MAINNET, name: NETWORK_NAMES[NETWORK_ID.MAINNET] },
-    { id: NETWORK_ID.TESTNET_11, name: NETWORK_NAMES[NETWORK_ID.TESTNET_11] },
+    { id: NETWORK_ID.TESTNET_10, name: 'Testnet' },
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-lg mx-auto mb-6">
       <div className="bg-card border-4 border-border rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] p-4">
-        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3">
+        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
           Select Network
         </h3>
         <div className="grid grid-cols-2 gap-3">

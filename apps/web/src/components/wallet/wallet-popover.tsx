@@ -47,7 +47,6 @@ export function WalletPopover() {
 
   const address = useWalletStore(selectAddress);
   const balance = useWalletStore(selectBalance);
-  const network = useWalletStore((state) => state.network);
   const { disconnectWallet, refreshBalance } = useWalletStore();
 
   // Reset copied state after 2 seconds
@@ -92,7 +91,8 @@ export function WalletPopover() {
 
   const handleExplorer = () => {
     if (!address) return;
-    const explorerUrl = getExplorerAddressUrl(address, network);
+    // Testnet explorer URL
+    const explorerUrl = `https://explorer.kaspa.org/addresses/${address}`;
     window.open(explorerUrl, '_blank');
   };
 
@@ -103,8 +103,6 @@ export function WalletPopover() {
   if (!address) return null;
 
   const balanceKas = balance ? formatKas(balance.available, 4) : '0';
-  const networkName = NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network;
-  const isMainnet = network === 'mainnet';
 
   return (
     <Popover>
@@ -117,16 +115,7 @@ export function WalletPopover() {
         <div className="space-y-4">
           {/* Header */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <h4 className="font-semibold leading-none">Your Wallet</h4>
-              <div className={`px-2 py-1 rounded-full text-xs font-bold border-2 ${
-                isMainnet
-                  ? 'bg-neo-green text-black border-border'
-                  : 'bg-neo-yellow text-black border-border'
-              }`}>
-                {networkName}
-              </div>
-            </div>
+            <h4 className="font-semibold leading-none">Your Wallet</h4>
             <p className="text-sm text-muted-foreground font-mono">
               {truncateAddress(address)}
             </p>

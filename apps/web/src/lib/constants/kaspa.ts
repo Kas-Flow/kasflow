@@ -36,7 +36,7 @@ export const EXPLORER_URLS = {
 } as const;
 
 // Default network for development
-export const DEFAULT_NETWORK = NETWORK_ID.TESTNET_11;
+export const DEFAULT_NETWORK = NETWORK_ID.TESTNET_10;
 
 // RPC connection settings
 export const RPC_TIMEOUT_MS = 30000; // 30 seconds
