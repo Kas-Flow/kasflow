@@ -16,11 +16,12 @@ import { kasToSompi } from '@kasflow/passkey-wallet';
 interface PaymentActionsProps {
   address: string;
   amount: string;
+  network: string;
   memo?: string;
   onPaymentSent: () => void;
 }
 
-export function PaymentActions({ address, amount, memo, onPaymentSent }: PaymentActionsProps) {
+export function PaymentActions({ address, amount, network, memo, onPaymentSent }: PaymentActionsProps) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -110,6 +111,7 @@ export function PaymentActions({ address, amount, memo, onPaymentSent }: Payment
       <WalletAuthModal
         open={isAuthOpen}
         onOpenChange={setIsAuthOpen}
+        network={network}
         onSuccess={handleWalletConnected}
       />
     </div>

@@ -21,6 +21,7 @@ import { useWalletStore } from '@/stores/wallet-store';
 import { WelcomeScreen } from './welcome-screen';
 import { AuthMethodCard } from './auth-method-card';
 import { pageVariants, pageTransition, staggerContainer } from '@/lib/constants/animations';
+import { NETWORK_NAMES } from '@/lib/constants/kaspa';
 import confetti from 'canvas-confetti';
 
 // =============================================================================
@@ -30,6 +31,7 @@ import confetti from 'canvas-confetti';
 interface WalletAuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  network?: string; // Network to display (optional)
   onSuccess?: () => void; // Called after successful connection
 }
 
@@ -39,10 +41,12 @@ type ModalView = 'welcome' | 'auth-selection' | 'authenticating' | 'success' | '
 // WalletAuthModal Component
 // =============================================================================
 
-export function WalletAuthModal({ open, onOpenChange, onSuccess }: WalletAuthModalProps) {
+export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: WalletAuthModalProps) {
   const [view, setView] = useState<ModalView>('welcome');
   const [selectedMethod, setSelectedMethod] = useState<'passkey' | 'kip12' | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const networkName = network ? (NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network) : undefined;
 
   const {
     createWallet,
@@ -216,6 +220,13 @@ export function WalletAuthModal({ open, onOpenChange, onSuccess }: WalletAuthMod
                   <DialogDescription>
                     Choose your authentication method
                   </DialogDescription>
+                  {networkName && (
+                    <div className="mt-3 inline-flex items-center justify-center">
+                      <div className="bg-neo-cyan text-black px-3 py-1 rounded-full text-xs font-bold border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)]">
+                        {networkName}
+                      </div>
+                    </div>
+                  )}
                 </DialogHeader>
 
                 <motion.div

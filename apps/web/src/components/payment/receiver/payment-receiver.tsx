@@ -51,6 +51,7 @@ export function PaymentReceiver({ data }: PaymentReceiverProps) {
           <PaymentActions
             address={data.address}
             amount={data.amount}
+            network={data.network}
             memo={data.memo}
             onPaymentSent={handlePaymentSent}
           />
