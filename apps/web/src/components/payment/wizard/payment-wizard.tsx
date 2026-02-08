@@ -55,7 +55,7 @@ export function PaymentWizard() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-lg mx-auto">
       {/* Progress Indicator */}
       <div className="flex justify-center gap-2 mb-8">
         {['address', 'amount', 'memo', 'success'].map((s, i) => {
@@ -64,7 +64,7 @@ export function PaymentWizard() {
           return (
             <motion.div
               key={s}
-              animate={{ 
+              animate={{
                 scale: isActive ? 1.2 : 1,
                 backgroundColor: isActive || isDone ? '#bef264' : '#e5e7eb',
                 borderColor: isActive || isDone ? 'var(--border)' : '#d1d5db'
@@ -75,7 +75,7 @@ export function PaymentWizard() {
         })}
       </div>
 
-      <div className="relative min-h-[400px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-6">
+      <div className="relative min-h-[550px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-8">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           {step === 'address' && (
             <motion.div
@@ -86,7 +86,7 @@ export function PaymentWizard() {
               animate="center"
               exit="exit"
               transition={pageTransition}
-              className="absolute inset-0 p-6"
+              className="absolute inset-0 p-8 flex flex-col"
             >
               <AddressStep 
                 value={data.address}
@@ -105,7 +105,7 @@ export function PaymentWizard() {
               animate="center"
               exit="exit"
               transition={pageTransition}
-              className="absolute inset-0 p-6"
+              className="absolute inset-0 p-8 flex flex-col"
             >
               <AmountStep 
                 value={data.amount}
@@ -126,7 +126,7 @@ export function PaymentWizard() {
               animate="center"
               exit="exit"
               transition={pageTransition}
-              className="absolute inset-0 p-6"
+              className="absolute inset-0 p-8 flex flex-col"
             >
               <MemoStep 
                 value={data.memo}
@@ -148,7 +148,7 @@ export function PaymentWizard() {
               animate="center"
               exit="exit"
               transition={pageTransition}
-              className="absolute inset-0 p-6"
+              className="absolute inset-0 p-8 flex flex-col"
             >
               <SuccessStep 
                 data={data}

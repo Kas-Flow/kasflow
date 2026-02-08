@@ -26,14 +26,14 @@ export function AmountStep({ value, recipientAddress, onChange, onNext, onBack }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex items-center gap-3 mb-6 p-2 bg-muted/20 rounded-lg border-2 border-transparent">
+      <div className="flex items-center gap-3 mb-4 p-2 bg-muted/20 rounded-lg border-2 border-transparent">
         <AddressAvatar address={recipientAddress} size={32} animated={false} />
         <span className="text-sm font-mono text-muted-foreground truncate">
           {recipientAddress.slice(0, 12)}...{recipientAddress.slice(-8)}
         </span>
       </div>
 
-      <h2 className="text-2xl font-black mb-6">How much to send?</h2>
+      <h2 className="text-2xl font-black mb-4">How much to send?</h2>
 
       <div className="flex-1 space-y-6">
         <div className="relative">
@@ -42,7 +42,7 @@ export function AmountStep({ value, recipientAddress, onChange, onNext, onBack }
             placeholder="0.00"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="text-2xl h-16 font-mono pl-4 pr-16"
+            className="text-2xl h-14 font-mono pl-4 pr-16"
             autoFocus
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-muted-foreground">
