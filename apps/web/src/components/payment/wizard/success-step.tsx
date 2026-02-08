@@ -7,10 +7,12 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Copy, Share2, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
+import { getFullPaymentUrl } from '@/lib/payment/encode';
+import type { PaymentData } from '@/types';
 
 interface SuccessStepProps {
   data: {
-    address: string;
+    to: string;
     amount: string;
     memo: string;
   };
@@ -18,7 +20,7 @@ interface SuccessStepProps {
 }
 
 export function SuccessStep({ data, onReset }: SuccessStepProps) {
-  
+
   useEffect(() => {
     confetti({
       particleCount: 100,
@@ -28,7 +30,14 @@ export function SuccessStep({ data, onReset }: SuccessStepProps) {
     });
   }, []);
 
-  const paymentLink = `https://kasflow.app/pay/${btoa(JSON.stringify(data))}`;
+  // Use proper encoding function with correct PaymentData structure
+  const paymentData: PaymentData = {
+    to: data.to,
+    amount: data.amount,
+    memo: data.memo || undefined,
+  };
+
+  const paymentLink = getFullPaymentUrl(paymentData);
 
   const copyLink = () => {
     navigator.clipboard.writeText(paymentLink);
@@ -39,7 +48,7 @@ export function SuccessStep({ data, onReset }: SuccessStepProps) {
     if (navigator.share) {
       await navigator.share({
         title: 'Kaspa Payment Request',
-        text: `Pay ${data.amount} KAS to ${data.address}`,
+        text: `Pay ${data.amount} KAS to ${data.to}`,
         url: paymentLink
       });
     } else {

@@ -11,7 +11,7 @@ import { pageTransition } from '@/lib/constants/animations';
 type WizardStep = 'address' | 'amount' | 'memo' | 'success';
 
 interface PaymentData {
-  address: string;
+  to: string;
   amount: string;
   memo: string;
 }
@@ -20,7 +20,7 @@ export function PaymentWizard() {
   const [step, setStep] = useState<WizardStep>('address');
   const [direction, setDirection] = useState(1);
   const [data, setData] = useState<PaymentData>({
-    address: '',
+    to: '',
     amount: '',
     memo: ''
   });
@@ -75,7 +75,7 @@ export function PaymentWizard() {
         })}
       </div>
 
-      <div className="relative min-h-[550px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-8">
+      <div className="relative min-h-[500px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-8">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           {step === 'address' && (
             <motion.div
@@ -88,9 +88,9 @@ export function PaymentWizard() {
               transition={pageTransition}
               className="absolute inset-0 p-8 flex flex-col"
             >
-              <AddressStep 
-                value={data.address}
-                onChange={(val) => updateData('address', val)}
+              <AddressStep
+                value={data.to}
+                onChange={(val) => updateData('to', val)}
                 onNext={() => nextStep('amount')}
               />
             </motion.div>
@@ -107,9 +107,9 @@ export function PaymentWizard() {
               transition={pageTransition}
               className="absolute inset-0 p-8 flex flex-col"
             >
-              <AmountStep 
+              <AmountStep
                 value={data.amount}
-                recipientAddress={data.address}
+                recipientAddress={data.to}
                 onChange={(val) => updateData('amount', val)}
                 onNext={() => nextStep('memo')}
                 onBack={() => prevStep('address')}
@@ -128,9 +128,9 @@ export function PaymentWizard() {
               transition={pageTransition}
               className="absolute inset-0 p-8 flex flex-col"
             >
-              <MemoStep 
+              <MemoStep
                 value={data.memo}
-                recipientAddress={data.address}
+                recipientAddress={data.to}
                 amount={data.amount}
                 onChange={(val) => updateData('memo', val)}
                 onNext={() => nextStep('success')}
@@ -150,10 +150,10 @@ export function PaymentWizard() {
               transition={pageTransition}
               className="absolute inset-0 p-8 flex flex-col"
             >
-              <SuccessStep 
+              <SuccessStep
                 data={data}
                 onReset={() => {
-                  setData({ address: '', amount: '', memo: '' });
+                  setData({ to: '', amount: '', memo: '' });
                   nextStep('address');
                 }}
               />
