@@ -12,7 +12,7 @@ interface PaymentHeaderProps {
 
 export function PaymentHeader({ amount, recipientAddress, memo }: PaymentHeaderProps) {
   return (
-    <div className="flex flex-col items-center text-center bg-white border-4 border-border p-8 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+    <div className="flex flex-col items-center text-center bg-card border-4 border-border p-8 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -24,7 +24,7 @@ export function PaymentHeader({ amount, recipientAddress, memo }: PaymentHeaderP
           size={100}
           className="border-neo-cyan"
         />
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-black text-white px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border-2 border-white">
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-foreground text-background px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border-2 border-background">
           Recipient
         </div>
       </motion.div>

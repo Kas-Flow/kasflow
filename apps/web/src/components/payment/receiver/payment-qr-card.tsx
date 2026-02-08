@@ -20,9 +20,9 @@ export function PaymentQRCard({ address, amount }: PaymentQRCardProps) {
       variants={cardGlowVariants}
       initial="initial"
       whileHover="hover"
-      className="bg-white p-8 rounded-xl border-4 border-border shadow-[8px_8px_0px_0px_var(--shadow-color)] flex flex-col items-center gap-4"
+      className="bg-card p-8 rounded-xl border-4 border-border shadow-[8px_8px_0px_0px_var(--shadow-color)] flex flex-col items-center gap-4"
     >
-      <div className="bg-white p-2">
+      <div className="bg-white dark:bg-white p-2 rounded">
         <QRCodeSVG value={uri} size={240} />
       </div>
       <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">

@@ -20,7 +20,7 @@ export function PaymentTimeline({ status, confirmations = 0 }: PaymentTimelinePr
   const currentStepIndex = steps.findIndex(s => s.id === status);
 
   return (
-    <div className="w-full bg-white border-4 border-border p-6 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+    <div className="w-full bg-card border-4 border-border p-6 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
       <h3 className="font-black text-lg mb-4">Payment Status</h3>
       <div className="space-y-6">
         {steps.map((step, index) => {
@@ -43,7 +43,7 @@ export function PaymentTimeline({ status, confirmations = 0 }: PaymentTimelinePr
                  animate={{
                    scale: isActive ? [1, 1.1, 1] : 1,
                    backgroundColor: isCompleted ? '#bef264' : isActive ? '#22d3ee' : '#e5e7eb',
-                   borderColor: isPending ? '#d1d5db' : '#000'
+                   borderColor: isPending ? '#d1d5db' : 'hsl(var(--foreground))'
                  }}
                  transition={isActive ? { repeat: Infinity, duration: 2 } : {}}
                  className={cn(
@@ -51,7 +51,7 @@ export function PaymentTimeline({ status, confirmations = 0 }: PaymentTimelinePr
                    isPending && "bg-muted border-muted-foreground"
                  )}
                >
-                 <step.icon className={cn("w-4 h-4 text-black", isPending && "text-muted-foreground")} />
+                 <step.icon className={cn("w-4 h-4", isCompleted || isActive ? "text-black dark:text-black" : "text-muted-foreground")} />
                </motion.div>
 
                <div className={cn("font-bold", isPending && "text-muted-foreground")}>
