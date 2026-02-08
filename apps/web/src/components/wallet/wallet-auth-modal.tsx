@@ -182,9 +182,9 @@ export function WalletAuthModal({ open, onOpenChange, onSuccess }: WalletAuthMod
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-background border-4 border-black shadow-[8px_8px_0px_0px_#000]">
+      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-background border-4 border-border shadow-[8px_8px_0px_0px_var(--shadow-color)]">
         <div className="h-[600px] relative">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             {/* Welcome Screen */}
             {view === 'welcome' && (
               <motion.div

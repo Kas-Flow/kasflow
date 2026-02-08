@@ -10,16 +10,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-neo-green border-2 border-black text-black shadow-[4px_4px_0px_0px_#000] hover:bg-neo-green/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_#000]",
+          "bg-neo-green border-2 border-border text-black shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-neo-green/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]",
         destructive:
-          "bg-destructive border-2 border-black text-white shadow-[4px_4px_0px_0px_#000] hover:bg-destructive/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_#000]",
+          "bg-destructive border-2 border-border text-white shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-destructive/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]",
         outline:
-          "bg-white border-2 border-black text-black shadow-[4px_4px_0px_0px_#000] hover:bg-neo-yellow hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_#000]",
+          "bg-background border-2 border-border text-foreground shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-neo-yellow hover:text-black hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]",
         secondary:
-          "bg-neo-cyan border-2 border-black text-black shadow-[4px_4px_0px_0px_#000] hover:bg-neo-cyan/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_#000]",
+          "bg-neo-cyan border-2 border-border text-black shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-neo-cyan/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        neo: "bg-black text-white border-2 border-black shadow-[4px_4px_0px_0px_#bef264] hover:shadow-[6px_6px_0px_0px_#bef264] hover:-translate-y-0.5 hover:-translate-x-0.5",
+        neo: "bg-black text-white border-2 border-border shadow-[4px_4px_0px_0px_#bef264] hover:shadow-[6px_6px_0px_0px_#bef264] hover:-translate-y-0.5 hover:-translate-x-0.5",
       },
       size: {
         default: "h-10 px-5 py-2",

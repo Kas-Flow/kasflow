@@ -59,7 +59,7 @@ export function AmountStep({ value, recipientAddress, onChange, onNext, onBack }
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               onClick={() => onChange(amt)}
-              className="flex-1 py-2 text-sm font-bold border-2 border-black rounded-md hover:bg-neo-yellow transition-colors shadow-[2px_2px_0px_0px_#000] active:translate-y-1 active:shadow-none"
+              className="flex-1 py-2 text-sm font-bold border-2 border-border rounded-md hover:bg-neo-yellow transition-colors shadow-[2px_2px_0px_0px_var(--shadow-color)] active:translate-y-1 active:shadow-none"
             >
               {amt}
             </motion.button>
@@ -70,7 +70,7 @@ export function AmountStep({ value, recipientAddress, onChange, onNext, onBack }
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="p-4 border-2 border-black rounded-xl bg-neo-cyan/20"
+            className="p-4 border-2 border-border rounded-xl bg-neo-cyan/20"
           >
             <div className="text-xs font-bold text-muted-foreground uppercase mb-1">Preview</div>
             <div className="flex items-center justify-between">

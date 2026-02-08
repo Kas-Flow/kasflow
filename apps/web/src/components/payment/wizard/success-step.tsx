@@ -53,7 +53,7 @@ export function SuccessStep({ data, onReset }: SuccessStepProps) {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-        className="mb-6 p-4 bg-white border-4 border-black shadow-[6px_6px_0px_0px_#000]"
+        className="mb-6 p-4 bg-white border-4 border-border shadow-[6px_6px_0px_0px_var(--shadow-color)]"
       >
         <QRCodeSVG value={paymentLink} size={160} />
       </motion.div>

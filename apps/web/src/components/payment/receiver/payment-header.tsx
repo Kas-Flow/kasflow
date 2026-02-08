@@ -39,7 +39,7 @@ export function PaymentHeader({ amount, recipientAddress, memo }: PaymentHeaderP
         </h1>
         
         {memo ? (
-          <div className="bg-neo-yellow/20 border-2 border-black rounded-lg px-4 py-2 inline-block max-w-sm">
+          <div className="bg-neo-yellow/20 border-2 border-border rounded-lg px-4 py-2 inline-block max-w-sm">
             <p className="font-bold text-sm">&quot;{memo}&quot;</p>
           </div>
         ) : (

@@ -25,7 +25,7 @@ export function MemoStep({ value, recipientAddress, amount, onChange, onNext, on
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex items-center gap-3 mb-6 p-4 bg-neo-yellow/20 rounded-lg border-2 border-black">
+      <div className="flex items-center gap-3 mb-6 p-4 bg-neo-yellow/20 rounded-lg border-2 border-border">
         <AddressAvatar address={recipientAddress} size={48} animated={false} />
         <div>
           <div className="text-xs font-bold text-muted-foreground uppercase">Sending</div>
@@ -60,7 +60,7 @@ export function MemoStep({ value, recipientAddress, amount, onChange, onNext, on
         </Button>
         <Button 
           type="submit" 
-          className="flex-1 text-lg bg-neo-pink text-black hover:bg-neo-pink/90 border-black"
+          className="flex-1 text-lg bg-neo-pink text-black hover:bg-neo-pink/90 border-border"
         >
           Create Link <ArrowRight className="ml-2 w-5 h-5" />
         </Button>

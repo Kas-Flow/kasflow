@@ -23,15 +23,14 @@ export function AddressAvatar({
   // The library slices from index 2, so we make sure it's long enough
   const displayAddress = address || 'kaspa:000000000000000000000000';
 
-  const AvatarComponent = (
-    <div
-      className={cn(
-        "rounded-full border-4 border-black bg-white overflow-hidden shadow-[4px_4px_0px_0px_#000] flex items-center justify-center shrink-0",
-        className
-      )}
-      style={{ width: size, height: size }}
-    >
-      <div style={{ width: '100%', height: '100%' }}>
+    const AvatarComponent = (
+      <div 
+        className={cn(
+          "rounded-full border-4 border-border bg-white overflow-hidden shadow-[4px_4px_0px_0px_var(--shadow-color)] flex items-center justify-center shrink-0", 
+          className
+        )}
+        style={{ width: size, height: size }}
+      >      <div style={{ width: '100%', height: '100%' }}>
         <Jazzicon address={displayAddress} />
       </div>
     </div>

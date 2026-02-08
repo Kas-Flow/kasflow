@@ -12,6 +12,7 @@
   --neo-purple: #a78bfa;        /* Purple */
   
   --border: #000000;            /* Pitch Black Borders */
+  --shadow-color: #000000;      /* Shadow Color */
   
   --card: #ffffff;
   --card-foreground: #000000;
@@ -45,6 +46,7 @@
   --neo-purple: #8b5cf6;        /* Slightly deeper purple */
   
   --border: #ffffff;            /* White Borders in Dark Mode */
+  --shadow-color: #ffffff;      /* White Shadows in Dark Mode */
   
   --card: #18181b;              /* Dark Gray Card */
   --card-foreground: #ffffff;
@@ -55,7 +57,7 @@
   --secondary: #06b6d4;
   --secondary-foreground: #000000;
   --muted: #27272a;
-  --muted-foreground: #a1a1aa;
+  --muted-foreground: #e4e4e7;  /* Zinc-200 for better visibility */
   --accent: #db2777;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
@@ -71,6 +73,7 @@
   --color-neo-yellow: var(--neo-yellow);
   --color-neo-purple: var(--neo-purple);
   --color-border: var(--border);
+  --color-shadow-color: var(--shadow-color);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-primary: var(--primary);

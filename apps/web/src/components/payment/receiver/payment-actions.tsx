@@ -74,7 +74,7 @@ export function PaymentActions({ address, amount, memo, onPaymentSent }: Payment
     <div className="w-full space-y-4">
       <Button
         size="lg"
-        className="w-full h-16 text-xl bg-neo-green text-black hover:bg-neo-green/90 border-black shadow-[6px_6px_0px_0px_#000] hover:shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 transition-all"
+        className="w-full h-16 text-xl bg-neo-green text-black hover:bg-neo-green/90 border-border shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:shadow-[8px_8px_0px_0px_var(--shadow-color)] hover:-translate-y-1 transition-all"
         onClick={() => setIsAuthOpen(true)}
         disabled={isSending}
       >

@@ -67,7 +67,7 @@ export function PaymentWizard() {
               animate={{ 
                 scale: isActive ? 1.2 : 1,
                 backgroundColor: isActive || isDone ? '#bef264' : '#e5e7eb',
-                borderColor: isActive || isDone ? '#000' : '#d1d5db'
+                borderColor: isActive || isDone ? 'var(--border)' : '#d1d5db'
               }}
               className="w-3 h-3 rounded-full border-2 transition-colors"
             />
@@ -75,7 +75,7 @@ export function PaymentWizard() {
         })}
       </div>
 
-      <div className="relative min-h-[400px] overflow-hidden bg-card border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_#000] p-6">
+      <div className="relative min-h-[400px] overflow-hidden bg-card border-4 border-border rounded-2xl shadow-[8px_8px_0px_0px_var(--shadow-color)] p-6">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           {step === 'address' && (
             <motion.div
