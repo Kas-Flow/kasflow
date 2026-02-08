@@ -18,9 +18,9 @@ export function NetworkSelector({ value, onChange }: NetworkSelectorProps) {
   ];
 
   return (
-    <div className="w-full max-w-lg mx-auto mb-6">
+    <div className="w-full">
       <div className="bg-card border-4 border-border rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] p-4">
-        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
+        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3">
           Select Network
         </h3>
         <div className="grid grid-cols-2 gap-3">
