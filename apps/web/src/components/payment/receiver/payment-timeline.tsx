@@ -20,7 +20,8 @@ export function PaymentTimeline({ status, confirmations = 0 }: PaymentTimelinePr
   const currentStepIndex = steps.findIndex(s => s.id === status);
 
   return (
-    <div className="w-full max-w-sm mx-auto mt-12 bg-white border-4 border-border p-6 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+    <div className="w-full bg-white border-4 border-border p-6 rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+      <h3 className="font-black text-lg mb-4">Payment Status</h3>
       <div className="space-y-6">
         {steps.map((step, index) => {
           const isActive = index === currentStepIndex;

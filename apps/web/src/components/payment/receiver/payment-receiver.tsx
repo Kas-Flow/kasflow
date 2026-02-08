@@ -38,26 +38,34 @@ export function PaymentReceiver({ data }: PaymentReceiverProps) {
   if (!data) return null;
 
   return (
-    <div className="w-full max-w-md mx-auto py-12 px-4">
-      <PaymentHeader 
-        amount={data.amount} 
-        recipientAddress={data.address} 
-        memo={data.memo} 
-      />
-      
-      <PaymentQRCard 
-        address={data.address} 
-        amount={data.amount} 
-      />
+    <div className="w-full max-w-6xl mx-auto py-8 px-4 min-h-[calc(100vh-64px)] flex items-center">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        {/* Left Column: QR Code + Actions */}
+        <div className="flex flex-col gap-6">
+          <PaymentQRCard
+            address={data.address}
+            amount={data.amount}
+          />
 
-      <PaymentActions
-        address={data.address}
-        amount={data.amount}
-        memo={data.memo}
-        onPaymentSent={handlePaymentSent}
-      />
+          <PaymentActions
+            address={data.address}
+            amount={data.amount}
+            memo={data.memo}
+            onPaymentSent={handlePaymentSent}
+          />
+        </div>
 
-      <PaymentTimeline status={status} />
+        {/* Right Column: Header + Timeline */}
+        <div className="flex flex-col gap-8">
+          <PaymentHeader
+            amount={data.amount}
+            recipientAddress={data.address}
+            memo={data.memo}
+          />
+
+          <PaymentTimeline status={status} />
+        </div>
+      </div>
     </div>
   );
 }
