@@ -18,12 +18,15 @@ export function NetworkSelector({ value, onChange }: NetworkSelectorProps) {
   ];
 
   return (
-    <div className="w-full max-w-lg mx-auto mb-6">
+    <div className="w-full lg:sticky lg:top-6 lg:self-start">
       <div className="bg-card border-4 border-border rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] p-4">
-        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center">
+        {/* Optional: Show heading only on mobile */}
+        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3 text-center lg:hidden">
           Select Network
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+
+        {/* Responsive: 2-col grid on mobile, vertical stack on desktop */}
+        <div className="grid grid-cols-2 gap-3 lg:flex lg:flex-col lg:gap-2">
           {networks.map((network) => {
             const isSelected = value === network.id;
             return (

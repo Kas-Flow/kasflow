@@ -16,10 +16,13 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { useWalletStore } from '@/stores/wallet-store';
 import { WelcomeScreen } from './welcome-screen';
 import { AuthMethodCard } from './auth-method-card';
 import { pageVariants, pageTransition, staggerContainer } from '@/lib/constants/animations';
+import { NETWORK_ID, NETWORK_NAMES } from '@/lib/constants/kaspa';
 import confetti from 'canvas-confetti';
 
 // =============================================================================
@@ -40,6 +43,7 @@ type ModalView = 'welcome' | 'auth-selection' | 'authenticating' | 'success' | '
 export function WalletModal({ open, onOpenChange }: WalletModalProps) {
   const [view, setView] = useState<ModalView>('welcome');
   const [selectedMethod, setSelectedMethod] = useState<'passkey' | 'kip12' | null>(null);
+  const [selectedNetwork, setSelectedNetwork] = useState<string>(NETWORK_ID.TESTNET_10);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -48,6 +52,7 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
     connectKIP12,
     detectUserState,
     markOnboardingComplete,
+    setNetwork,
     isFirstTimeUser,
     walletExists,
     kip12Available,
@@ -117,6 +122,10 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
     setError(null);
 
     try {
+      // Set network BEFORE creating/unlocking wallet
+      console.log('[WalletModal] Setting network to:', selectedNetwork);
+      setNetwork(selectedNetwork as any);
+
       // Smart detection: unlock if exists, create if doesn't
       if (walletExists) {
         console.log('[WalletModal] Unlocking existing wallet...');
@@ -140,6 +149,10 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
     setError(null);
 
     try {
+      // Set network BEFORE connecting
+      console.log('[WalletModal] Setting network to:', selectedNetwork);
+      setNetwork(selectedNetwork as any);
+
       // Check if window.kaspa exists
       if (typeof window === 'undefined' || !('kaspa' in window)) {
         throw new Error('No KIP-12 wallet extension detected');
@@ -208,12 +221,60 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
                 transition={pageTransition}
                 className="absolute inset-0 p-8 flex flex-col justify-center"
               >
-                <DialogHeader className="text-center mb-8">
+                <DialogHeader className="text-center mb-6">
                   <DialogTitle className="text-2xl font-black">Connect Wallet</DialogTitle>
                   <DialogDescription>
-                    Choose your authentication method
+                    Select network and authentication method
                   </DialogDescription>
                 </DialogHeader>
+
+                {/* Network Selection */}
+                <div className="mb-6 p-4 bg-muted/30 rounded-xl border-2 border-border">
+                  <Label className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2 block">
+                    {walletExists ? 'Connect on Network' : 'Start on Network'}
+                  </Label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    {walletExists
+                      ? 'Your wallet works on all networks - choose which to connect to now'
+                      : 'Your wallet will work on all networks - choose which to start on'}
+                  </p>
+                  <RadioGroup
+                    value={selectedNetwork}
+                    onValueChange={setSelectedNetwork}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    <div className="relative">
+                      <RadioGroupItem
+                        value={NETWORK_ID.MAINNET}
+                        id="mainnet"
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor="mainnet"
+                        className="flex items-center justify-center px-4 py-3 rounded-lg border-2 font-bold cursor-pointer transition-all
+                                   peer-data-[state=checked]:bg-neo-green peer-data-[state=checked]:text-black peer-data-[state=checked]:border-border peer-data-[state=checked]:shadow-[4px_4px_0px_0px_var(--shadow-color)]
+                                   peer-data-[state=unchecked]:bg-background peer-data-[state=unchecked]:border-border peer-data-[state=unchecked]:hover:bg-muted"
+                      >
+                        {NETWORK_NAMES[NETWORK_ID.MAINNET]}
+                      </Label>
+                    </div>
+                    <div className="relative">
+                      <RadioGroupItem
+                        value={NETWORK_ID.TESTNET_10}
+                        id="testnet"
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor="testnet"
+                        className="flex items-center justify-center px-4 py-3 rounded-lg border-2 font-bold cursor-pointer transition-all
+                                   peer-data-[state=checked]:bg-neo-green peer-data-[state=checked]:text-black peer-data-[state=checked]:border-border peer-data-[state=checked]:shadow-[4px_4px_0px_0px_var(--shadow-color)]
+                                   peer-data-[state=unchecked]:bg-background peer-data-[state=unchecked]:border-border peer-data-[state=unchecked]:hover:bg-muted"
+                      >
+                        Testnet
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
 
                 <motion.div
                   variants={staggerContainer}

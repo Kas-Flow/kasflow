@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PaymentHeader } from './payment-header';
 import { PaymentQRCard } from './payment-qr-card';
 import { PaymentActions } from './payment-actions';
@@ -20,19 +20,37 @@ interface PaymentReceiverProps {
 
 export function PaymentReceiver({ data }: PaymentReceiverProps) {
   const [status, setStatus] = useState<'pending' | 'confirming' | 'confirmed'>('pending');
+  const confettiTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const hasConfettiFiredRef = useRef(false);
 
   const handlePaymentSent = () => {
+    // Prevent duplicate calls
+    if (status !== 'pending') {
+      console.log('[PaymentReceiver] Payment already sent, ignoring duplicate call');
+      return;
+    }
+
     setStatus('confirming');
-    
+
+    // Clear any existing timer
+    if (confettiTimerRef.current) {
+      clearTimeout(confettiTimerRef.current);
+    }
+
     // Simulate confirmation
-    setTimeout(() => {
+    confettiTimerRef.current = setTimeout(() => {
       setStatus('confirmed');
-      confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#49EACB', '#bef264', '#f472b6']
-      });
+
+      // Fire confetti only once
+      if (!hasConfettiFiredRef.current) {
+        hasConfettiFiredRef.current = true;
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#49EACB', '#bef264', '#f472b6']
+        });
+      }
     }, 2000);
   };
 
@@ -46,6 +64,7 @@ export function PaymentReceiver({ data }: PaymentReceiverProps) {
           <PaymentQRCard
             address={data.address}
             amount={data.amount}
+            network={data.network}
           />
 
           <PaymentActions

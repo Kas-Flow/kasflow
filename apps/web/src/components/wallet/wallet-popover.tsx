@@ -18,6 +18,7 @@ import { useWalletStore, selectAddress, selectBalance } from '@/stores/wallet-st
 import { sompiToKas, formatKas } from '@kasflow/passkey-wallet';
 import { toast } from 'sonner';
 import { NETWORK_NAMES, getExplorerAddressUrl } from '@/lib/constants/kaspa';
+import { NetworkSwitcher } from './network-switcher';
 
 // =============================================================================
 // Helper Functions
@@ -47,6 +48,7 @@ export function WalletPopover() {
 
   const address = useWalletStore(selectAddress);
   const balance = useWalletStore(selectBalance);
+  const network = useWalletStore((state) => state.network);
   const { disconnectWallet, refreshBalance } = useWalletStore();
 
   // Reset copied state after 2 seconds
@@ -91,8 +93,7 @@ export function WalletPopover() {
 
   const handleExplorer = () => {
     if (!address) return;
-    // Testnet explorer URL
-    const explorerUrl = `https://explorer.kaspa.org/addresses/${address}`;
+    const explorerUrl = getExplorerAddressUrl(address, network);
     window.open(explorerUrl, '_blank');
   };
 
@@ -118,6 +119,20 @@ export function WalletPopover() {
             <h4 className="font-semibold leading-none">Your Wallet</h4>
             <p className="text-sm text-muted-foreground font-mono">
               {truncateAddress(address)}
+            </p>
+          </div>
+
+          <Separator />
+
+          {/* Network Switcher */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">Network</span>
+              <NetworkSwitcher />
+            </div>
+
+            <p className="text-xs text-muted-foreground italic">
+              Switch networks instantly - your addresses are pre-computed for all networks.
             </p>
           </div>
 

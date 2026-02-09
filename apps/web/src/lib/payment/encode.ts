@@ -78,6 +78,7 @@ export function decodePaymentLink(encoded: string): Result<PaymentData> {
     const data: PaymentData = {
       to: payload.to,
       amount: payload.amount,
+      network: payload.network,
       memo: payload.memo,
       label: payload.label,
       expiresAt: payload.expiresAt,
