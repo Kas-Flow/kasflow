@@ -26,12 +26,20 @@ export interface UnlockWalletOptions {
 export interface WalletMetadata {
   /** Passkey public key (for deterministic key derivation) */
   passkeyPublicKey: string; // base64 encoded
-  /** Wallet address (for verification) */
-  address: string;
-  /** Network */
-  network: NetworkId;
+  /** Addresses for all networks (enables seamless network switching) */
+  addresses: {
+    [key in NetworkId]: string;
+  };
+  /** Primary/default network */
+  primaryNetwork: NetworkId;
   /** Creation timestamp */
   createdAt: number;
+
+  // Deprecated fields (kept for backward compatibility with existing wallets)
+  /** @deprecated Use addresses map instead */
+  address?: string;
+  /** @deprecated Use primaryNetwork instead */
+  network?: NetworkId;
 }
 
 // =============================================================================

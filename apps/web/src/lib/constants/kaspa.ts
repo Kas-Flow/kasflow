@@ -28,11 +28,11 @@ export const RPC_URLS = {
   [NETWORK_ID.TESTNET_11]: 'wss://api.testnet-11.kaspa.org',
 } as const;
 
-// Block explorer URLs
+// Block explorer URLs (kaspa.stream format)
 export const EXPLORER_URLS = {
-  [NETWORK_ID.MAINNET]: 'https://explorer.kaspa.org',
-  [NETWORK_ID.TESTNET_10]: 'https://explorer.testnet-10.kaspa.org',
-  [NETWORK_ID.TESTNET_11]: 'https://explorer.testnet-11.kaspa.org',
+  [NETWORK_ID.MAINNET]: 'https://kaspa.stream',
+  [NETWORK_ID.TESTNET_10]: 'https://tn10.kaspa.stream',
+  [NETWORK_ID.TESTNET_11]: 'https://tn11.kaspa.stream',
 } as const;
 
 // Default network for development
@@ -67,7 +67,7 @@ export const NETWORK_NAMES = {
 // Helper to get explorer TX URL
 export function getExplorerTxUrl(txId: string, network: string): string {
   const baseUrl = EXPLORER_URLS[network as keyof typeof EXPLORER_URLS] || EXPLORER_URLS[NETWORK_ID.MAINNET];
-  return `${baseUrl}/tx/${txId}`;
+  return `${baseUrl}/transactions/${txId}`;
 }
 
 // Helper to get explorer address URL

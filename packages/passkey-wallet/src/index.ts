@@ -20,8 +20,8 @@
  *   const balance = await wallet.getBalance();
  *   console.log('Balance:', balance.available);
  *
- *   // Send KAS
- *   const tx = await wallet.send({
+ *   // Send KAS with per-transaction authentication (recommended)
+ *   const tx = await wallet.sendWithAuth({
  *     to: 'kaspatest:...',
  *     amount: 100000000n,
  *   });
@@ -115,6 +115,8 @@ export {
   // Hex utilities
   uint8ArrayToHex,
   hexToUint8Array,
+  // Transaction hash computation
+  computeTransactionHash,
   // WASM types
   PrivateKey,
   PublicKey,
@@ -123,7 +125,7 @@ export {
 } from './kaspa';
 
 // WebAuthn utilities (for custom implementations)
-export { isWebAuthnSupported } from './webauthn';
+export { isWebAuthnSupported, authenticateWithChallenge } from './webauthn';
 
 // COSE parser for extracting public keys from attestation
 export { extractPublicKeyFromAttestation } from './cose-parser';

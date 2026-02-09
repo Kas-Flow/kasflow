@@ -6,7 +6,7 @@
  * Auto-detects user state and shows appropriate flow
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Fingerprint, Wallet, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -49,12 +49,14 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
   const networkName = network ? (NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network) : undefined;
 
   const {
+    wallet,
     createWallet,
     unlockWallet,
     connectKIP12,
     detectUserState,
     markOnboardingComplete,
     setNetwork,
+    switchNetwork,
     isFirstTimeUser,
     walletExists,
     kip12Available,
@@ -75,27 +77,27 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
     }
   }, [open, detectUserState, isFirstTimeUser]);
 
+  // Stabilize onSuccess callback with useRef
+  const onSuccessRef = useRef(onSuccess);
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
+
   // Auto-close on success
   useEffect(() => {
-    if (status === 'connected' && view !== 'success') {
+    if (status === 'connected' && view !== 'success' && wallet) {
       setView('success');
 
-      // Trigger confetti
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#49EACB', '#bef264', '#f472b6']
-      });
+      // Don't trigger confetti here anymore (moved to receipt modal)
 
       // Close after showing success
       setTimeout(() => {
         onOpenChange(false);
-        onSuccess?.();
+        onSuccessRef.current?.();  // Use stable ref - just notifies parent, doesn't send
         resetState();
-      }, 1500);
+      }, 800);  // Faster close
     }
-  }, [status, view, onOpenChange, onSuccess]);
+  }, [status, view, wallet, onOpenChange]);
 
   // Reset state when modal closes
   useEffect(() => {
@@ -135,6 +137,12 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
       if (walletExists) {
         console.log('[WalletAuthModal] Unlocking existing wallet...');
         await unlockWallet();
+
+        // If wallet was unlocked on different network, switch to payment network
+        if (network && wallet && wallet.getNetwork() !== network) {
+          console.log('[WalletAuthModal] Switching to payment network:', network);
+          await switchNetwork(network as any);
+        }
       } else {
         console.log('[WalletAuthModal] Creating new wallet...');
         await createWallet('KasFlow Wallet');
@@ -229,9 +237,9 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
                 className="absolute inset-0 p-8 flex flex-col justify-center"
               >
                 <DialogHeader className="text-center mb-8">
-                  <DialogTitle className="text-2xl font-black">Connect to Pay</DialogTitle>
+                  <DialogTitle className="text-2xl font-black">Connect Your Wallet</DialogTitle>
                   <DialogDescription>
-                    Choose your authentication method
+                    Unlock your wallet to enable payments
                   </DialogDescription>
                   {networkName && (
                     <div className="mt-3 inline-flex items-center justify-center">
@@ -295,12 +303,17 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
                     : 'Connecting Extension...'
                   }
                 </h3>
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-sm text-muted-foreground text-center max-w-sm">
                   {selectedMethod === 'passkey'
-                    ? 'Please complete the biometric authentication'
+                    ? 'Use your fingerprint, face, or device password to authenticate'
                     : 'Please approve the connection in your wallet extension'
                   }
                 </p>
+                {selectedMethod === 'passkey' && (
+                  <p className="text-xs text-muted-foreground text-center mt-3 max-w-sm">
+                    You'll need to authenticate again when sending the payment
+                  </p>
+                )}
               </motion.div>
             )}
 
@@ -323,9 +336,9 @@ export function WalletAuthModal({ open, onOpenChange, network, onSuccess }: Wall
                 >
                   <CheckCircle2 className="w-12 h-12 text-black" />
                 </motion.div>
-                <h3 className="text-2xl font-black mb-2">Connected!</h3>
+                <h3 className="text-2xl font-black mb-2">Wallet Unlocked!</h3>
                 <p className="text-sm text-muted-foreground">
-                  Your wallet is ready to use
+                  Click "Send Payment" to continue
                 </p>
               </motion.div>
             )}

@@ -61,6 +61,7 @@ export function RpcProvider({
   const [network, setNetwork] = useState<NetworkId>(defaultNetwork);
   const [url, setUrl] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   /**
    * Connect to Kaspa RPC
@@ -72,6 +73,12 @@ export function RpcProvider({
       if (isConnected || isConnecting) {
         console.log('[RpcProvider] Already connected or connecting');
         return;
+      }
+
+      // Clear any pending retry
+      if (retryTimeoutId) {
+        clearTimeout(retryTimeoutId);
+        setRetryTimeoutId(null);
       }
 
       const networkToUse = targetNetwork || network;
@@ -118,23 +125,40 @@ export function RpcProvider({
           const delay = RPC_RETRY_INTERVAL_MS * Math.pow(2, retryCount);
           console.log(`[RpcProvider] Retrying in ${delay}ms (attempt ${retryCount + 1}/${MAX_RPC_RETRIES})`);
 
-          setTimeout(() => {
+          const timeoutId = setTimeout(() => {
             setRetryCount((prev) => prev + 1);
             connect(networkToUse);
           }, delay);
+          setRetryTimeoutId(timeoutId);
+        } else {
+          console.error(`[RpcProvider] Max retries reached (${MAX_RPC_RETRIES}). Giving up.`);
         }
       } finally {
         setIsConnecting(false);
       }
     },
-    [isConnected, isConnecting, network, retryCount]
+    [isConnected, isConnecting, network, retryCount, retryTimeoutId]
   );
 
   /**
    * Disconnect from RPC
    */
   const disconnect = useCallback(async () => {
-    if (!rpc) return;
+    // Clear any pending retry first
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId);
+      setRetryTimeoutId(null);
+    }
+
+    if (!rpc) {
+      // Even if no RPC, reset state
+      setRpc(null);
+      setIsConnected(false);
+      setUrl(null);
+      setError(null);
+      setRetryCount(0);
+      return;
+    }
 
     try {
       console.log('[RpcProvider] Disconnecting...');
@@ -144,12 +168,18 @@ export function RpcProvider({
       setIsConnected(false);
       setUrl(null);
       setError(null);
+      setRetryCount(0);
 
       console.log('[RpcProvider] Disconnected');
     } catch (err: any) {
       console.error('[RpcProvider] Disconnect error:', err?.message);
+      // Still reset state even if disconnect fails
+      setRpc(null);
+      setIsConnected(false);
+      setUrl(null);
+      setRetryCount(0);
     }
-  }, [rpc]);
+  }, [rpc, retryTimeoutId]);
 
   /**
    * Auto-connect on mount if enabled
@@ -165,12 +195,18 @@ export function RpcProvider({
    */
   useEffect(() => {
     return () => {
+      // Clear any pending retry
+      if (retryTimeoutId) {
+        clearTimeout(retryTimeoutId);
+      }
+
+      // Disconnect RPC if connected
       if (rpc && isConnected) {
         console.log('[RpcProvider] Cleaning up on unmount');
         rpc.disconnect().catch(console.error);
       }
     };
-  }, [rpc, isConnected]);
+  }, [rpc, isConnected, retryTimeoutId]);
 
   const value: IRpcContext = {
     rpc,

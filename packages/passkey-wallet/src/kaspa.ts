@@ -266,6 +266,49 @@ export const formatKas = (sompi: bigint, decimals: number = 8): string => {
 export const parseKas = kasStringToSompi;
 
 // =============================================================================
+// Transaction Hash Computation
+// =============================================================================
+
+/**
+ * Compute transaction hash for use as WebAuthn challenge
+ *
+ * This function extracts the transaction ID (hash) from a PendingTransaction
+ * and converts it to a Uint8Array suitable for use as a WebAuthn challenge.
+ *
+ * The transaction ID is the BLAKE2b-256 hash of the transaction data, which
+ * uniquely identifies the transaction and can be used to cryptographically
+ * bind a WebAuthn signature to a specific transaction.
+ *
+ * @param tx - PendingTransaction from WASM SDK
+ * @returns 32-byte transaction hash as Uint8Array
+ *
+ * @example
+ * ```typescript
+ * const tx = await buildTransaction(options);
+ * const txHash = computeTransactionHash(tx);
+ * const authResult = await authenticateWithChallenge(credentialId, txHash);
+ * ```
+ */
+export const computeTransactionHash = (tx: any): Uint8Array => {
+  // PendingTransaction has a readonly `id` property (transaction hash as hex string)
+  const txId = tx.id as string;
+
+  if (!txId || typeof txId !== 'string') {
+    throw new Error('Invalid transaction: missing transaction ID');
+  }
+
+  // Convert hex string to Uint8Array
+  // Transaction ID is already the BLAKE2b-256 hash (32 bytes)
+  const hashBytes = hexToUint8Array(txId);
+
+  if (hashBytes.length !== 32) {
+    throw new Error(`Invalid transaction hash length: expected 32 bytes, got ${hashBytes.length}`);
+  }
+
+  return hashBytes;
+};
+
+// =============================================================================
 // Hex Utilities (re-export for convenience)
 // =============================================================================
 

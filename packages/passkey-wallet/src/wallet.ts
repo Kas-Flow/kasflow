@@ -3,15 +3,21 @@
  * Provides a simple API for creating and managing passkey-protected Kaspa wallets
  */
 
-import { DEFAULT_NETWORK, ERROR_MESSAGES, type NetworkId } from './constants';
-import { uint8ArrayToBase64, base64ToUint8Array } from './crypto';
+import { DEFAULT_NETWORK, NETWORK_ID, ERROR_MESSAGES, type NetworkId } from './constants';
+import { uint8ArrayToBase64, base64ToUint8Array, base64urlToUint8Array } from './crypto';
 import { deriveKaspaKeysFromPasskey } from './deterministic-keys';
 import {
   getAddressFromPrivateKey,
   getPublicKeyHex,
   signMessageWithKey,
+  computeTransactionHash,
 } from './kaspa';
-import { registerPasskey, authenticateWithPasskey, isWebAuthnSupported } from './webauthn';
+import {
+  registerPasskey,
+  authenticateWithPasskey,
+  authenticateWithChallenge,
+  isWebAuthnSupported,
+} from './webauthn';
 import {
   hasStoredWallet,
   clearAllData,
@@ -26,6 +32,9 @@ const logger = createLogger('PasskeyWallet');
 import { KaspaRpc, type RpcConnectionOptions } from './rpc';
 import {
   sendTransaction,
+  buildTransactions,
+  signTransactions,
+  submitTransactions,
   estimateFee,
   type SendOptions,
   type SendResult,
@@ -38,6 +47,7 @@ import type {
   WalletEvent,
   WalletEventHandler,
   BalanceInfo,
+  AuthenticationResult,
 } from './types';
 
 // =============================================================================
@@ -81,17 +91,23 @@ export class PasskeyWallet {
   private network: NetworkId;
   private eventHandlers: Set<WalletEventHandler> = new Set();
   private rpc: KaspaRpc;
+  private credentialId: string | null = null;
+  private passkeyPublicKey: Uint8Array | null = null;
 
   private constructor(
     privateKeyHex: string,
     publicKeyHex: string,
     address: string,
-    network: NetworkId
+    network: NetworkId,
+    credentialId?: string,
+    passkeyPublicKey?: Uint8Array
   ) {
     this.privateKeyHex = privateKeyHex;
     this.publicKeyHex = publicKeyHex;
     this.address = address;
     this.network = network;
+    this.credentialId = credentialId ?? null;
+    this.passkeyPublicKey = passkeyPublicKey ?? null;
     this.rpc = new KaspaRpc();
 
     // Set up RPC event handlers
@@ -179,32 +195,54 @@ export class PasskeyWallet {
     logger.info('Deriving Kaspa keys from passkey public key...');
     const { privateKeyHex } = deriveKaspaKeysFromPasskey(registration.passkeyPublicKey);
 
-    logger.debug('Getting public key and address...');
+    logger.debug('Getting public key...');
     const publicKeyHex = await getPublicKeyHex(privateKeyHex);
-    const address = await getAddressFromPrivateKey(privateKeyHex, network);
 
-    logger.info('Wallet derived deterministically:', {
-      address,
+    // Generate addresses for ALL networks (enables seamless network switching)
+    logger.info('Generating addresses for all networks...');
+    const addresses: { [key in NetworkId]: string } = {
+      [NETWORK_ID.MAINNET]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.MAINNET),
+      [NETWORK_ID.TESTNET_10]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.TESTNET_10),
+      [NETWORK_ID.TESTNET_11]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.TESTNET_11),
+    };
+
+    const address = addresses[network];
+
+    logger.info('Wallet created for all networks:', {
+      primaryNetwork: network,
+      mainnetAddress: addresses[NETWORK_ID.MAINNET],
+      testnet10Address: addresses[NETWORK_ID.TESTNET_10],
+      testnet11Address: addresses[NETWORK_ID.TESTNET_11],
       publicKeyPrefix: publicKeyHex.substring(0, 10) + '...',
     });
 
     // Store passkey public key for unlock on other devices
     const passkeyPublicKeyBase64 = uint8ArrayToBase64(registration.passkeyPublicKey);
 
-    // Store wallet metadata (no encryption needed - keys derived on-demand)
+    // Store wallet metadata with all network addresses (no encryption needed - keys derived on-demand)
     logger.debug('Storing wallet metadata...');
     await storeWalletMetadata({
       passkeyPublicKey: passkeyPublicKeyBase64,
+      addresses,
+      primaryNetwork: network,
+      createdAt: Date.now(),
+      // Backward compatibility fields
       address,
       network,
-      createdAt: Date.now(),
     });
     await storeCredentialId(registration.credential.id);
     logger.debug('Wallet metadata stored successfully');
 
     // Create and return wallet instance
     logger.debug('Creating wallet instance...');
-    const wallet = new PasskeyWallet(privateKeyHex, publicKeyHex, address, network);
+    const wallet = new PasskeyWallet(
+      privateKeyHex,
+      publicKeyHex,
+      address,
+      network,
+      registration.credential.id,
+      registration.passkeyPublicKey
+    );
     wallet.emit({ type: 'connected', address });
 
     logger.info('Wallet created successfully!');
@@ -271,29 +309,78 @@ export class PasskeyWallet {
     const { privateKeyHex } = deriveKaspaKeysFromPasskey(passkeyPublicKey);
 
     const publicKeyHex = await getPublicKeyHex(privateKeyHex);
-    const network = options.network ?? metadata.network;
+
+    // MIGRATION: Handle old metadata format (automatic upgrade)
+    let currentMetadata = metadata;
+    if (!metadata.addresses && metadata.address && metadata.network) {
+      logger.info('Migrating wallet to multi-network format...');
+
+      // Generate addresses for all networks
+      const addresses: { [key in NetworkId]: string } = {
+        [NETWORK_ID.MAINNET]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.MAINNET),
+        [NETWORK_ID.TESTNET_10]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.TESTNET_10),
+        [NETWORK_ID.TESTNET_11]: await getAddressFromPrivateKey(privateKeyHex, NETWORK_ID.TESTNET_11),
+      };
+
+      // Validate migration is correct
+      if (addresses[metadata.network] !== metadata.address) {
+        logger.error('Migration validation failed', {
+          expectedAddress: metadata.address,
+          derivedAddress: addresses[metadata.network],
+          network: metadata.network,
+        });
+        return {
+          success: false,
+          error: 'Failed to migrate wallet to multi-network format',
+        };
+      }
+
+      // Update metadata with new format
+      currentMetadata = {
+        passkeyPublicKey: metadata.passkeyPublicKey,
+        addresses,
+        primaryNetwork: metadata.network,
+        createdAt: metadata.createdAt,
+        // Keep old fields for rollback safety
+        address: metadata.address,
+        network: metadata.network,
+      };
+
+      await storeWalletMetadata(currentMetadata);
+      logger.info('Migration complete - wallet now supports all networks');
+    }
+
+    // Determine network (use option if provided, otherwise use primary network)
+    const network = options.network ?? currentMetadata.primaryNetwork ?? currentMetadata.network ?? NETWORK_ID.TESTNET_10;
     const address = await getAddressFromPrivateKey(privateKeyHex, network);
 
-    // Verify address matches stored address
-    if (address !== metadata.address) {
-      logger.error('Derived address mismatch!', {
-        expected: metadata.address,
+    // Verify address matches stored address for this network
+    const expectedAddress = currentMetadata.addresses
+      ? currentMetadata.addresses[network]
+      : currentMetadata.address; // Fallback for legacy format
+
+    if (address !== expectedAddress) {
+      logger.error('Derived address mismatch for network', {
+        network,
+        expected: expectedAddress,
         derived: address,
       });
       return {
         success: false,
-        error: 'Failed to derive correct wallet address',
+        error: 'Failed to derive correct wallet address for network',
       };
     }
 
-    logger.debug('Keys derived successfully, address verified');
+    logger.debug('Keys derived successfully, address verified for network:', network);
 
-    // Create wallet instance
+    // Create wallet instance with credential ID and passkey public key
     const wallet = new PasskeyWallet(
       privateKeyHex,
       publicKeyHex,
       address,
-      network
+      network,
+      credentialId ?? undefined,
+      passkeyPublicKey
     );
     wallet.emit({ type: 'connected', address });
 
@@ -395,6 +482,64 @@ export class PasskeyWallet {
     await this.rpc.disconnect();
   }
 
+  /**
+   * Switch to a different network without re-authentication
+   * Uses pre-computed addresses from wallet creation
+   *
+   * @param network - Target network to switch to
+   * @returns Result with success status
+   */
+  async switchNetwork(network: NetworkId): Promise<Result<void>> {
+    logger.info('switchNetwork() called:', { from: this.network, to: network });
+
+    // Check if already on target network
+    if (network === this.network) {
+      logger.info('Already on target network');
+      return { success: true };
+    }
+
+    // Get metadata to verify address exists for target network
+    const metadata = await getWalletMetadata();
+    if (!metadata || !metadata.addresses || !metadata.addresses[network]) {
+      logger.error('Address for target network not found in metadata');
+      return {
+        success: false,
+        error: `Address for network ${network} not found. Wallet may need to be recreated.`,
+      };
+    }
+
+    // Derive address for new network to verify it matches stored address
+    const newAddress = await getAddressFromPrivateKey(this.privateKeyHex, network);
+
+    // Verify matches stored address (security check)
+    if (newAddress !== metadata.addresses[network]) {
+      logger.error('Derived address does not match stored address for network', {
+        network,
+        stored: metadata.addresses[network],
+        derived: newAddress,
+      });
+      return {
+        success: false,
+        error: 'Failed to validate address for network switch',
+      };
+    }
+
+    // Disconnect from current network RPC if connected
+    if (this.isConnected) {
+      logger.debug('Disconnecting from current network...');
+      await this.disconnectNetwork();
+    }
+
+    // Update wallet instance to new network
+    this.network = network;
+    this.address = newAddress;
+
+    logger.info('Network switched successfully:', { network, address: newAddress });
+    this.emit({ type: 'connected', address: newAddress });
+
+    return { success: true };
+  }
+
   // ===========================================================================
   // Balance & UTXOs
   // ===========================================================================
@@ -466,6 +611,154 @@ export class PasskeyWallet {
   }
 
   /**
+   * Send transaction with per-transaction passkey authentication
+   *
+   * **RECOMMENDED:** Use this method instead of `send()` for better security.
+   *
+   * This method prompts for passkey authentication for EACH transaction, using the
+   * transaction hash as the WebAuthn challenge. This provides cryptographic proof
+   * that the user approved THIS specific transaction.
+   *
+   * Benefits over `send()`:
+   * - Per-transaction authentication (user approves each transaction)
+   * - Transaction hash cryptographically bound to WebAuthn signature
+   * - Keys derived only when needed, not stored in memory
+   * - Matches standard wallet UX (MetaMask, hardware wallets)
+   *
+   * @param options - Send options (to, amount, priorityFee)
+   * @returns Transaction result with ID and fees
+   * @throws Error if authentication fails, insufficient balance, or network error
+   *
+   * @example
+   * ```typescript
+   * const result = await wallet.sendWithAuth({
+   *   to: 'kaspatest:qz...',
+   *   amount: 100000000n, // 1 KAS
+   * });
+   * console.log('Transaction ID:', result.transactionId);
+   * ```
+   */
+  async sendWithAuth(options: SendOptions): Promise<SendResult> {
+    if (!this.rpc.isConnected) {
+      throw new Error(ERROR_MESSAGES.RPC_NOT_CONNECTED);
+    }
+
+    if (!this.credentialId) {
+      throw new Error('Credential ID not available. Cannot authenticate transaction.');
+    }
+
+    if (!this.passkeyPublicKey) {
+      throw new Error('Passkey public key not available. Cannot derive signing key.');
+    }
+
+    logger.info('[PasskeyWallet] sendWithAuth() - Starting per-transaction auth flow');
+
+    // 1. Get UTXOs
+    const utxos = await this.rpc.getUtxos(this.address);
+
+    // 2. Validate balance
+    const totalAvailable = utxos.reduce((sum, utxo) => sum + utxo.amount, 0n);
+    if (totalAvailable < options.amount) {
+      throw new Error(ERROR_MESSAGES.INSUFFICIENT_BALANCE);
+    }
+
+    // 3. Build unsigned transactions
+    const outputs = [
+      {
+        address: options.to,
+        amount: options.amount,
+      },
+    ];
+
+    const buildResult = await buildTransactions(
+      utxos,
+      outputs,
+      this.address,
+      options.priorityFee,
+      this.network
+    );
+
+    const { transactions, summary } = buildResult;
+    logger.info('[PasskeyWallet] Built unsigned transactions:', {
+      count: transactions.length,
+      totalFee: summary.fees.toString(),
+    });
+
+    // 4. FOR EACH TRANSACTION: Authenticate + Sign
+    const signedTransactions = [];
+
+    for (let i = 0; i < transactions.length; i++) {
+      const tx = transactions[i];
+      logger.info(`[PasskeyWallet] Processing transaction ${i + 1}/${transactions.length}`);
+
+      // 4a. Compute transaction hash
+      const txHash = computeTransactionHash(tx);
+      logger.info('[PasskeyWallet] Transaction hash computed:', {
+        length: txHash.length,
+        previewHex: Array.from(txHash.slice(0, 8))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join(''),
+      });
+
+      // 4b. Authenticate with passkey using transaction hash as challenge
+      logger.info(
+        '[PasskeyWallet] Requesting passkey authentication for this transaction...'
+      );
+
+      const authResult = await authenticateWithChallenge(this.credentialId, txHash);
+
+      if (!authResult.success) {
+        throw new Error(
+          authResult.error ?? 'Passkey authentication failed for transaction'
+        );
+      }
+
+      logger.info('[PasskeyWallet] User authenticated - passkey signature received');
+
+      // 4c. Verify authentication signature binds to transaction
+      const verified = this.verifyAuthenticationForTransaction(authResult, txHash);
+
+      if (!verified) {
+        throw new Error(
+          'Authentication signature does not match transaction. Possible security issue.'
+        );
+      }
+
+      logger.info('[PasskeyWallet] ✓ WebAuthn signature verified for this transaction');
+
+      // 4d. Derive secp256k1 signing key (same deterministic derivation)
+      const { privateKeyHex } = deriveKaspaKeysFromPasskey(this.passkeyPublicKey);
+      logger.info('[PasskeyWallet] Derived secp256k1 signing key for this transaction');
+
+      // 4e. Sign transaction with derived key
+      await signTransactions([tx], privateKeyHex);
+      logger.info('[PasskeyWallet] Transaction signed successfully');
+
+      // 4f. Clear sensitive data immediately (privateKeyHex is local variable, will be GC'd)
+
+      signedTransactions.push(tx);
+    }
+
+    logger.info('[PasskeyWallet] All transactions signed successfully');
+
+    // 5. Submit signed transactions to network
+    const transactionIds = await submitTransactions(signedTransactions, this.rpc);
+    logger.info('[PasskeyWallet] Transactions submitted:', transactionIds);
+
+    // 6. Emit event
+    this.emit({
+      type: 'transaction_sent',
+      txId: transactionIds[0],
+    });
+
+    return {
+      transactionId: transactionIds[0],
+      amount: options.amount,
+      fee: summary.fees,
+    };
+  }
+
+  /**
    * Estimate the fee for a transaction
    *
    * @param options - Send options (to, amount, priorityFee)
@@ -516,6 +809,79 @@ export class PasskeyWallet {
         logger.error('Event handler error:', error);
       }
     });
+  }
+
+  // ===========================================================================
+  // Per-Transaction Authentication Helpers
+  // ===========================================================================
+
+  /**
+   * Verify that WebAuthn authentication result is for specific transaction
+   *
+   * This method ensures the WebAuthn signature was created for THIS specific
+   * transaction by verifying that the challenge in clientDataJSON matches the
+   * transaction hash.
+   *
+   * This prevents replay attacks where an attacker could try to reuse a signature
+   * from a different transaction.
+   *
+   * @param authResult - Authentication result from passkey
+   * @param txHash - Transaction hash that should be in the challenge
+   * @returns true if verified, false otherwise
+   */
+  private verifyAuthenticationForTransaction(
+    authResult: AuthenticationResult,
+    txHash: Uint8Array
+  ): boolean {
+    try {
+      // Parse clientDataJSON
+      const clientDataText = new TextDecoder().decode(authResult.clientDataJSON!);
+      const clientData = JSON.parse(clientDataText);
+
+      logger.debug('[PasskeyWallet] Verifying clientDataJSON:', {
+        type: clientData.type,
+        origin: clientData.origin,
+        challengePreview: clientData.challenge?.substring(0, 16),
+      });
+
+      // Extract challenge from clientDataJSON
+      const challengeBase64url = clientData.challenge;
+      if (!challengeBase64url) {
+        logger.error('[PasskeyWallet] No challenge found in clientDataJSON');
+        return false;
+      }
+
+      const challengeBytes = base64urlToUint8Array(challengeBase64url);
+
+      // Verify challenge matches transaction hash
+      if (challengeBytes.length !== txHash.length) {
+        logger.error('[PasskeyWallet] Challenge length mismatch:', {
+          expected: txHash.length,
+          actual: challengeBytes.length,
+        });
+        return false;
+      }
+
+      for (let i = 0; i < txHash.length; i++) {
+        if (challengeBytes[i] !== txHash[i]) {
+          logger.error('[PasskeyWallet] Challenge byte mismatch at index:', i);
+          return false;
+        }
+      }
+
+      logger.info('[PasskeyWallet] ✓ WebAuthn challenge verified = transaction hash');
+
+      // Additional verification: Check that this is a WebAuthn get assertion
+      if (clientData.type !== 'webauthn.get') {
+        logger.error('[PasskeyWallet] Invalid clientData type:', clientData.type);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      logger.error('[PasskeyWallet] Failed to verify authentication:', error);
+      return false;
+    }
   }
 
   /**

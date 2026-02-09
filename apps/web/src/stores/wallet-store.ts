@@ -51,6 +51,9 @@ export interface WalletState {
   // RPC connection
   rpcConnected: boolean;
 
+  // Network switching
+  switching: boolean;
+
   // Actions
   createWallet: (name?: string) => Promise<void>;
   unlockWallet: () => Promise<void>;
@@ -59,6 +62,7 @@ export interface WalletState {
 
   // Network actions
   setNetwork: (network: NetworkId) => void;
+  switchNetwork: (network: NetworkId) => Promise<void>;
   connectToNetwork: () => Promise<void>;
   disconnectFromNetwork: () => Promise<void>;
 
@@ -95,6 +99,7 @@ const initialState = {
   balance: null,
   balanceLoading: false,
   rpcConnected: false,
+  switching: false,
 };
 
 // =============================================================================
@@ -253,6 +258,12 @@ export const useWalletStore = create<WalletState>()(
         if (wallet) {
           wallet.disconnectNetwork();
         }
+
+        // Clear session flag when disconnecting
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('kasflow-session-active');
+        }
+
         set({
           wallet: null,
           status: 'disconnected',
@@ -276,6 +287,11 @@ export const useWalletStore = create<WalletState>()(
 
           await PasskeyWallet.delete();
 
+          // Clear session flag when deleting wallet
+          if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('kasflow-session-active');
+          }
+
           set({
             ...initialState,
           });
@@ -292,6 +308,64 @@ export const useWalletStore = create<WalletState>()(
       setNetwork: (network: NetworkId) => {
         console.log('[WalletStore] Setting network:', network);
         set({ network });
+      },
+
+      /**
+       * Switch to a different network (seamless, no passkey required)
+       */
+      switchNetwork: async (newNetwork: NetworkId) => {
+        const { wallet, network: currentNetwork } = get();
+
+        // Validate
+        if (!wallet) {
+          throw new Error('No wallet connected');
+        }
+
+        if (newNetwork === currentNetwork) {
+          return; // Already on this network
+        }
+
+        try {
+          set({ switching: true, error: null });
+
+          console.log('[WalletStore] Switching network...', { from: currentNetwork, to: newNetwork });
+
+          // Use SDK's seamless network switching (no passkey required!)
+          const result = await wallet.switchNetwork(newNetwork);
+
+          if (!result.success) {
+            throw new Error(result.error || 'Failed to switch network');
+          }
+
+          // Update state with new network and address
+          set({
+            network: newNetwork,
+            address: wallet.getAddress(),
+            rpcConnected: false,
+            balance: null,
+            switching: false,
+          });
+
+          console.log('[WalletStore] Network switched successfully:', {
+            network: newNetwork,
+            address: wallet.getAddress()
+          });
+
+          // Reconnect to new network and refresh balance
+          await get().connectToNetwork();
+
+        } catch (error) {
+          console.error('[WalletStore] Failed to switch network:', error);
+
+          // Revert to old network on error
+          set({
+            network: currentNetwork,
+            switching: false,
+            error: 'Failed to switch network',
+          });
+
+          throw error;
+        }
       },
 
       /**
@@ -490,3 +564,4 @@ export const selectBalance = (state: WalletState) => state.balance;
 export const selectStatus = (state: WalletState) => state.status;
 export const selectIsConnected = (state: WalletState) => state.status === 'connected';
 export const selectError = (state: WalletState) => state.error;
+export const selectSwitching = (state: WalletState) => state.switching;

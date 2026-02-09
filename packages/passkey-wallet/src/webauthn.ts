@@ -269,6 +269,115 @@ export const authenticateWithPasskey = async (
 };
 
 /**
+ * Authenticate with passkey using custom challenge (e.g., transaction hash)
+ *
+ * This function enables per-transaction authentication by using transaction-specific
+ * data as the WebAuthn challenge. The authenticator signs the challenge, creating
+ * cryptographic proof that the user approved THIS specific transaction.
+ *
+ * @param credentialId - Stored credential ID from wallet creation
+ * @param challenge - Custom challenge bytes (e.g., transaction hash)
+ * @returns Authentication result with signature
+ *
+ * @example
+ * ```typescript
+ * const txHash = await computeTransactionHash(transaction);
+ * const authResult = await authenticateWithChallenge(credentialId, txHash);
+ * // authResult.signature proves user approved this specific transaction
+ * ```
+ */
+export const authenticateWithChallenge = async (
+  credentialId: string,
+  challenge: Uint8Array
+): Promise<AuthenticationResult> => {
+  logger.info('[WebAuthn] authenticateWithChallenge() called');
+  logger.info('[WebAuthn] Challenge length:', challenge.length, 'bytes');
+
+  if (!isWebAuthnSupported()) {
+    logger.error('[WebAuthn] WebAuthn not supported');
+    return {
+      success: false,
+      error: ERROR_MESSAGES.WEBAUTHN_NOT_SUPPORTED,
+    };
+  }
+
+  if (!credentialId) {
+    logger.error('[WebAuthn] No credential ID provided');
+    return {
+      success: false,
+      error: 'Credential ID is required for authentication',
+    };
+  }
+
+  try {
+    // Use provided challenge (e.g., transaction hash) instead of random bytes
+    const challengeBase64 = uint8ArrayToBase64(challenge);
+
+    // Build authentication options with custom challenge
+    const authenticationOptions = {
+      challenge: challengeBase64,
+      rpId: WEBAUTHN_RP_ID,
+      timeout: WEBAUTHN_TIMEOUT_MS,
+      userVerification: WEBAUTHN_USER_VERIFICATION,
+      allowCredentials: [
+        {
+          id: credentialId,
+          type: 'public-key' as const,
+        },
+      ],
+    };
+
+    logger.info('[WebAuthn] Authentication options with custom challenge:', {
+      rpId: authenticationOptions.rpId,
+      timeout: authenticationOptions.timeout,
+      challengePreview: challengeBase64.substring(0, 16) + '...',
+    });
+
+    // Start the authentication ceremony
+    logger.info('[WebAuthn] Starting WebAuthn authentication ceremony with custom challenge...');
+    const assertion = await startAuthentication({ optionsJSON: authenticationOptions });
+    logger.info('[WebAuthn] Authentication ceremony completed, assertion received');
+
+    // Convert response data to Uint8Array
+    const authenticatorData = base64urlToUint8Array(assertion.response.authenticatorData);
+    const clientDataJSON = base64urlToUint8Array(assertion.response.clientDataJSON);
+    const signature = base64urlToUint8Array(assertion.response.signature);
+
+    logger.info('[WebAuthn] Authentication with custom challenge successful');
+    return {
+      success: true,
+      authenticatorData,
+      clientDataJSON,
+      signature,
+    };
+  } catch (error) {
+    logger.error('[WebAuthn] Authentication with custom challenge failed:', error);
+
+    // Handle user cancellation
+    if (error instanceof Error && error.name === 'NotAllowedError') {
+      logger.warn('[WebAuthn] User cancelled the authentication');
+      return {
+        success: false,
+        error: ERROR_MESSAGES.USER_CANCELLED,
+      };
+    }
+
+    if (error instanceof Error) {
+      logger.error('[WebAuthn] Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
+    }
+
+    return {
+      success: false,
+      error: ERROR_MESSAGES.PASSKEY_AUTHENTICATION_FAILED,
+    };
+  }
+};
+
+/**
  * Authenticate with passkey to verify user access
  * Returns authenticator data for wallet unlock verification
  */

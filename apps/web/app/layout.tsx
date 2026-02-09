@@ -4,6 +4,7 @@ import "./globals.css";
 import { RpcProvider } from "@/lib/kaspa/rpc";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { WalletInitializer } from "@/components/wallet/wallet-initializer";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -40,6 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <RpcProvider>
+            <WalletInitializer />
             {children}
             <Toaster />
           </RpcProvider>
