@@ -139,11 +139,30 @@ export function TransactionReceiptModal({
     try {
       toast.loading('Generating receipt...');
 
+      // Temporarily make receipt visible for capture
+      receiptElement.style.opacity = '1';
+      receiptElement.style.zIndex = '9999';
+
+      // Wait for QR code and fonts to fully render
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Convert to PNG with proper options for font/image handling
       const dataUrl = await toPng(receiptElement, {
         quality: 1.0,
         backgroundColor: '#ffffff',
         pixelRatio: 2, // Higher quality
+        cacheBust: true, // Ensure fresh resources
+        skipFonts: false, // Include fonts
       });
+
+      // Hide receipt again
+      receiptElement.style.opacity = '0';
+      receiptElement.style.zIndex = '-1';
+
+      // Verify we got actual image data (not blank)
+      if (!dataUrl || dataUrl === 'data:,' || dataUrl.length < 100) {
+        throw new Error('Generated image is blank');
+      }
 
       const link = document.createElement('a');
       link.download = `kasflow-receipt-${transactionId.slice(0, 8)}.png`;

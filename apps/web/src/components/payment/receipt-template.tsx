@@ -86,9 +86,13 @@ export function ReceiptTemplate({
       className="w-[400px] p-8 bg-white text-black"
       style={{
         fontFamily: 'monospace',
-        position: 'absolute',
-        left: '-9999px',
-        top: '-9999px',
+        position: 'fixed',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        opacity: 0,
+        pointerEvents: 'none',
+        zIndex: -1,
       }}
     >
       {/* Header */}
