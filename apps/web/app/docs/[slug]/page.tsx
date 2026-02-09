@@ -34,7 +34,8 @@ export function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const page = getDocPage(params.slug);
 
   if (!page) {
@@ -49,7 +50,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function DocPageContent({ params }: { params: { slug: string } }) {
+export default async function DocPageContent(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const page = getDocPage(params.slug);
 
   if (!page) {
