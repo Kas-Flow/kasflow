@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import * as QRCode from 'qrcode';
-import { NETWORK_NAMES } from '@/lib/constants/kaspa';
+import { NETWORK_NAMES, getExplorerTxUrl } from '@/lib/constants/kaspa';
 
 // =============================================================================
 // Types
@@ -70,9 +70,13 @@ export function ReceiptTemplate({
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
 
   // Generate QR code as data URL (canvas-based, works with html-to-image)
+  // QR code points to explorer URL (network-aware: testnet or mainnet)
   useEffect(() => {
-    if (transactionId) {
-      QRCode.toDataURL(transactionId, {
+    if (transactionId && network) {
+      // Generate explorer URL based on network (testnet-10, mainnet, etc.)
+      const explorerUrl = getExplorerTxUrl(transactionId, network);
+
+      QRCode.toDataURL(explorerUrl, {
         width: 140,
         margin: 1,
         errorCorrectionLevel: 'M',
@@ -84,7 +88,7 @@ export function ReceiptTemplate({
         .then((url) => setQrCodeDataUrl(url))
         .catch((error) => console.error('QR code generation failed:', error));
     }
-  }, [transactionId]);
+  }, [transactionId, network]);
 
   return (
     <div
