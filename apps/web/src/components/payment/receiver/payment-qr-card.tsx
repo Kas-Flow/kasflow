@@ -44,7 +44,7 @@ export function PaymentQRCard({ address, amount, network }: PaymentQRCardProps) 
         <QRCodeSVG value={uri} size={240} />
       </div>
       <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">
-        Scan to Pay
+        Scan with Wallet App
       </p>
     </motion.div>
   );
