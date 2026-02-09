@@ -13,12 +13,15 @@ interface PaymentQRCardProps {
 }
 
 export function PaymentQRCard({ address, amount, network }: PaymentQRCardProps) {
-  // Construct Kaspa payment URI per official spec (kaspad#2189)
-  // Format: kaspa:<bech32_address>?amount=<amount>
-  // Note: URI scheme is ALWAYS "kaspa:" regardless of network
-  // Strip network prefix (kaspa: or kaspatest:) and use just bech32 part
-  const bech32Address = address.includes(':') ? address.split(':')[1] : address;
-  const uri = `kaspa:${bech32Address}?amount=${amount}`;
+  // Construct Kaspa payment URI
+  // Per kaspad#2189: kaspa:<bech32_address>?amount=<kas_amount>
+  // BUT: For testnet, wallets may expect kaspatest: scheme
+  // We'll keep the full address with its prefix (kaspa: or kaspatest:)
+  // Format amount as decimal number (e.g., "10" -> "10.0")
+  const formattedAmount = parseFloat(amount).toFixed(8).replace(/\.?0+$/, '');
+  const uri = `${address}?amount=${formattedAmount}`;
+
+  console.log('[PaymentQRCard] Generated URI:', uri);
 
   // Get network display name
   const networkName = NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network || 'Unknown Network';
