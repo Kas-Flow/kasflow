@@ -13,9 +13,12 @@ interface PaymentQRCardProps {
 }
 
 export function PaymentQRCard({ address, amount, network }: PaymentQRCardProps) {
-  // Construct payment URI (BIP-21 style but for Kaspa)
-  // kaspa:<address>?amount=<amount>
-  const uri = `kaspa:${address}?amount=${amount}`;
+  // Construct Kaspa payment URI per official spec (kaspad#2189)
+  // Format: kaspa:<bech32_address>?amount=<amount>
+  // Note: URI scheme is ALWAYS "kaspa:" regardless of network
+  // Strip network prefix (kaspa: or kaspatest:) and use just bech32 part
+  const bech32Address = address.includes(':') ? address.split(':')[1] : address;
+  const uri = `kaspa:${bech32Address}?amount=${amount}`;
 
   // Get network display name
   const networkName = NETWORK_NAMES[network as keyof typeof NETWORK_NAMES] || network || 'Unknown Network';
