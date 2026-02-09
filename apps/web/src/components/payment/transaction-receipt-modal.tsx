@@ -146,6 +146,9 @@ export function TransactionReceiptModal({
       // Wait for QR code and fonts to fully render
       await new Promise(resolve => setTimeout(resolve, 500));
 
+      // Get the actual dimensions of the receipt
+      const rect = receiptElement.getBoundingClientRect();
+
       // Convert to PNG with proper options for font/image handling
       const dataUrl = await toPng(receiptElement, {
         quality: 1.0,
@@ -153,6 +156,8 @@ export function TransactionReceiptModal({
         pixelRatio: 2, // Higher quality
         cacheBust: true, // Ensure fresh resources
         skipFonts: false, // Include fonts
+        width: rect.width, // Explicit width
+        height: rect.height, // Explicit height
       });
 
       // Hide receipt again

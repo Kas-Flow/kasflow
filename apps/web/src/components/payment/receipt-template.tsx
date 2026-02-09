@@ -31,9 +31,15 @@ interface ReceiptRowProps {
 
 function ReceiptRow({ label, value }: ReceiptRowProps) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="text-xs text-gray-600">{label}</span>
-      <span className="text-xs font-bold text-right break-all max-w-[250px]">{value}</span>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+      <span style={{ fontSize: '12px', color: '#4b5563' }}>{label}</span>
+      <span style={{
+        fontSize: '12px',
+        fontWeight: 'bold',
+        textAlign: 'right',
+        wordBreak: 'break-all',
+        maxWidth: '280px',
+      }}>{value}</span>
     </div>
   );
 }
@@ -83,53 +89,87 @@ export function ReceiptTemplate({
   return (
     <div
       id="receipt-template"
-      className="w-[400px] p-8 bg-white text-black"
       style={{
+        width: '450px',
+        padding: '32px',
+        backgroundColor: '#ffffff',
+        color: '#000000',
         fontFamily: 'monospace',
         position: 'fixed',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%, -50%)',
+        left: '0',
+        top: '0',
         opacity: 0,
         pointerEvents: 'none',
         zIndex: -1,
+        boxSizing: 'border-box',
       }}
     >
       {/* Header */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-black tracking-tight mb-2">KASFLOW</h1>
-        <p className="text-sm text-gray-600 uppercase tracking-wider">Payment Receipt</p>
-        <div className="mt-2 h-px bg-gray-300" />
+      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '30px', fontWeight: 900, letterSpacing: '-0.025em', marginBottom: '8px' }}>
+          KASFLOW
+        </h1>
+        <p style={{ fontSize: '14px', color: '#4b5563', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Payment Receipt
+        </p>
+        <div style={{ marginTop: '8px', height: '1px', backgroundColor: '#d1d5db' }} />
       </div>
 
       {/* Transaction Details */}
-      <div className="border-t-2 border-b-2 border-dashed border-gray-400 py-4 space-y-2">
-        <ReceiptRow label="Date:" value={date} />
-        <ReceiptRow label="Amount:" value={`${amount} KAS`} />
-        <ReceiptRow label="Network:" value={networkName} />
-        <ReceiptRow label="Fee:" value={formatFee(fee)} />
-        <ReceiptRow label="Status:" value="CONFIRMED ✓" />
+      <div style={{
+        borderTop: '2px dashed #9ca3af',
+        borderBottom: '2px dashed #9ca3af',
+        paddingTop: '16px',
+        paddingBottom: '16px',
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <ReceiptRow label="Date:" value={date} />
+          <ReceiptRow label="Amount:" value={`${amount} KAS`} />
+          <ReceiptRow label="Network:" value={networkName} />
+          <ReceiptRow label="Fee:" value={formatFee(fee)} />
+          <ReceiptRow label="Status:" value="CONFIRMED ✓" />
+        </div>
       </div>
 
       {/* Recipient Address */}
-      <div className="mt-4 space-y-1">
-        <p className="text-xs text-gray-500 uppercase">Recipient:</p>
-        <p className="text-xs break-all font-mono bg-gray-100 p-2 rounded border border-gray-300">
+      <div style={{ marginTop: '16px' }}>
+        <p style={{ fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>
+          Recipient:
+        </p>
+        <p style={{
+          fontSize: '12px',
+          wordBreak: 'break-all',
+          fontFamily: 'monospace',
+          backgroundColor: '#f3f4f6',
+          padding: '8px',
+          borderRadius: '4px',
+          border: '1px solid #d1d5db',
+        }}>
           {recipientAddress}
         </p>
       </div>
 
       {/* Transaction ID */}
-      <div className="mt-4 space-y-1">
-        <p className="text-xs text-gray-500 uppercase">Transaction ID:</p>
-        <p className="text-xs break-all font-mono bg-gray-100 p-2 rounded border border-gray-300">
+      <div style={{ marginTop: '16px' }}>
+        <p style={{ fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>
+          Transaction ID:
+        </p>
+        <p style={{
+          fontSize: '12px',
+          wordBreak: 'break-all',
+          fontFamily: 'monospace',
+          backgroundColor: '#f3f4f6',
+          padding: '8px',
+          borderRadius: '4px',
+          border: '1px solid #d1d5db',
+        }}>
           {transactionId}
         </p>
       </div>
 
       {/* QR Code */}
-      <div className="mt-6 flex flex-col items-center">
-        <div className="bg-white p-3 border-2 border-black rounded-lg">
+      <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ backgroundColor: '#ffffff', padding: '12px', border: '2px solid #000000', borderRadius: '8px' }}>
           {qrCodeDataUrl ? (
             <img
               src={qrCodeDataUrl}
@@ -149,25 +189,25 @@ export function ReceiptTemplate({
                 justifyContent: 'center',
               }}
             >
-              <span className="text-xs text-gray-400">Generating QR...</span>
+              <span style={{ fontSize: '12px', color: '#9ca3af' }}>Generating QR...</span>
             </div>
           )}
         </div>
-        <p className="text-xs text-gray-500 mt-2">Scan to view transaction</p>
+        <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px' }}>Scan to view transaction</p>
       </div>
 
       {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-gray-300">
-        <p className="text-center text-xs text-gray-500">
+      <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #d1d5db' }}>
+        <p style={{ textAlign: 'center', fontSize: '12px', color: '#6b7280' }}>
           Thank you for using KasFlow
         </p>
-        <p className="text-center text-xs text-gray-400 mt-1">
+        <p style={{ textAlign: 'center', fontSize: '12px', color: '#9ca3af', marginTop: '4px' }}>
           Instant Kaspa Payments
         </p>
       </div>
 
       {/* Decorative tear line */}
-      <div className="mt-6 text-center text-gray-300 text-xs">
+      <div style={{ marginTop: '24px', textAlign: 'center', color: '#d1d5db', fontSize: '12px' }}>
         ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂
       </div>
     </div>
