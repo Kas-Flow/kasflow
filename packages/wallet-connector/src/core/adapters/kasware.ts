@@ -415,9 +415,23 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
       // Note: This may overflow for very large amounts (>2^53)
       const amountNumber = Number(params.amount);
 
-      const txId = await this.provider.sendKaspa(params.to, amountNumber, {
+      const result = await this.provider.sendKaspa(params.to, amountNumber, {
         priorityFee: params.priorityFee ? Number(params.priorityFee) : undefined,
       });
+
+      console.log('[KasWareAdapter] sendKaspa result:', result);
+
+      // KasWare may return the transaction ID as a string OR as an object with 'id' property
+      let txId: string;
+      if (typeof result === 'string') {
+        txId = result;
+      } else if (result && typeof result === 'object' && 'id' in result) {
+        txId = (result as { id: string }).id;
+      } else {
+        throw new Error('Unexpected response format from KasWare');
+      }
+
+      console.log('[KasWareAdapter] Extracted txId:', txId);
 
       return {
         txId,
