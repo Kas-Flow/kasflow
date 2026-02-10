@@ -59,18 +59,18 @@ export function NetworkSwitcher() {
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-between"
+          className="w-full justify-between cursor-pointer hover:bg-neo-yellow/20 hover:text-foreground transition-all duration-200 group"
           disabled={switching}
         >
           <div className="flex items-center">
-            <Network className="w-4 h-4 mr-2" />
+            <Network className="w-4 h-4 mr-2 group-hover:text-neo-yellow transition-colors" />
             <span className="text-sm">{NETWORK_NAMES[network]}</span>
           </div>
-          <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
+          <ChevronDown className={`w-4 h-4 ml-2 opacity-50 group-hover:opacity-100 group-hover:text-neo-yellow transition-all duration-200 ${open ? 'rotate-180' : ''}`} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel>Network</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-48 bg-card border-2 border-border shadow-[4px_4px_0px_0px_var(--border)]">
+        <DropdownMenuLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Network</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={network} onValueChange={handleSwitchNetwork}>
           {networks.map((net) => (
@@ -78,6 +78,7 @@ export function NetworkSwitcher() {
               key={net.id}
               value={net.id}
               disabled={switching}
+              className="cursor-pointer hover:bg-neo-yellow/20 focus:bg-neo-yellow/20 data-[state=checked]:bg-neo-green/20 data-[state=checked]:text-foreground transition-colors"
             >
               {net.name}
             </DropdownMenuRadioItem>

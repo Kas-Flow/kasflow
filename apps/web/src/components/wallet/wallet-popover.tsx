@@ -124,14 +124,14 @@ export function WalletPopover() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Balance</span>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={handleRefresh}
                 disabled={refreshing}
+                className="p-2 rounded-lg cursor-pointer hover:bg-neo-cyan/20 hover:text-neo-cyan transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+                title="Refresh balance"
               >
-                <RefreshCw className={`w-3 h-3 ${refreshing ? 'animate-spin' : ''}`} />
-              </Button>
+                <RefreshCw className={`w-4 h-4 group-hover:scale-110 transition-transform ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
             </div>
             <div className="text-2xl font-bold">
               {formattedAvailable} <span className="text-sm font-normal text-muted-foreground">KAS</span>
@@ -146,7 +146,11 @@ export function WalletPopover() {
               variant="outline"
               size="sm"
               onClick={handleCopy}
-              className="w-full"
+              className={`w-full cursor-pointer transition-all duration-200 ${
+                copied
+                  ? 'bg-neo-green text-black border-neo-green hover:bg-neo-green'
+                  : 'hover:bg-neo-yellow/20 hover:border-neo-yellow hover:text-foreground'
+              }`}
             >
               {copied ? (
                 <>
@@ -164,22 +168,20 @@ export function WalletPopover() {
               variant="outline"
               size="sm"
               onClick={handleExplorer}
-              className="w-full"
+              className="w-full cursor-pointer hover:bg-neo-yellow/20 hover:border-neo-yellow hover:text-foreground transition-all duration-200"
             >
               <ExternalLink className="w-4 h-4 mr-2" />
               Explorer
             </Button>
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={handleDisconnect}
-            className="w-full text-destructive hover:text-destructive"
+            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-medium cursor-pointer text-muted-foreground hover:bg-neo-pink/20 hover:text-neo-pink transition-all duration-200 group"
           >
-            <LogOut className="w-4 h-4 mr-2" />
+            <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform" />
             Disconnect
-          </Button>
+          </button>
         </div>
       </PopoverContent>
     </Popover>
