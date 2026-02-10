@@ -5,7 +5,7 @@ export const pageVariants = {
 };
 
 export const pageTransition = {
-  type: 'spring',
+  type: 'spring' as const,
   stiffness: 300,
   damping: 30
 };
@@ -17,7 +17,7 @@ export const avatarVariants = {
     rotate: 0,
     opacity: 1,
     transition: {
-      type: 'spring',
+      type: 'spring' as const,
       stiffness: 200,
       damping: 20
     }
@@ -26,7 +26,7 @@ export const avatarVariants = {
 
 export const cardGlowVariants = {
   initial: { boxShadow: '0 0 0 rgba(0,0,0,0)' },
-  hover: { 
+  hover: {
     boxShadow: '0 0 20px rgba(73, 234, 203, 0.3)',
     scale: 1.02,
     transition: { duration: 0.2 }
@@ -48,11 +48,11 @@ export const pulseVariants = {
 
 export const slideInUp = {
   hidden: { y: 20, opacity: 0 },
-  visible: { 
-    y: 0, 
+  visible: {
+    y: 0,
     opacity: 1,
     transition: {
-      type: 'spring',
+      type: 'spring' as const,
       stiffness: 100
     }
   }

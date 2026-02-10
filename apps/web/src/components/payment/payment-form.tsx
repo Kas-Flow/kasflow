@@ -65,10 +65,16 @@ export function PaymentForm() {
 
   const onSubmit = async (values: PaymentFormValues) => {
     try {
+      // Detect network from address prefix
+      const network = values.recipientAddress.startsWith('kaspatest:')
+        ? 'testnet-10'
+        : 'mainnet';
+
       // Encode payment data
       const encoded = encodePaymentLink({
         to: values.recipientAddress,
         amount: values.amount,
+        network,
         memo: values.memo || undefined,
       });
 

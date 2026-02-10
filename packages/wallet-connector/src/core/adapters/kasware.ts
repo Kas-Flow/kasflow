@@ -5,6 +5,7 @@
  * KasWare is a popular Kaspa wallet extension for Chrome/Brave.
  */
 
+import { KaspaRpc } from '@kasflow/passkey-wallet';
 import { BaseWalletAdapter } from './base';
 import type {
   WalletMetadata,
@@ -133,6 +134,7 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
 
   private provider: KaswareProvider | null = null;
   private _readyState: WalletReadyState = 'not-detected';
+  private rpc: KaspaRpc | null = null;
 
   // Bound event handlers for cleanup
   private handleAccountsChanged = this.onAccountsChanged.bind(this);
@@ -254,6 +256,16 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
       this.provider.on('accountsChanged', this.handleAccountsChanged);
       this.provider.on('networkChanged', this.handleNetworkChanged);
 
+      // Connect to RPC for reliable balance fetching
+      try {
+        this.rpc = new KaspaRpc();
+        await this.rpc.connect({ network: this._network });
+        console.log('[KasWare] RPC connected for balance fetching');
+      } catch (rpcError) {
+        console.warn('[KasWare] RPC connection failed, balance may be unreliable:', rpcError);
+        // Don't fail the whole connection if RPC fails
+      }
+
       this.setConnected(address, publicKey);
     } catch (error) {
       this.setConnecting(false);
@@ -283,6 +295,16 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
     if (this.provider) {
       this.provider.removeListener('accountsChanged', this.handleAccountsChanged);
       this.provider.removeListener('networkChanged', this.handleNetworkChanged);
+    }
+
+    // Disconnect RPC
+    if (this.rpc) {
+      try {
+        await this.rpc.disconnect();
+      } catch {
+        // Ignore disconnect errors
+      }
+      this.rpc = null;
     }
 
     this.setDisconnected();
@@ -319,10 +341,10 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
   // =========================================================================
 
   /**
-   * Get wallet balance from KasWare
+   * Get wallet balance via RPC (more reliable than wallet extension)
    */
   async getBalance(): Promise<WalletBalance> {
-    if (!this.provider || !this._connected) {
+    if (!this._connected || !this._address) {
       throw new WalletError(
         'NOT_CONNECTED' as WalletErrorCode,
         'Wallet is not connected'
@@ -330,22 +352,37 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
     }
 
     try {
-      const balance = await this.provider.getBalance();
-      console.log('[KasWareAdapter] Raw balance from extension:', balance);
+      // Prefer RPC for reliable balance (wallet extension getBalance is unreliable)
+      if (this.rpc && this.rpc.isConnected) {
+        console.log('[KasWareAdapter] Fetching balance via RPC for:', this._address);
+        const balance = await this.rpc.getBalance(this._address);
+        console.log('[KasWareAdapter] RPC balance:', {
+          available: balance.available.toString(),
+          pending: balance.pending.toString(),
+          total: balance.total.toString(),
+        });
+        return {
+          available: balance.available,
+          pending: balance.pending,
+          total: balance.total,
+        };
+      }
 
-      // KasWare returns balance in sompi as numbers
-      // Convert to bigint for consistency
-      const result = {
-        available: BigInt(balance.confirmed || 0),
-        pending: BigInt(balance.unconfirmed || 0),
-        total: BigInt(balance.total || 0),
-      };
-      console.log('[KasWareAdapter] Converted balance:', {
-        available: result.available.toString(),
-        pending: result.pending.toString(),
-        total: result.total.toString(),
-      });
-      return result;
+      // Fallback to wallet extension if RPC not available
+      if (this.provider) {
+        console.log('[KasWareAdapter] Fallback: fetching balance from extension');
+        const balance = await this.provider.getBalance();
+        console.log('[KasWareAdapter] Extension balance:', balance);
+
+        // KasWare may return total but not confirmed - use total as available if confirmed is missing
+        const available = BigInt(balance.confirmed || balance.total || 0);
+        const pending = BigInt(balance.unconfirmed || 0);
+        const total = BigInt(balance.total || 0);
+
+        return { available, pending, total };
+      }
+
+      throw new Error('No balance source available');
     } catch (error) {
       console.error('[KasWareAdapter] getBalance error:', error);
       throw new WalletError(
@@ -482,6 +519,17 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
         if (newAddress !== this._address) {
           this._address = newAddress;
           this.emitAccountChange(newAddress);
+        }
+      }
+
+      // Reconnect RPC to new network
+      if (this.rpc) {
+        try {
+          await this.rpc.disconnect();
+          await this.rpc.connect({ network });
+          console.log('[KasWare] RPC reconnected for new network:', network);
+        } catch (rpcError) {
+          console.warn('[KasWare] RPC reconnection failed:', rpcError);
         }
       }
 

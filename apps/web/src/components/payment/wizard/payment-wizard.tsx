@@ -164,7 +164,7 @@ export function PaymentWizard({ network }: PaymentWizardProps) {
               <SuccessStep
                 data={data}
                 onReset={() => {
-                  setData({ to: '', amount: '', memo: '' });
+                  setData({ to: '', amount: '', memo: '', network });
                   nextStep('address');
                 }}
               />

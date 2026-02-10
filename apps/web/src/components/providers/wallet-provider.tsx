@@ -8,7 +8,7 @@
  * existing components through a bridge to the Zustand store.
  */
 
-import { type ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   KaspaWalletProvider,
   passkeyAdapter,
@@ -26,7 +26,7 @@ const DEFAULT_NETWORK: NetworkId = (process.env.NEXT_PUBLIC_DEFAULT_NETWORK as N
  * Props for WalletProvider
  */
 interface WalletProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -120,7 +120,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
       }}
     >
       <WalletStoreBridge />
-      {children}
+      {children as any}
       <WalletModal title="Connect Wallet" />
     </KaspaWalletProvider>
   );

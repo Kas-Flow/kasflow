@@ -36,6 +36,7 @@ export const paymentDataSchema = z.object({
       (val) => parseFloat(val) <= MAX_PAYMENT_AMOUNT_KAS,
       { message: `Amount must be less than ${MAX_PAYMENT_AMOUNT_KAS} KAS` }
     ),
+  network: z.enum(['mainnet', 'testnet-10', 'testnet-11']),
   memo: z.string().max(500, 'Memo must be less than 500 characters').optional(),
   label: z.string().max(100, 'Label must be less than 100 characters').optional(),
   expiresAt: z
@@ -80,6 +81,7 @@ export const sanitizePaymentInput = z
   .object({
     to: z.string().trim(),
     amount: z.string().trim(),
+    network: z.string().trim(),
     memo: z.string().trim().optional(),
     label: z.string().trim().optional(),
     expiresAt: z.number().optional(),
@@ -87,6 +89,7 @@ export const sanitizePaymentInput = z
   .transform((data) => ({
     to: data.to,
     amount: data.amount,
+    network: data.network,
     ...(data.memo && { memo: data.memo }),
     ...(data.label && { label: data.label }),
     ...(data.expiresAt && { expiresAt: data.expiresAt }),
