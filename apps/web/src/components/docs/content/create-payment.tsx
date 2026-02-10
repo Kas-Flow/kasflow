@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export function CreatePaymentContent() {
   return (
     <>
@@ -14,7 +16,7 @@ export function CreatePaymentContent() {
 
       <h3>1. Navigate to Create Payment</h3>
       <p>
-        Click <strong>"Create Payment"</strong> in the navigation bar, or visit{' '}
+        Click <strong>&quot;Create Payment&quot;</strong> in the navigation bar, or visit{' '}
         <a href="/create" className="text-neo-cyan hover:underline">
           kasflow.app/create
         </a>
@@ -36,12 +38,12 @@ export function CreatePaymentContent() {
       <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
         <div className="text-xl">💡</div>
         <div className="text-sm text-foreground/80 leading-relaxed">
-          <strong>Tip:</strong> If you're connected to a wallet, KasFlow will auto-fill your wallet address and match the network.
+          <strong>Tip:</strong> If you&apos;re connected to a wallet, KasFlow will auto-fill your wallet address and match the network.
         </div>
       </div>
 
       <h3>3. Set the Amount</h3>
-      <p>Enter the payment amount in KAS (Kaspa's native currency). Examples:</p>
+      <p>Enter the payment amount in KAS (Kaspa&apos;s native currency). Examples:</p>
       <ul>
         <li>
           <code>10</code> - 10 KAS
@@ -57,20 +59,20 @@ export function CreatePaymentContent() {
       <h3>4. Add a Memo (Optional)</h3>
       <p>Include a note to help track what this payment is for:</p>
       <ul>
-        <li>"Coffee - Order #42"</li>
-        <li>"Freelance Invoice - January 2026"</li>
-        <li>"Birthday Gift from Sarah"</li>
+        <li>&quot;Coffee - Order #42&quot;</li>
+        <li>&quot;Freelance Invoice - January 2026&quot;</li>
+        <li>&quot;Birthday Gift from Sarah&quot;</li>
       </ul>
 
       <h3>5. Generate Link</h3>
-      <p>Click <strong>"Generate Payment Link"</strong> to create your unique payment URL.</p>
+      <p>Click <strong>&quot;Generate Payment Link&quot;</strong> to create your unique payment URL.</p>
 
       <h2>Sharing Your Payment Link</h2>
 
       <p>Once generated, you have multiple ways to share your payment link:</p>
 
       <h3>📋 Copy Link</h3>
-      <p>Click the <strong>"Copy Link"</strong> button to copy the full URL. Share via:</p>
+      <p>Click the <strong>&quot;Copy Link&quot;</strong> button to copy the full URL. Share via:</p>
       <ul>
         <li>Text message / SMS</li>
         <li>Email</li>
@@ -112,7 +114,7 @@ export function CreatePaymentContent() {
 
       <h2>Best Practices</h2>
 
-      <h3>✅ Do's</h3>
+      <h3>✅ Dos</h3>
       <ul>
         <li>Double-check the recipient address before sharing</li>
         <li>Use descriptive memos for easy tracking</li>
@@ -120,11 +122,11 @@ export function CreatePaymentContent() {
         <li>Save payment links for recurring invoices</li>
       </ul>
 
-      <h3>❌ Don'ts</h3>
+      <h3>❌ Donts</h3>
       <ul>
-        <li>Don't share mainnet links when testing</li>
-        <li>Don't reuse payment links for different amounts</li>
-        <li>Don't accept payments to addresses you don't control</li>
+        <li>Avoid sharing mainnet links when testing</li>
+        <li>Avoid reusing payment links for different amounts</li>
+        <li>Never accept payments to addresses you don&apos;t control</li>
       </ul>
 
       <h2>Advanced: Network Selection</h2>
@@ -172,12 +174,12 @@ export function CreatePaymentContent() {
         <p className="text-muted-foreground text-lg mb-6">
           Learn how to pay with your KasFlow wallet or external wallet apps.
         </p>
-        <a
+        <Link
           href="/docs/send-payment"
           className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Send Payment Guide →
-        </a>
+        </Link>
       </div>
     </>
   );

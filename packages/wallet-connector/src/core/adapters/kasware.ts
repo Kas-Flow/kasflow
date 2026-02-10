@@ -436,18 +436,18 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
             // Calculate fee from inputs and outputs
             // fee = sum(inputs) - sum(outputs)
             if (parsed.inputs && parsed.outputs) {
-              const inputSum = parsed.inputs.reduce((sum: bigint, input: any) => {
-                const amount = input.utxo?.amount || '0';
-                return sum + BigInt(amount);
-              }, 0n);
+              const inputSum = (parsed.inputs as Array<{ utxo?: { amount?: string } }>).reduce(
+                (sum, input) => sum + BigInt(input.utxo?.amount || '0'),
+                0n
+              );
 
-              const outputSum = parsed.outputs.reduce((sum: bigint, output: any) => {
-                const value = output.value || '0';
-                return sum + BigInt(value);
-              }, 0n);
+              const outputSum = (parsed.outputs as Array<{ value?: string }>).reduce(
+                (sum, output) => sum + BigInt(output.value || '0'),
+                0n
+              );
 
               fee = inputSum - outputSum;
-              console.log('[KasWareAdapter] Calculated fee:', fee.toString(), 'sompi');
+              console.log('[KasWareAdapter] Calculated fee:', fee?.toString(), 'sompi');
             }
           } catch {
             txId = result; // If parse fails, use as-is

@@ -5,7 +5,6 @@
  */
 
 import { use, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/navbar';
 import { PaymentReceiver } from '@/components/payment/receiver/payment-receiver';
 import { decodePaymentLink } from '@/lib/payment';
@@ -18,7 +17,6 @@ interface PageProps {
 
 export default function PaymentPage({ params }: PageProps) {
   const resolvedParams = use(params);
-  const router = useRouter();
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [error, setError] = useState<string | null>(null);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { PaymentWizard } from '@/components/payment/wizard/payment-wizard';
 import { NetworkSelector } from '@/components/payment/network-selector';
 import { NetworkDisplay } from '@/components/wallet/network-display';
@@ -13,15 +13,12 @@ export default function CreatePaymentPage() {
   const walletNetwork = useWalletStore((state) => state.network);
   const [selectedNetwork, setSelectedNetwork] = useState<string>(DEFAULT_NETWORK);
 
-  // Sync with wallet network when connected
-  useEffect(() => {
-    if (isConnected) {
-      setSelectedNetwork(walletNetwork);
-    }
-  }, [isConnected, walletNetwork]);
-
   // Use wallet network if connected, otherwise use user selection
-  const activeNetwork = isConnected ? walletNetwork : selectedNetwork;
+  // Memoize to avoid unnecessary recalculations
+  const activeNetwork = useMemo(
+    () => (isConnected ? walletNetwork : selectedNetwork),
+    [isConnected, walletNetwork, selectedNetwork]
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
