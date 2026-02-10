@@ -74,14 +74,20 @@ console.log('Total:', balance.total);
 ```typescript
 import { kasStringToSompi } from '@kasflow/passkey-wallet';
 
-// Send 1.5 KAS to an address
-const result = await wallet.send({
+// Recommended: Send with per-transaction biometric authentication
+const result = await wallet.sendWithAuth({
   to: 'kaspatest:qz7ulu4c25dh7fzec9zjyrmlhnkzrg4wmf89q7gzr3gfrsj3uz6xjceef60sd',
   amount: kasStringToSompi('1.5'),  // Converts "1.5" to sompi
 });
 
 console.log('Transaction ID:', result.transactionId);
 console.log('Fee paid:', result.fee);
+
+// Alternative: Send without additional authentication (uses session keys)
+const result2 = await wallet.send({
+  to: 'kaspatest:qz...',
+  amount: kasStringToSompi('1.0'),
+});
 ```
 
 ### Sign Messages
@@ -117,6 +123,7 @@ console.log('Signature:', signature);
 | `wallet.disconnectNetwork()` | Disconnect from the network |
 | `wallet.getBalance()` | Get wallet balance (requires connection) |
 | `wallet.send(options)` | Send KAS to an address |
+| `wallet.sendWithAuth(options)` | Send with per-transaction biometric auth (recommended) |
 | `wallet.estimateFee(options)` | Estimate transaction fee |
 | `wallet.signMessage(message)` | Sign a message |
 | `wallet.on(handler)` | Subscribe to wallet events |
@@ -262,17 +269,17 @@ console.log(DEFAULT_NETWORK);       // 'testnet-11'
 
 ### How It Works
 
-1. **Wallet Creation**: A new Kaspa private key is generated using Web Crypto API
-2. **Passkey Registration**: A passkey is registered on the user's device
-3. **Key Encryption**: The private key is encrypted using key material derived from passkey authentication
-4. **Secure Storage**: Encrypted data is stored in IndexedDB (never leaves the device)
+1. **Passkey Registration**: A WebAuthn credential is created and tied to device biometrics
+2. **Deterministic Derivation**: Kaspa keys are derived from the passkey's public key using SHA-256
+3. **No Key Storage**: Private keys are never stored - they're re-derived on each unlock
+4. **Multi-Device Sync**: Same wallet on any device where the passkey syncs (iCloud Keychain, Google Password Manager)
 
 ### Security Considerations
 
-- Private keys are encrypted at rest and only decrypted in memory during wallet operations
 - No seed phrases or passwords - authentication is biometric only
-- Keys never leave the browser - all cryptographic operations happen locally
-- The passkey itself cannot decrypt the wallet - it provides key material for derivation
+- Private keys exist only in memory during operations, never persisted
+- Keys are deterministically derived, so the same passkey always produces the same wallet
+- All cryptographic operations happen locally in the browser
 
 ### Browser Requirements
 
