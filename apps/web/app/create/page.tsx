@@ -39,24 +39,21 @@ export default function CreatePaymentPage() {
         </div>
 
         {/* Two-Column Grid Layout (Desktop) / Stacked (Mobile) */}
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] xl:grid-cols-[360px_1fr] gap-6 lg:gap-8 items-start">
-          {/* Left Column: Network Display (if connected) or Selector (if not) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6 lg:gap-10 items-start max-w-6xl mx-auto">
+          {/* Left Column: Compact Network Display (if connected) or Selector (if not) */}
           {isConnected ? (
-            <div className="w-full lg:sticky lg:top-6 lg:self-start">
-              <div className="bg-card border-4 border-border rounded-xl shadow-[6px_6px_0px_0px_var(--shadow-color)] p-6">
+            <div className="w-full lg:sticky lg:top-24 lg:self-start">
+              <div className="bg-card border-2 border-border rounded-lg shadow-[4px_4px_0px_0px_var(--shadow-color)] p-4 pb-6">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <div className="w-2 h-2 rounded-full bg-neo-green animate-pulse" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Wallet Connected</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-neo-green animate-pulse shrink-0" />
+                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Connected</span>
                   </div>
 
-                  <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Payment Network</p>
-                    <NetworkDisplay network={walletNetwork} size="lg" className="w-full justify-center" />
-                  </div>
+                  <NetworkDisplay network={walletNetwork} size="sm" />
 
-                  <p className="text-xs text-muted-foreground italic pt-2 border-t-2 border-border">
-                    Switch network from the wallet menu to create payments on a different network.
+                  <p className="text-[11px] text-muted-foreground leading-relaxed pt-2">
+                    Switch network from wallet menu.
                   </p>
                 </div>
               </div>
@@ -65,7 +62,7 @@ export default function CreatePaymentPage() {
             <NetworkSelector value={selectedNetwork} onChange={setSelectedNetwork} />
           )}
 
-          {/* Right Column: Payment Wizard (Flexible Width) */}
+          {/* Right Column: Payment Wizard (More Space) */}
           <div className="w-full">
             <PaymentWizard network={activeNetwork} />
           </div>
