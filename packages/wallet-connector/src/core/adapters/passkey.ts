@@ -245,10 +245,12 @@ export class PasskeyWalletAdapter extends BaseWalletAdapter {
 
       console.log('[PasskeyAdapter] sendWithAuth result:', result);
       console.log('[PasskeyAdapter] Transaction ID:', result.transactionId);
+      console.log('[PasskeyAdapter] Fee:', result.fee?.toString(), 'sompi');
 
       const txResult = {
         txId: result.transactionId,
         network: this._network,
+        fee: result.fee,
       };
       console.log('[PasskeyAdapter] Returning:', txResult);
       return txResult;

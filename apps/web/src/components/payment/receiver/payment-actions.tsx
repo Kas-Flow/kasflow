@@ -98,11 +98,17 @@ export function PaymentActions({ address, amount, network, memo, onPaymentSent }
 
       console.log('[PaymentActions] Payment sent successfully:', result);
       console.log('[PaymentActions] Transaction ID from result:', result.txId);
+      console.log('[PaymentActions] Fee from result:', result.fee?.toString());
 
       // Store transaction details - IMPORTANT: Set state before opening modal
       const txId = result.txId;
       console.log('[PaymentActions] Setting completedTxId to:', txId);
       setCompletedTxId(txId);
+
+      // Set the fee if available
+      if (result.fee) {
+        setTransactionFee(result.fee);
+      }
 
       // Small delay to ensure state is set before modal opens
       await new Promise(resolve => setTimeout(resolve, 50));

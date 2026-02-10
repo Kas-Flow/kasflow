@@ -124,6 +124,8 @@ export interface TransactionResult {
   txId: string;
   /** Network the transaction was sent on */
   network: NetworkId;
+  /** Transaction fee in sompi (optional) */
+  fee?: bigint;
 }
 
 /**

@@ -422,14 +422,33 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
       console.log('[KasWareAdapter] sendKaspa result:', result);
 
       // KasWare returns a JSON string containing the full transaction object
-      // We need to parse it and extract just the 'id' field
+      // We need to parse it and extract the 'id' field and calculate fee
       let txId: string;
+      let fee: bigint | undefined;
+
       if (typeof result === 'string') {
         // Check if it's a JSON string (starts with '{')
         if (result.startsWith('{')) {
           try {
             const parsed = JSON.parse(result);
             txId = parsed.id || result;
+
+            // Calculate fee from inputs and outputs
+            // fee = sum(inputs) - sum(outputs)
+            if (parsed.inputs && parsed.outputs) {
+              const inputSum = parsed.inputs.reduce((sum: bigint, input: any) => {
+                const amount = input.utxo?.amount || '0';
+                return sum + BigInt(amount);
+              }, 0n);
+
+              const outputSum = parsed.outputs.reduce((sum: bigint, output: any) => {
+                const value = output.value || '0';
+                return sum + BigInt(value);
+              }, 0n);
+
+              fee = inputSum - outputSum;
+              console.log('[KasWareAdapter] Calculated fee:', fee.toString(), 'sompi');
+            }
           } catch {
             txId = result; // If parse fails, use as-is
           }
@@ -447,6 +466,7 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
       return {
         txId,
         network: this._network,
+        fee,
       };
     } catch (error) {
       if (error instanceof Error) {
