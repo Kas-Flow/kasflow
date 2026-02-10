@@ -58,7 +58,7 @@
   --secondary: #06b6d4;
   --secondary-foreground: #000000;
   --muted: #27272a;
-  --muted-foreground: #e4e4e7;  /* Zinc-200 for better visibility */
+  --muted-foreground: #b4b4b4;  /* Light gray for good visibility on dark cards */
   --accent: #db2777;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
@@ -77,10 +77,18 @@
   --color-shadow-color: var(--shadow-color);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 }
