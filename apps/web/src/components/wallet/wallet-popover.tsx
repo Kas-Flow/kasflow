@@ -94,7 +94,7 @@ export function WalletPopover() {
           {shortAddress}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80 bg-card border-2 border-border shadow-[4px_4px_0px_0px_var(--border)]">
         <div className="space-y-4">
           {/* Header */}
           <div className="space-y-2">

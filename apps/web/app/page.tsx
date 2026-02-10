@@ -221,6 +221,7 @@ export default function Home() {
                 desc: "Leverage Kaspa's BlockDAG for sub-second finality. Don't make your users wait.",
                 icon: Zap,
                 color: "bg-neo-yellow",
+                iconColor: "text-neo-yellow",
                 rotate: 3
               },
               {
@@ -228,6 +229,7 @@ export default function Home() {
                 desc: "Non-custodial wallets secured by device biometrics. No seed phrases to lose.",
                 icon: ShieldCheck,
                 color: "bg-neo-cyan",
+                iconColor: "text-neo-cyan",
                 rotate: -2
               },
               {
@@ -235,10 +237,11 @@ export default function Home() {
                 desc: "Generate payment links instantly. Share anywhere. No complex backend setup required.",
                 icon: LinkIcon,
                 color: "bg-neo-pink",
+                iconColor: "text-neo-pink",
                 rotate: 2
               }
             ].map((feature, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ scale: 0.9, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
@@ -247,8 +250,8 @@ export default function Home() {
                 transition={{ delay: i * 0.2 }}
                 className={`${feature.color} border-4 border-border p-8 shadow-[8px_8px_0px_0px_var(--border)] transition-all group cursor-default`}
               >
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <feature.icon className={`h-8 w-8 text-black`} fill={feature.color.replace('bg-', '') === 'neo-pink' ? 'white' : 'currentColor'} />
+                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-2 border-black">
+                  <feature.icon className={`h-8 w-8 ${feature.iconColor}`} />
                 </div>
                 <h3 className="text-3xl font-black mb-4 text-black">{feature.title}</h3>
                 <p className="text-lg font-bold text-black/80">
@@ -315,13 +318,30 @@ export default function Home() {
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="bg-black text-white py-12 border-t-4 border-border">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-neo-green rounded flex items-center justify-center text-black font-black">K</div>
-            <span className="font-black text-2xl">KasFlow</span>
+      <footer className="bg-black text-white py-16 border-t-4 border-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center gap-6">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-neo-green rounded-lg flex items-center justify-center border-2 border-white shadow-[3px_3px_0px_0px_#fff]">
+                <span className="text-black font-black text-lg">K</span>
+              </div>
+              <span className="font-black text-2xl">KasFlow</span>
+            </div>
+
+            {/* Tagline */}
+            <p className="text-gray-400 font-bold max-w-md">
+              The fastest way to accept Kaspa payments. Open source and free forever.
+            </p>
+
+            {/* Divider */}
+            <div className="w-24 h-1 bg-neo-green rounded-full" />
+
+            {/* Copyright */}
+            <p className="text-gray-500 text-sm font-medium">
+              © 2026 KasFlow. Built with passion for the Kaspathon.
+            </p>
           </div>
-          <p className="font-bold text-gray-400">© 2026 KasFlow. Built for the Kaspathon.</p>
         </div>
       </footer>
     </div>
