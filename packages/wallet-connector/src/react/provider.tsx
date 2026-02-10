@@ -172,9 +172,13 @@ export function KaspaWalletProvider({
         }
 
         // Connect
+        console.log('[WalletProvider] Connecting to adapter:', adapter.metadata.name);
         await adapter.connect();
 
         // Update state
+        console.log('[WalletProvider] Connection successful');
+        console.log('[WalletProvider] Adapter address:', adapter.address);
+        console.log('[WalletProvider] Adapter network:', adapter.network);
         setCurrentAdapter(adapter);
         setConnected(true);
         setAddress(adapter.address);
@@ -306,14 +310,21 @@ export function KaspaWalletProvider({
 
   const switchNetwork = useCallback(
     async (newNetwork: NetworkId): Promise<void> => {
+      console.log('[WalletProvider] switchNetwork called:', newNetwork);
+      console.log('[WalletProvider] currentAdapter:', currentAdapter?.metadata.name);
+
       if (currentAdapter) {
         await currentAdapter.switchNetwork(newNetwork);
+        console.log('[WalletProvider] Adapter switchNetwork completed');
+        console.log('[WalletProvider] Adapter network after switch:', currentAdapter.network);
         setNetwork(newNetwork);
         // Refresh address in case it changed
         setAddress(currentAdapter.address);
+        console.log('[WalletProvider] Address after switch:', currentAdapter.address);
         // Refresh balance for new network
         await refreshBalance();
       } else {
+        console.log('[WalletProvider] No adapter, just setting network state');
         setNetwork(newNetwork);
       }
     },

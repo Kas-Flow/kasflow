@@ -65,36 +65,40 @@ export interface KaswareAdapterOptions {
 
 /**
  * Convert KasWare network string to our NetworkId type
+ * KasWare uses format: kaspa_mainnet, kaspa_testnet_10, kaspa_testnet_11
  */
 function kaswareNetworkToNetworkId(kaswareNetwork: string): NetworkId {
-  switch (kaswareNetwork.toLowerCase()) {
-    case 'mainnet':
-    case 'kaspa-mainnet':
-      return 'mainnet';
-    case 'testnet-10':
-    case 'kaspa-testnet-10':
-      return 'testnet-10';
-    case 'testnet-11':
-    case 'kaspa-testnet-11':
-      return 'testnet-11';
-    default:
-      return 'mainnet';
+  const network = kaswareNetwork.toLowerCase();
+
+  // KasWare specific formats (with underscores)
+  if (network === 'kaspa_mainnet' || network === 'mainnet') {
+    return 'mainnet';
   }
+  if (network === 'kaspa_testnet_10' || network === 'testnet-10') {
+    return 'testnet-10';
+  }
+  if (network === 'kaspa_testnet_11' || network === 'testnet-11') {
+    return 'testnet-11';
+  }
+
+  console.warn('[KasWare] Unknown network format:', kaswareNetwork, '- defaulting to mainnet');
+  return 'mainnet';
 }
 
 /**
  * Convert our NetworkId to KasWare network string
+ * KasWare uses format: kaspa_mainnet, kaspa_testnet_10, kaspa_testnet_11
  */
 function networkIdToKaswareNetwork(networkId: NetworkId): string {
   switch (networkId) {
     case 'mainnet':
-      return 'kaspa-mainnet';
+      return 'kaspa_mainnet';
     case 'testnet-10':
-      return 'kaspa-testnet-10';
+      return 'kaspa_testnet_10';
     case 'testnet-11':
-      return 'kaspa-testnet-11';
+      return 'kaspa_testnet_11';
     default:
-      return 'kaspa-mainnet';
+      return 'kaspa_mainnet';
   }
 }
 
@@ -242,7 +246,9 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
 
       // Get current network from wallet
       const kaswareNetwork = await this.provider.getNetwork();
+      console.log('[KasWare] Wallet returned network:', kaswareNetwork);
       this._network = kaswareNetworkToNetworkId(kaswareNetwork);
+      console.log('[KasWare] Mapped to NetworkId:', this._network);
 
       // Set up event listeners
       this.provider.on('accountsChanged', this.handleAccountsChanged);
@@ -302,7 +308,9 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
 
   private onNetworkChanged(network: unknown): void {
     const networkStr = network as string;
+    console.log('[KasWare] Network changed event received:', networkStr);
     const networkId = kaswareNetworkToNetworkId(networkStr);
+    console.log('[KasWare] Mapped to NetworkId:', networkId);
     this.setNetwork(networkId);
   }
 
@@ -444,18 +452,35 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
    * Switch network via KasWare
    */
   async switchNetwork(network: NetworkId): Promise<void> {
+    console.log('[KasWare] switchNetwork called with:', network);
+
     if (!this.provider || !this._connected) {
-      // Just update internal state if not connected
+      console.log('[KasWare] Not connected, just updating internal state');
       this.setNetwork(network);
       return;
     }
 
     try {
       const kaswareNetwork = networkIdToKaswareNetwork(network);
+      console.log('[KasWare] Requesting wallet to switch to:', kaswareNetwork);
       await this.provider.switchNetwork(kaswareNetwork);
+      console.log('[KasWare] Network switch request completed');
 
-      // Network change event handler will update internal state
+      // Get updated account info after network switch
+      const accounts = await this.provider.getAccounts();
+      if (accounts && accounts.length > 0) {
+        const newAddress = accounts[0];
+        console.log('[KasWare] Address after network switch:', newAddress);
+        if (newAddress !== this._address) {
+          this._address = newAddress;
+          this.emitAccountChange(newAddress);
+        }
+      }
+
+      // Update internal network state
+      this.setNetwork(network);
     } catch (error) {
+      console.error('[KasWare] Network switch failed:', error);
       throw new WalletError(
         'NETWORK_ERROR' as WalletErrorCode,
         error instanceof Error ? error.message : 'Network switch failed',
