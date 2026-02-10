@@ -52,7 +52,7 @@ export function PaymentWizard({ network }: PaymentWizardProps) {
 
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
+      x: direction > 0 ? '100%' : '-100%',
       opacity: 0
     }),
     center: {
@@ -60,7 +60,7 @@ export function PaymentWizard({ network }: PaymentWizardProps) {
       opacity: 1
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? 300 : -300,
+      x: direction < 0 ? '100%' : '-100%',
       opacity: 0
     })
   };

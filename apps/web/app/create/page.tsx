@@ -24,7 +24,7 @@ export default function CreatePaymentPage() {
   const activeNetwork = isConnected ? walletNetwork : selectedNetwork;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
 
       <main className="container mx-auto px-4 lg:px-6 py-4 lg:py-6">
