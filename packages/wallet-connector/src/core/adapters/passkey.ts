@@ -236,16 +236,22 @@ export class PasskeyWalletAdapter extends BaseWalletAdapter {
 
     try {
       // Use sendWithAuth for per-transaction authentication (more secure)
+      console.log('[PasskeyAdapter] Calling sendWithAuth...');
       const result = await this.wallet.sendWithAuth({
         to: params.to,
         amount: params.amount,
         priorityFee: params.priorityFee,
       });
 
-      return {
+      console.log('[PasskeyAdapter] sendWithAuth result:', result);
+      console.log('[PasskeyAdapter] Transaction ID:', result.transactionId);
+
+      const txResult = {
         txId: result.transactionId,
         network: this._network,
       };
+      console.log('[PasskeyAdapter] Returning:', txResult);
+      return txResult;
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('insufficient') || error.message.includes('balance')) {

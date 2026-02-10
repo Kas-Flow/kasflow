@@ -65,6 +65,9 @@ export function PaymentActions({ address, amount, network, memo, onPaymentSent }
 
     try {
       setIsSending(true);
+      // Reset previous transaction data
+      setCompletedTxId(null);
+      setReceiptOpen(false);
 
       // Convert amount to sompi
       const amountInSompi = kasToSompi(parseFloat(amount));
@@ -94,13 +97,19 @@ export function PaymentActions({ address, amount, network, memo, onPaymentSent }
       });
 
       console.log('[PaymentActions] Payment sent successfully:', result);
+      console.log('[PaymentActions] Transaction ID from result:', result.txId);
 
-      // Store transaction details
-      setCompletedTxId(result.txId);
-      // Note: Fee is not returned by current adapter, but could be added
+      // Store transaction details - IMPORTANT: Set state before opening modal
+      const txId = result.txId;
+      console.log('[PaymentActions] Setting completedTxId to:', txId);
+      setCompletedTxId(txId);
+
+      // Small delay to ensure state is set before modal opens
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       // Show receipt modal
       setReceiptOpen(true);
+      console.log('[PaymentActions] Receipt modal opened with txId:', txId);
 
       // Notify parent
       onPaymentSent();

@@ -331,15 +331,23 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
 
     try {
       const balance = await this.provider.getBalance();
+      console.log('[KasWareAdapter] Raw balance from extension:', balance);
 
       // KasWare returns balance in sompi as numbers
       // Convert to bigint for consistency
-      return {
-        available: BigInt(balance.confirmed),
-        pending: BigInt(balance.unconfirmed),
-        total: BigInt(balance.total),
+      const result = {
+        available: BigInt(balance.confirmed || 0),
+        pending: BigInt(balance.unconfirmed || 0),
+        total: BigInt(balance.total || 0),
       };
+      console.log('[KasWareAdapter] Converted balance:', {
+        available: result.available.toString(),
+        pending: result.pending.toString(),
+        total: result.total.toString(),
+      });
+      return result;
     } catch (error) {
+      console.error('[KasWareAdapter] getBalance error:', error);
       throw new WalletError(
         'RPC_ERROR' as WalletErrorCode,
         error instanceof Error ? error.message : 'Failed to get balance',

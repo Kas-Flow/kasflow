@@ -276,13 +276,22 @@ export function KaspaWalletProvider({
   // =========================================================================
 
   const refreshBalance = useCallback(async (): Promise<void> => {
-    if (!currentAdapter || !connected) return;
+    if (!currentAdapter || !connected) {
+      console.log('[WalletProvider] refreshBalance skipped - not connected');
+      return;
+    }
 
     try {
+      console.log('[WalletProvider] Refreshing balance for:', currentAdapter.metadata.name);
       const newBalance = await currentAdapter.getBalance();
+      console.log('[WalletProvider] Balance received:', {
+        available: newBalance.available.toString(),
+        pending: newBalance.pending.toString(),
+        total: newBalance.total.toString(),
+      });
       setBalance(newBalance);
     } catch (err) {
-      console.error('Failed to refresh balance:', err);
+      console.error('[WalletProvider] Failed to refresh balance:', err);
     }
   }, [currentAdapter, connected]);
 
