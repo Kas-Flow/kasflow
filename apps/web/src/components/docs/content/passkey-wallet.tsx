@@ -11,10 +11,11 @@ export function PasskeyWalletContent() {
         A passkey wallet is a non-custodial cryptocurrency wallet secured by your device's biometric authentication system (Face ID, Touch ID, Windows Hello). Instead of memorizing seed phrases or passwords, you simply use your fingerprint or face to access your funds.
       </p>
 
-      <div className="p-4 bg-green-500/10 border-2 border-green-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>✅ The Best of Both Worlds:</strong> You get the security of self-custody (you control your keys) with the convenience of biometric authentication (no seed phrases to write down).
-        </p>
+      <div className="my-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">✅</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>The Best of Both Worlds:</strong> You get the security of self-custody (you control your keys) with the convenience of biometric authentication (no seed phrases to write down).
+        </div>
       </div>
 
       <h2>How It Works</h2>
@@ -46,26 +47,61 @@ export function PasskeyWalletContent() {
 
       <h2>Why Passkeys are Better</h2>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose">
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold text-neo-cyan mb-2">Traditional Wallets</h4>
-          <ul className="text-sm space-y-2 text-muted-foreground">
-            <li>❌ 12-24 word seed phrases to memorize</li>
-            <li>❌ Risk of writing down seed insecurely</li>
-            <li>❌ Lost seed = lost funds forever</li>
-            <li>❌ Password fatigue</li>
-            <li>❌ Phishing attacks on seeds</li>
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg text-primary mb-4 flex items-center gap-2">
+            <span className="text-muted-foreground line-through opacity-70">Traditional Wallets</span>
+          </h4>
+          <ul className="space-y-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-destructive font-bold">✕</span>
+              <span>12-24 word seed phrases to memorize</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-destructive font-bold">✕</span>
+              <span>Risk of writing down seed insecurely</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-destructive font-bold">✕</span>
+              <span>Lost seed = lost funds forever</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-destructive font-bold">✕</span>
+              <span>Password fatigue</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-destructive font-bold">✕</span>
+              <span>Phishing attacks on seeds</span>
+            </li>
           </ul>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold text-neo-green mb-2">Passkey Wallets</h4>
-          <ul className="text-sm space-y-2 text-muted-foreground">
-            <li>✅ No seed phrases needed</li>
-            <li>✅ Biometric authentication only</li>
-            <li>✅ Keys sync across your devices</li>
-            <li>✅ Phishing-resistant</li>
-            <li>✅ Hardware-backed security</li>
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow ring-1 ring-primary/20">
+          <h4 className="font-bold text-lg text-primary mb-4 flex items-center gap-2">
+            <span>Passkey Wallets</span>
+            <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">Recommended</span>
+          </h4>
+          <ul className="space-y-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-primary font-bold">✓</span>
+              <span>No seed phrases needed</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary font-bold">✓</span>
+              <span>Biometric authentication only</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary font-bold">✓</span>
+              <span>Keys sync across your devices</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary font-bold">✓</span>
+              <span>Phishing-resistant</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary font-bold">✓</span>
+              <span>Hardware-backed security</span>
+            </li>
           </ul>
         </div>
       </div>
@@ -94,18 +130,34 @@ export function PasskeyWalletContent() {
 
       <h2>Supported Devices</h2>
 
-      <div className="space-y-3 not-prose">
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
-          <p className="text-sm"><strong>🍎 iOS/iPadOS:</strong> Face ID, Touch ID (iOS 16+)</p>
+      <div className="grid sm:grid-cols-2 gap-4 my-6 not-prose">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm flex items-center gap-3">
+          <span className="text-2xl">🍎</span>
+          <div>
+            <div className="font-bold text-sm">iOS/iPadOS</div>
+            <div className="text-xs text-muted-foreground">Face ID, Touch ID (iOS 16+)</div>
+          </div>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
-          <p className="text-sm"><strong>💻 macOS:</strong> Touch ID, Face ID (macOS Ventura+)</p>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm flex items-center gap-3">
+          <span className="text-2xl">💻</span>
+          <div>
+            <div className="font-bold text-sm">macOS</div>
+            <div className="text-xs text-muted-foreground">Touch ID, Face ID (Ventura+)</div>
+          </div>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
-          <p className="text-sm"><strong>🪟 Windows:</strong> Windows Hello (fingerprint, face, PIN)</p>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm flex items-center gap-3">
+          <span className="text-2xl">🪟</span>
+          <div>
+            <div className="font-bold text-sm">Windows</div>
+            <div className="text-xs text-muted-foreground">Windows Hello (fingerprint, face)</div>
+          </div>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
-          <p className="text-sm"><strong>🤖 Android:</strong> Fingerprint, Face Unlock (Android 9+)</p>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm flex items-center gap-3">
+          <span className="text-2xl">🤖</span>
+          <div>
+            <div className="font-bold text-sm">Android</div>
+            <div className="text-xs text-muted-foreground">Fingerprint, Face Unlock (Android 9+)</div>
+          </div>
         </div>
       </div>
 
@@ -156,14 +208,14 @@ export function PasskeyWalletContent() {
         </li>
       </ul>
 
-      <div className="p-6 bg-gradient-to-r from-neo-purple/20 to-neo-pink/20 rounded-xl border-2 border-border not-prose mt-8">
-        <p className="text-lg font-bold mb-2">Ready to create your passkey wallet?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-purple/10 to-neo-pink/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Ready to create your passkey wallet?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Get started in seconds with biometric authentication.
         </p>
         <a
           href="/docs/quickstart"
-          className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Quick Start Guide →
         </a>

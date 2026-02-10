@@ -9,11 +9,11 @@ export function DocsSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 h-[calc(100vh-64px)] sticky top-16 overflow-y-auto border-r border-border p-6">
+    <aside className="w-64 h-[calc(100vh-64px)] sticky top-16 overflow-y-auto border-r border-border/40 p-6 hidden md:block">
       <nav className="space-y-8">
         {DOCS_NAVIGATION.map((section) => (
           <div key={section.title}>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-muted-foreground mb-3">
+            <h4 className="font-semibold text-sm tracking-tight text-foreground mb-3 px-3">
               {section.title}
             </h4>
             <ul className="space-y-1">
@@ -26,12 +26,11 @@ export function DocsSidebar() {
                     <Link
                       href={href}
                       className={cn(
-                        'flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors',
-                        'hover:bg-accent hover:text-accent-foreground',
-                        isActive && 'bg-neo-cyan text-black font-bold border-2 border-border shadow-[2px_2px_0px_0px_var(--shadow-color)]'
+                        'flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors',
+                        'hover:bg-accent hover:text-accent-foreground text-muted-foreground',
+                        isActive && 'bg-accent text-accent-foreground font-medium'
                       )}
                     >
-                      {page.icon && <span className="text-lg">{page.icon}</span>}
                       <span>{page.title}</span>
                     </Link>
                   </li>

@@ -11,31 +11,31 @@ export function SecurityContent() {
         KasFlow is designed with security as the top priority. Here's how we protect your funds:
       </p>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose mb-8">
-        <div className="p-4 bg-card rounded-lg border-2 border-neo-cyan">
-          <h4 className="font-bold mb-2">🔒 Client-Side Only</h4>
-          <p className="text-sm text-muted-foreground">
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🔒 Client-Side Only</h4>
+          <p className="text-muted-foreground leading-relaxed">
             All cryptographic operations happen in your browser. No keys or sensitive data ever touch our servers.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-neo-green">
-          <h4 className="font-bold mb-2">🔐 Hardware Security</h4>
-          <p className="text-sm text-muted-foreground">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🔐 Hardware Security</h4>
+          <p className="text-muted-foreground leading-relaxed">
             Private keys stored in device Secure Enclave/TPM - impossible to extract even with physical access.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-neo-pink">
-          <h4 className="font-bold mb-2">👆 Biometric Auth</h4>
-          <p className="text-sm text-muted-foreground">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">👆 Biometric Auth</h4>
+          <p className="text-muted-foreground leading-relaxed">
             Every transaction requires your fingerprint or face - no password reuse or phishing attacks.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-neo-yellow">
-          <h4 className="font-bold mb-2">🌐 Domain Binding</h4>
-          <p className="text-sm text-muted-foreground">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🌐 Domain Binding</h4>
+          <p className="text-muted-foreground leading-relaxed">
             Passkeys only work on kasflow.app - fake phishing sites can't steal your credentials.
           </p>
         </div>
@@ -55,31 +55,33 @@ export function SecurityContent() {
       <h3>2. Key Storage</h3>
       <p>What's stored where:</p>
 
-      <div className="p-4 bg-card rounded-lg border-2 border-border not-prose mb-4">
-        <p className="font-bold mb-2">🔐 Secure Enclave (Hardware)</p>
-        <ul className="text-sm space-y-1 text-muted-foreground">
-          <li>✓ Passkey private key</li>
-          <li>✓ Cannot be extracted</li>
-          <li>✓ Requires biometric to use</li>
-        </ul>
-      </div>
+      <div className="space-y-4 my-6 not-prose">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+          <p className="font-bold mb-2">🔐 Secure Enclave (Hardware)</p>
+          <ul className="text-sm space-y-1 text-muted-foreground">
+            <li>✓ Passkey private key</li>
+            <li>✓ Cannot be extracted</li>
+            <li>✓ Requires biometric to use</li>
+          </ul>
+        </div>
 
-      <div className="p-4 bg-card rounded-lg border-2 border-border not-prose mb-4">
-        <p className="font-bold mb-2">💾 IndexedDB (Browser Storage)</p>
-        <ul className="text-sm space-y-1 text-muted-foreground">
-          <li>✓ Passkey public key (not sensitive)</li>
-          <li>✓ Wallet addresses (public information)</li>
-          <li>✓ Credential ID (for faster lookup)</li>
-        </ul>
-      </div>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+          <p className="font-bold mb-2">💾 IndexedDB (Browser Storage)</p>
+          <ul className="text-sm space-y-1 text-muted-foreground">
+            <li>✓ Passkey public key (not sensitive)</li>
+            <li>✓ Wallet addresses (public information)</li>
+            <li>✓ Credential ID (for faster lookup)</li>
+          </ul>
+        </div>
 
-      <div className="p-4 bg-card rounded-lg border-2 border-border not-prose">
-        <p className="font-bold mb-2">🧠 Memory (Temporary)</p>
-        <ul className="text-sm space-y-1 text-muted-foreground">
-          <li>✓ Kaspa private key (only during transactions)</li>
-          <li>✓ Cleared immediately after use</li>
-          <li>✓ Never persisted to disk</li>
-        </ul>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+          <p className="font-bold mb-2">🧠 Memory (Temporary)</p>
+          <ul className="text-sm space-y-1 text-muted-foreground">
+            <li>✓ Kaspa private key (only during transactions)</li>
+            <li>✓ Cleared immediately after use</li>
+            <li>✓ Never persisted to disk</li>
+          </ul>
+        </div>
       </div>
 
       <h3>3. Transaction Signing</h3>
@@ -94,8 +96,8 @@ export function SecurityContent() {
 
       <h2>Threat Model & Protection</h2>
 
-      <div className="space-y-4">
-        <details className="p-4 bg-card rounded-lg border-2 border-border" open>
+      <div className="space-y-3 my-6">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm" open>
           <summary className="font-bold cursor-pointer">🎣 Phishing Attacks</summary>
           <div className="mt-3 space-y-2 text-sm text-muted-foreground">
             <p><strong>Attack:</strong> Fake website tries to steal your credentials</p>
@@ -103,7 +105,7 @@ export function SecurityContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">📱 Device Theft</summary>
           <div className="mt-3 space-y-2 text-sm text-muted-foreground">
             <p><strong>Attack:</strong> Attacker steals your phone/computer</p>
@@ -111,7 +113,7 @@ export function SecurityContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">💻 Malware</summary>
           <div className="mt-3 space-y-2 text-sm text-muted-foreground">
             <p><strong>Attack:</strong> Malicious software tries to steal keys</p>
@@ -119,7 +121,7 @@ export function SecurityContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">🔓 Session Hijacking</summary>
           <div className="mt-3 space-y-2 text-sm text-muted-foreground">
             <p><strong>Attack:</strong> Attacker tries to send unauthorized transactions from your session</p>
@@ -127,7 +129,7 @@ export function SecurityContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">🌐 Man-in-the-Middle</summary>
           <div className="mt-3 space-y-2 text-sm text-muted-foreground">
             <p><strong>Attack:</strong> Attacker intercepts network traffic</p>
@@ -159,10 +161,10 @@ export function SecurityContent() {
 
       <h2>Best Security Practices</h2>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose">
-        <div className="p-4 bg-green-500/10 border-2 border-green-500 rounded-lg">
-          <h4 className="font-bold mb-2 text-green-600 dark:text-green-400">✅ Do This</h4>
-          <ul className="text-sm space-y-2">
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-green-500/10 border border-green-500/50 rounded-xl">
+          <h4 className="font-bold text-lg mb-4 text-green-600 dark:text-green-400">✅ Do This</h4>
+          <ul className="text-sm space-y-2 text-foreground/80">
             <li>• Enable device lock (passcode/pattern)</li>
             <li>• Use strong device password</li>
             <li>• Keep browser updated</li>
@@ -173,9 +175,9 @@ export function SecurityContent() {
           </ul>
         </div>
 
-        <div className="p-4 bg-red-500/10 border-2 border-red-500 rounded-lg">
-          <h4 className="font-bold mb-2 text-red-600 dark:text-red-400">❌ Avoid This</h4>
-          <ul className="text-sm space-y-2">
+        <div className="p-6 bg-red-500/10 border border-red-500/50 rounded-xl">
+          <h4 className="font-bold text-lg mb-4 text-red-600 dark:text-red-400">❌ Avoid This</h4>
+          <ul className="text-sm space-y-2 text-foreground/80">
             <li>• Don't share your device with untrusted people</li>
             <li>• Don't disable device biometric auth</li>
             <li>• Don't use KasFlow on public/shared computers</li>
@@ -189,7 +191,7 @@ export function SecurityContent() {
 
       <h2>Comparing Security Models</h2>
 
-      <table className="w-full text-sm border-2 border-border not-prose">
+      <table className="w-full text-sm border border-border rounded-lg overflow-hidden my-6 not-prose">
         <thead>
           <tr className="bg-muted">
             <th className="p-3 text-left border-b-2 border-border">Feature</th>
@@ -226,15 +228,15 @@ export function SecurityContent() {
         </tbody>
       </table>
 
-      <div className="p-6 bg-gradient-to-r from-neo-cyan/20 to-neo-purple/20 rounded-xl border-2 border-border not-prose mt-8">
-        <p className="text-lg font-bold mb-2">Questions about security?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-cyan/10 to-neo-purple/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Questions about security?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Check our FAQ or review the open-source code on GitHub.
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <a
             href="/docs/faq"
-            className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
           >
             FAQ →
           </a>
@@ -242,7 +244,7 @@ export function SecurityContent() {
             href="https://github.com/yourusername/kasflow"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-3 bg-card font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 bg-card border border-border font-bold rounded-lg hover:bg-muted transition-colors"
           >
             View Source →
           </a>

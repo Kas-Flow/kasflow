@@ -46,32 +46,32 @@ export function IntroductionContent() {
 
       <h2>Key Features</h2>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose">
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">✨ Passkey Authentication</h4>
-          <p className="text-sm text-muted-foreground">
-            WebAuthn-based security with biometric authentication on every transaction
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">✨ Passkey Authentication</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            WebAuthn-based security with biometric authentication on every transaction.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">📱 Mobile-First Design</h4>
-          <p className="text-sm text-muted-foreground">
-            Fully responsive interface optimized for mobile payments
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">📱 Mobile-First Design</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            Fully responsive interface optimized for mobile payments.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🌐 Multi-Network Support</h4>
-          <p className="text-sm text-muted-foreground">
-            Seamlessly switch between mainnet and testnet networks
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🌐 Multi-Network Support</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            Seamlessly switch between mainnet and testnet networks.
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🧾 Transaction Receipts</h4>
-          <p className="text-sm text-muted-foreground">
-            Download professional receipts with QR codes and explorer links
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🧾 Transaction Receipts</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            Download professional receipts with QR codes and explorer links.
           </p>
         </div>
       </div>
@@ -93,14 +93,14 @@ export function IntroductionContent() {
         </li>
       </ol>
 
-      <div className="p-6 bg-gradient-to-r from-neo-cyan/20 to-neo-green/20 rounded-xl border-2 border-border not-prose">
-        <p className="text-lg font-bold mb-2">Ready to get started?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-cyan/10 to-neo-green/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Ready to get started?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Follow our Quick Start guide to create your first payment in under 5 minutes.
         </p>
         <a
           href="/docs/quickstart"
-          className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Quick Start Guide →
         </a>

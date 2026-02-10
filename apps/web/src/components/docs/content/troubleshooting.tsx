@@ -5,17 +5,18 @@ export function TroubleshootingContent() {
         Common issues and their solutions to help you get back to sending and receiving payments quickly.
       </p>
 
-      <div className="p-4 bg-blue-500/10 border-2 border-blue-500 rounded-lg not-prose mb-8">
-        <p className="text-sm">
-          <strong>💡 Quick Tip:</strong> Most issues can be resolved by refreshing the page, checking your network connection, or switching to a different browser. Try these first!
-        </p>
+      <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">💡</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Quick Tip:</strong> Most issues can be resolved by refreshing the page, checking your network connection, or switching to a different browser. Try these first!
+        </div>
       </div>
 
       {/* Wallet Issues */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-black">Wallet Issues</h2>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold mb-6">Wallet Issues</h2>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border" open>
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm" open>
           <summary className="font-bold cursor-pointer">Passkey authentication not working</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If biometric authentication fails or doesn't appear:</p>
@@ -29,7 +30,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Wallet balance shows zero</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If your balance isn't showing correctly:</p>
@@ -43,7 +44,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Can't send payment - insufficient balance</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If you get "insufficient balance" errors:</p>
@@ -56,7 +57,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Wallet disconnects on page refresh</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If your wallet doesn't persist across page refreshes:</p>
@@ -70,11 +71,13 @@ export function TroubleshootingContent() {
         </details>
       </section>
 
-      {/* Payment Issues */}
-      <section className="space-y-4 mt-8">
-        <h2 className="text-2xl font-black">Payment Issues</h2>
+      <hr className="my-12 border-border" />
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+      {/* Payment Issues */}
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold mb-6">Payment Issues</h2>
+
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Payment link shows "Invalid payment link"</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If payment links aren't loading:</p>
@@ -87,7 +90,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">QR code not scanning</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If QR codes aren't working:</p>
@@ -100,7 +103,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Payment stuck on "Confirming"</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If payment confirmation takes longer than expected:</p>
@@ -113,7 +116,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Transaction failed to broadcast</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If transaction fails to send:</p>
@@ -128,11 +131,13 @@ export function TroubleshootingContent() {
         </details>
       </section>
 
-      {/* Browser Issues */}
-      <section className="space-y-4 mt-8">
-        <h2 className="text-2xl font-black">Browser & Connection Issues</h2>
+      <hr className="my-12 border-border" />
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+      {/* Browser Issues */}
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold mb-6">Browser & Connection Issues</h2>
+
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">WebSocket connection errors</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If you see "WebSocket is not connected" errors:</p>
@@ -146,7 +151,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Page won't load or is blank</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If KasFlow pages aren't displaying:</p>
@@ -160,7 +165,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Console shows JavaScript errors</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If you see errors in browser console (F12):</p>
@@ -174,11 +179,13 @@ export function TroubleshootingContent() {
         </details>
       </section>
 
-      {/* Network Issues */}
-      <section className="space-y-4 mt-8">
-        <h2 className="text-2xl font-black">Network Issues</h2>
+      <hr className="my-12 border-border" />
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+      {/* Network Issues */}
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold mb-6">Network Issues</h2>
+
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Wrong network selected</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If you're on the wrong network:</p>
@@ -191,7 +198,7 @@ export function TroubleshootingContent() {
           </div>
         </details>
 
-        <details className="p-4 bg-card rounded-lg border-2 border-border">
+        <details className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <summary className="font-bold cursor-pointer">Can't get testnet funds</summary>
           <div className="mt-3 space-y-3 text-sm">
             <p className="text-muted-foreground">If testnet faucets aren't working:</p>
@@ -206,12 +213,14 @@ export function TroubleshootingContent() {
         </details>
       </section>
 
-      {/* Advanced Issues */}
-      <section className="space-y-4 mt-8">
-        <h2 className="text-2xl font-black">Advanced Troubleshooting</h2>
+      <hr className="my-12 border-border" />
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🔍 Enable Debug Mode</h4>
+      {/* Advanced Issues */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold mb-6">Advanced Troubleshooting</h2>
+
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+          <h4 className="font-bold mb-3">🔍 Enable Debug Mode</h4>
           <ol className="text-sm space-y-2 text-muted-foreground">
             <li>1. Open browser console (F12 or Cmd+Option+I)</li>
             <li>2. Go to "Console" tab</li>
@@ -221,9 +230,9 @@ export function TroubleshootingContent() {
           </ol>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🗄️ Reset Wallet Data</h4>
-          <p className="text-sm text-muted-foreground mb-2">If you need to start fresh:</p>
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+          <h4 className="font-bold mb-3">🗄️ Reset Wallet Data</h4>
+          <p className="text-sm text-muted-foreground mb-3">If you need to start fresh:</p>
           <ol className="text-sm space-y-2 text-muted-foreground">
             <li>1. Open browser DevTools (F12)</li>
             <li>2. Go to "Application" tab</li>
@@ -231,19 +240,21 @@ export function TroubleshootingContent() {
             <li>4. Delete "kasflow-wallet" database</li>
             <li>5. Refresh page - wallet will be reset</li>
           </ol>
-          <p className="text-xs text-amber-600 dark:text-amber-400 mt-3">
-            ⚠️ Warning: This doesn't delete your passkey. You can recreate the wallet with the same passkey.
-          </p>
+          <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/50 rounded-lg">
+            <p className="text-xs text-amber-600 dark:text-amber-400">
+              ⚠️ Warning: This doesn't delete your passkey. You can recreate the wallet with the same passkey.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Still Need Help */}
-      <div className="p-6 bg-gradient-to-r from-neo-pink/20 to-neo-yellow/20 rounded-xl border-2 border-border not-prose mt-8">
-        <p className="text-lg font-bold mb-2">Still stuck?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-pink/10 to-neo-yellow/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Still stuck?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           We're here to help! Open an issue on GitHub with details about your problem.
         </p>
-        <div className="space-y-3">
+        <div className="space-y-4">
           <p className="text-sm font-semibold">When reporting an issue, include:</p>
           <ul className="text-sm text-muted-foreground space-y-1">
             <li>• Browser and version (Chrome 120, Safari 17, etc.)</li>
@@ -256,7 +267,7 @@ export function TroubleshootingContent() {
             href="https://github.com/yourusername/kasflow/issues"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
           >
             Open GitHub Issue →
           </a>

@@ -14,7 +14,7 @@ export function ReceivePaymentContent() {
       <h2>Creating a Receive Link</h2>
 
       <ol>
-        <li>Go to <a href="/create" className="text-neo-cyan hover:underline">Create Payment</a></li>
+        <li>Go to <a href="/create" className="text-primary font-medium hover:underline">Create Payment</a></li>
         <li>Enter YOUR Kaspa address (where you want to receive funds)</li>
         <li>Set the amount you're requesting</li>
         <li>Add a memo for tracking (optional)</li>
@@ -37,8 +37,8 @@ export function ReceivePaymentContent() {
 
       <p>The payment page automatically tracks three stages:</p>
 
-      <div className="space-y-4 not-prose">
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
+      <div className="space-y-4 my-8 not-prose">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 font-bold">1</div>
             <h4 className="font-bold">⏳ Waiting for Payment</h4>
@@ -48,7 +48,7 @@ export function ReceivePaymentContent() {
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 font-bold">2</div>
             <h4 className="font-bold">🔄 Confirming</h4>
@@ -58,7 +58,7 @@ export function ReceivePaymentContent() {
           </p>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 font-bold">3</div>
             <h4 className="font-bold">✅ Payment Complete</h4>
@@ -88,7 +88,7 @@ export function ReceivePaymentContent() {
 
       <h3>Option 3: Block Explorer</h3>
       <ol>
-        <li>Visit <a href="https://explorer.kaspa.org" target="_blank" rel="noopener noreferrer" className="text-neo-cyan hover:underline">kaspa.org explorer</a></li>
+        <li>Visit <a href="https://explorer.kaspa.org" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">kaspa.org explorer</a></li>
         <li>Paste your address in the search bar</li>
         <li>See all transactions and current balance</li>
       </ol>
@@ -104,14 +104,15 @@ export function ReceivePaymentContent() {
         <li>Receive free testnet KAS within seconds</li>
       </ol>
 
-      <div className="p-4 bg-blue-500/10 border-2 border-blue-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>💡 Testnet Resources:</strong>
-        </p>
-        <ul className="text-sm space-y-1 mt-2">
-          <li>• Testnet-10 Faucet: Available on Kaspa Discord</li>
-          <li>• Testnet-11 Explorer: <a href="https://tn11.kaspa.stream" target="_blank" rel="noopener noreferrer" className="text-neo-cyan hover:underline">tn11.kaspa.stream</a></li>
-        </ul>
+      <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">💡</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Testnet Resources:</strong>
+          <ul className="mt-2 space-y-1">
+            <li>• Testnet-10 Faucet: Available on Kaspa Discord</li>
+            <li>• Testnet-11 Explorer: <a href="https://tn11.kaspa.stream" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">tn11.kaspa.stream</a></li>
+          </ul>
+        </div>
       </div>
 
       <h2>Payment Link Best Practices</h2>
@@ -145,29 +146,29 @@ export function ReceivePaymentContent() {
 
       <h2>Security Tips</h2>
 
-      <div className="space-y-3">
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
+      <div className="space-y-3 my-6 not-prose">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <p className="text-sm"><strong>🔒 Verify addresses</strong> - Always double-check the address matches yours</p>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <p className="text-sm"><strong>🌐 Check network</strong> - Mainnet for real payments, testnet for testing</p>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <p className="text-sm"><strong>💰 Confirm amount</strong> - Ensure the amount in the link matches your invoice</p>
         </div>
-        <div className="p-3 bg-card rounded-lg border-2 border-border">
+        <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
           <p className="text-sm"><strong>📊 Monitor confirmations</strong> - Wait for "Payment Complete" before fulfilling orders</p>
         </div>
       </div>
 
-      <div className="p-6 bg-gradient-to-r from-neo-green/20 to-neo-yellow/20 rounded-xl border-2 border-border not-prose mt-8">
-        <p className="text-lg font-bold mb-2">Ready to create your first payment link?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-green/10 to-neo-yellow/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Ready to create your first payment link?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Start accepting Kaspa payments in under a minute.
         </p>
         <a
           href="/create"
-          className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Create Payment Link →
         </a>

@@ -66,16 +66,23 @@ export default async function DocPageContent(props: { params: Promise<{ slug: st
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       {/* Page Header */}
-      <div className="space-y-4">
-        {page.icon && <div className="text-5xl">{page.icon}</div>}
-        <h1 className="text-5xl font-black tracking-tight">{page.title}</h1>
-        <p className="text-xl text-muted-foreground">{page.description}</p>
+      <div className="space-y-4 border-b pb-8">
+        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">{page.title}</h1>
+        <p className="text-xl text-muted-foreground leading-relaxed">{page.description}</p>
       </div>
 
       {/* Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none">
+      <div className="prose prose-lg prose-slate dark:prose-invert max-w-none 
+        prose-headings:font-bold prose-headings:tracking-tight 
+        prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-3xl
+        prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-2xl
+        prose-p:leading-relaxed prose-p:text-muted-foreground
+        prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+        prose-li:text-muted-foreground prose-li:marker:text-primary
+        prose-img:rounded-xl prose-img:border prose-img:shadow-md
+        prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-mono prose-code:text-sm prose-code:font-semibold prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none">
         <ContentComponent />
       </div>
 

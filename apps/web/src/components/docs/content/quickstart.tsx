@@ -5,9 +5,11 @@ export function QuickstartContent() {
         Get started with KasFlow in under 5 minutes. This guide walks you through creating your first payment link and setting up your passkey wallet.
       </p>
 
-      <div className="p-4 bg-amber-500/10 border-2 border-amber-500 rounded-lg not-prose">
-        <p className="font-bold mb-1">⚠️ Before you start</p>
-        <p className="text-sm">
+      <div className="my-8 p-6 bg-amber-500/10 border border-amber-500/50 rounded-xl not-prose">
+        <p className="font-bold text-amber-600 dark:text-amber-400 mb-2 flex items-center gap-2">
+          <span className="text-xl">⚠️</span> Before you start
+        </p>
+        <p className="text-sm text-foreground/80 leading-relaxed">
           Make sure you're using a modern browser (Chrome, Safari, Edge, or Firefox) with a device that supports biometric authentication (Face ID, Touch ID, or Windows Hello).
         </p>
       </div>
@@ -20,7 +22,7 @@ export function QuickstartContent() {
 
       <h3>Step 1: Navigate to Create Payment</h3>
       <ol>
-        <li>Go to <a href="/create" className="text-neo-cyan hover:underline">kasflow.app/create</a></li>
+        <li>Go to <a href="/create" className="text-primary font-medium hover:underline">kasflow.app/create</a></li>
         <li>You'll see a step-by-step wizard to guide you</li>
       </ol>
 
@@ -31,10 +33,11 @@ export function QuickstartContent() {
         <li>Click <strong>Continue</strong></li>
       </ol>
 
-      <div className="p-4 bg-blue-500/10 border-2 border-blue-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>💡 Tip:</strong> Don't have a Kaspa address yet? You can create one by following Option 2 below or use any Kaspa wallet app (Kaspium, Kasware, etc.).
-        </p>
+      <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">💡</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Tip:</strong> Don't have a Kaspa address yet? You can create one by following Option 2 below or use any Kaspa wallet app (Kaspium, Kasware, etc.).
+        </div>
       </div>
 
       <h3>Step 3: Set Payment Amount</h3>
@@ -62,7 +65,7 @@ export function QuickstartContent() {
         <strong>That's it!</strong> When someone pays, you'll see real-time confirmation on the payment page.
       </p>
 
-      <hr />
+      <hr className="my-12 border-border" />
 
       <h2>Option 2: Send a Payment (For Customers)</h2>
 
@@ -72,7 +75,7 @@ export function QuickstartContent() {
 
       <h3>Step 1: Open a Payment Link</h3>
       <ol>
-        <li>Click on any KasFlow payment link (or visit <a href="/docs/create-payment" className="text-neo-cyan hover:underline">Create Payment</a> to make a test one)</li>
+        <li>Click on any KasFlow payment link (or visit <a href="/docs/create-payment" className="text-primary font-medium hover:underline">Create Payment</a> to make a test one)</li>
         <li>You'll see the payment details with a QR code</li>
       </ol>
 
@@ -90,10 +93,11 @@ export function QuickstartContent() {
         <li>Authenticate to create your wallet</li>
       </ol>
 
-      <div className="p-4 bg-green-500/10 border-2 border-green-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>✅ Security Note:</strong> Your wallet is secured by your device's biometric authentication. No seed phrases, no passwords to remember. Your keys never leave your device.
-        </p>
+      <div className="my-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">✅</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Security Note:</strong> Your wallet is secured by your device's biometric authentication. No seed phrases, no passwords to remember. Your keys never leave your device.
+        </div>
       </div>
 
       <h3>Step 4: Send the Payment</h3>
@@ -111,52 +115,52 @@ export function QuickstartContent() {
         <li>Click <strong>"Download Receipt"</strong> to save a PDF-style receipt</li>
       </ol>
 
-      <hr />
+      <hr className="my-12 border-border" />
 
       <h2>Next Steps</h2>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose">
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
         <a
           href="/docs/create-payment"
-          className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-cyan hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="group p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
         >
-          <div className="text-2xl mb-2">🔗</div>
-          <h4 className="font-bold mb-1">Learn More About Payment Links</h4>
-          <p className="text-sm text-muted-foreground">
-            Advanced features like custom memos and network selection
+          <div className="text-3xl mb-4">🔗</div>
+          <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">Learn More About Payment Links</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            Advanced features like custom memos and network selection.
           </p>
         </a>
 
         <a
           href="/docs/passkey-wallet"
-          className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-pink hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="group p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
         >
-          <div className="text-2xl mb-2">🔐</div>
-          <h4 className="font-bold mb-1">Understanding Passkey Wallets</h4>
-          <p className="text-sm text-muted-foreground">
-            How passkeys work and why they're more secure
+          <div className="text-3xl mb-4">🔐</div>
+          <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">Understanding Passkey Wallets</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            How passkeys work and why they're more secure.
           </p>
         </a>
 
         <a
           href="/docs/networks"
-          className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-yellow hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="group p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
         >
-          <div className="text-2xl mb-2">🌐</div>
-          <h4 className="font-bold mb-1">Networks Explained</h4>
-          <p className="text-sm text-muted-foreground">
-            When to use mainnet vs testnet
+          <div className="text-3xl mb-4">🌐</div>
+          <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">Networks Explained</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            When to use mainnet vs testnet.
           </p>
         </a>
 
         <a
           href="/docs/faq"
-          className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-green hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="group p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
         >
-          <div className="text-2xl mb-2">❓</div>
-          <h4 className="font-bold mb-1">FAQ</h4>
-          <p className="text-sm text-muted-foreground">
-            Common questions and answers
+          <div className="text-3xl mb-4">❓</div>
+          <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">FAQ</h4>
+          <p className="text-muted-foreground leading-relaxed">
+            Common questions and answers.
           </p>
         </a>
       </div>

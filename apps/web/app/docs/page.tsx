@@ -1,95 +1,113 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Book, 
+  CreditCard, 
+  Wallet, 
+  Shield, 
+  HelpCircle, 
+  Zap,
+  Globe,
+  LifeBuoy,
+  Github
+} from 'lucide-react';
 import { DOCS_NAVIGATION } from '@/lib/constants/docs';
+
+// Helper to get an icon based on slug or section
+const getIconForPage = (slug: string) => {
+  switch (slug) {
+    case 'introduction': return <Book className="w-5 h-5" />;
+    case 'quickstart': return <Zap className="w-5 h-5" />;
+    case 'create-payment': return <CreditCard className="w-5 h-5" />;
+    case 'send-payment': return <ArrowRight className="w-5 h-5" />; // Or Send icon if available
+    case 'receive-payment': return <CreditCard className="w-5 h-5" />;
+    case 'passkey-wallet': return <Wallet className="w-5 h-5" />;
+    case 'networks': return <Globe className="w-5 h-5" />;
+    case 'faq': return <HelpCircle className="w-5 h-5" />;
+    case 'security': return <Shield className="w-5 h-5" />;
+    case 'troubleshooting': return <LifeBuoy className="w-5 h-5" />;
+    default: return <Book className="w-5 h-5" />;
+  }
+};
 
 export default function DocsPage() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-16 pb-12">
       {/* Header */}
-      <div className="space-y-4">
-        <h1 className="text-5xl font-black tracking-tight">
-          KasFlow Documentation
+      <div className="space-y-6 border-b border-border pb-8">
+        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
+          Documentation
         </h1>
-        <p className="text-xl text-muted-foreground">
-          Everything you need to know about using KasFlow for instant Kaspa payments.
+        <p className="text-xl text-muted-foreground max-w-2xl">
+          Learn how to integrate KasFlow, manage wallets, and process instant Kaspa payments securely.
         </p>
-      </div>
-
-      {/* Quick Links Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {DOCS_NAVIGATION.map((section) =>
-          section.pages.map((page) => (
-            <Link
-              key={page.slug}
-              href={`/docs/${page.slug}`}
-              className="group p-6 bg-card rounded-xl border-4 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
-            >
-              <div className="flex items-start gap-4">
-                {page.icon && (
-                  <span className="text-4xl flex-shrink-0">{page.icon}</span>
-                )}
-                <div className="flex-1 space-y-2">
-                  <h3 className="text-lg font-bold group-hover:text-neo-cyan transition-colors">
-                    {page.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {page.description}
-                  </p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-neo-cyan group-hover:translate-x-1 transition-all" />
-              </div>
-            </Link>
-          ))
-        )}
-      </div>
-
-      {/* Getting Started CTA */}
-      <div className="p-8 bg-gradient-to-br from-neo-cyan/20 to-neo-green/20 rounded-xl border-4 border-border shadow-[6px_6px_0px_0px_var(--shadow-color)]">
-        <div className="space-y-4">
-          <h2 className="text-2xl font-black">New to KasFlow?</h2>
-          <p className="text-muted-foreground">
-            Start with our Quick Start guide to create your first payment in under 5 minutes.
-          </p>
-          <Link
+        <div className="flex flex-wrap gap-4 pt-4">
+           <Link
             href="/docs/quickstart"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:shadow-[6px_6px_0px_0px_var(--shadow-color)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors"
           >
-            Get Started
-            <ArrowRight className="w-5 h-5" />
+            <Zap className="w-4 h-4" />
+            Quick Start
           </Link>
+          <a
+            href="https://github.com/yourusername/kasflow" // Assuming this URL based on context, update if needed
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-input bg-background hover:bg-accent hover:text-accent-foreground font-medium rounded-md transition-colors"
+          >
+            <Github className="w-4 h-4" />
+            GitHub
+          </a>
         </div>
       </div>
 
-      {/* Need Help Section */}
-      <div className="pt-8 border-t border-border">
-        <h2 className="text-2xl font-black mb-6">Need Help?</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          <Link
-            href="/docs/faq"
-            className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-cyan transition-colors"
-          >
-            <div className="text-2xl mb-2">❓</div>
-            <h3 className="font-bold">FAQ</h3>
-            <p className="text-sm text-muted-foreground">Common questions</p>
-          </Link>
-          <Link
-            href="/docs/troubleshooting"
-            className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-pink transition-colors"
-          >
-            <div className="text-2xl mb-2">🔧</div>
-            <h3 className="font-bold">Troubleshooting</h3>
-            <p className="text-sm text-muted-foreground">Fix common issues</p>
-          </Link>
-          <a
-            href="https://github.com/yourusername/kasflow/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-4 bg-card rounded-lg border-2 border-border hover:border-neo-yellow transition-colors"
-          >
-            <div className="text-2xl mb-2">💬</div>
-            <h3 className="font-bold">Get Support</h3>
-            <p className="text-sm text-muted-foreground">Open an issue</p>
-          </a>
+      {/* Documentation Sections */}
+      <div className="space-y-16">
+        {DOCS_NAVIGATION.map((section) => (
+          <div key={section.title} className="space-y-6">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {section.title}
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {section.pages.map((page) => (
+                <Link
+                  key={page.slug}
+                  href={`/docs/${page.slug}`}
+                  className="group relative flex flex-col gap-2 p-6 rounded-xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+                >
+                  <div className="flex items-center gap-3 text-muted-foreground group-hover:text-primary transition-colors">
+                    {getIconForPage(page.slug)}
+                    <span className="font-semibold text-foreground">{page.title}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {page.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Support Section */}
+      <div className="rounded-xl border bg-muted/50 p-8 mt-12">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Need more help?</h3>
+            <p className="text-sm text-muted-foreground">
+              Check out our GitHub discussions or join the community.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="https://github.com/yourusername/kasflow/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium hover:underline"
+            >
+              Open an Issue <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </div>

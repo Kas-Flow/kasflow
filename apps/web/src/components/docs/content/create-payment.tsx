@@ -33,10 +33,11 @@ export function CreatePaymentContent() {
         </li>
       </ul>
 
-      <div className="p-4 bg-blue-500/10 border-2 border-blue-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>💡 Tip:</strong> If you're connected to a wallet, KasFlow will auto-fill your wallet address and match the network.
-        </p>
+      <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">💡</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Tip:</strong> If you're connected to a wallet, KasFlow will auto-fill your wallet address and match the network.
+        </div>
       </div>
 
       <h3>3. Set the Amount</h3>
@@ -85,10 +86,11 @@ export function CreatePaymentContent() {
         <li>Include on invoices</li>
       </ul>
 
-      <div className="p-4 bg-amber-500/10 border-2 border-amber-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>⚠️ Note:</strong> The QR code contains a Kaspa payment URI. Customers need to scan it with a Kaspa wallet app (like Kaspium or Kasware) or use the KasFlow web interface.
-        </p>
+      <div className="my-6 p-4 bg-amber-500/10 border border-amber-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">⚠️</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Note:</strong> The QR code contains a Kaspa payment URI. Customers need to scan it with a Kaspa wallet app (like Kaspium or Kasware) or use the KasFlow web interface.
+        </div>
       </div>
 
       <h2>Understanding Payment URLs</h2>
@@ -129,28 +131,28 @@ export function CreatePaymentContent() {
 
       <p>Choose the right network for your use case:</p>
 
-      <div className="grid md:grid-cols-2 gap-4 not-prose">
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🌍 Mainnet</h4>
-          <p className="text-sm text-muted-foreground mb-2">
-            Use for real payments with actual value
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🌍 Mainnet</h4>
+          <p className="text-muted-foreground mb-4">
+            Use for real payments with actual value.
           </p>
-          <ul className="text-sm space-y-1">
-            <li>✓ Production payments</li>
-            <li>✓ Customer transactions</li>
-            <li>✓ Business invoices</li>
+          <ul className="text-sm space-y-2 text-muted-foreground">
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Production payments</li>
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Customer transactions</li>
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Business invoices</li>
           </ul>
         </div>
 
-        <div className="p-4 bg-card rounded-lg border-2 border-border">
-          <h4 className="font-bold mb-2">🧪 Testnet</h4>
-          <p className="text-sm text-muted-foreground mb-2">
-            Use for testing without risking real funds
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
+          <h4 className="font-bold text-lg mb-2 flex items-center gap-2">🧪 Testnet</h4>
+          <p className="text-muted-foreground mb-4">
+            Use for testing without risking real funds.
           </p>
-          <ul className="text-sm space-y-1">
-            <li>✓ Development & testing</li>
-            <li>✓ Integration testing</li>
-            <li>✓ Demo purposes</li>
+          <ul className="text-sm space-y-2 text-muted-foreground">
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Development & testing</li>
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Integration testing</li>
+            <li className="flex items-center gap-2"><span className="text-primary">✓</span> Demo purposes</li>
           </ul>
         </div>
       </div>
@@ -165,14 +167,14 @@ export function CreatePaymentContent() {
         <li>You receive funds at your address</li>
       </ol>
 
-      <div className="p-6 bg-gradient-to-r from-neo-pink/20 to-neo-yellow/20 rounded-xl border-2 border-border not-prose">
-        <p className="text-lg font-bold mb-2">Need help with sending payments?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-pink/10 to-neo-yellow/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Need help with sending payments?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Learn how to pay with your KasFlow wallet or external wallet apps.
         </p>
         <a
           href="/docs/send-payment"
-          className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Send Payment Guide →
         </a>

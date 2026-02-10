@@ -11,24 +11,24 @@ export function NetworksContent() {
         Kaspa has multiple networks that run in parallel. Each network is a separate blockchain with its own transactions, addresses, and tokens. The main networks you'll interact with in KasFlow are:
       </p>
 
-      <div className="grid md:grid-cols-2 gap-6 not-prose">
-        <div className="p-6 bg-card rounded-xl border-4 border-neo-cyan shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
           <div className="text-4xl mb-3">🌍</div>
-          <h3 className="text-xl font-black mb-2">Mainnet</h3>
-          <p className="text-sm text-muted-foreground mb-3">
+          <h3 className="text-xl font-bold mb-2">Mainnet</h3>
+          <p className="text-sm text-muted-foreground mb-4">
             The production network with real KAS tokens that have real value.
           </p>
           <div className="space-y-1 text-sm">
             <p><strong>Address prefix:</strong> <code>kaspa:</code></p>
-            <p><strong>Explorer:</strong> <a href="https://kaspa.stream" target="_blank" rel="noopener noreferrer" className="text-neo-cyan hover:underline">kaspa.stream</a></p>
+            <p><strong>Explorer:</strong> <a href="https://kaspa.stream" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">kaspa.stream</a></p>
             <p><strong>Use for:</strong> Real payments, production apps</p>
           </div>
         </div>
 
-        <div className="p-6 bg-card rounded-xl border-4 border-neo-yellow shadow-[6px_6px_0px_0px_var(--shadow-color)]">
+        <div className="p-6 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
           <div className="text-4xl mb-3">🧪</div>
-          <h3 className="text-xl font-black mb-2">Testnet</h3>
-          <p className="text-sm text-muted-foreground mb-3">
+          <h3 className="text-xl font-bold mb-2">Testnet</h3>
+          <p className="text-sm text-muted-foreground mb-4">
             Testing networks with free test tokens that have no real value.
           </p>
           <div className="space-y-1 text-sm">
@@ -58,15 +58,16 @@ export function NetworksContent() {
         <li>Creating demos or tutorials</li>
       </ul>
 
-      <div className="p-4 bg-amber-500/10 border-2 border-amber-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>⚠️ Important:</strong> Testnet tokens have NO real value and cannot be converted to mainnet KAS. Never send mainnet KAS to a testnet address or vice versa - they are incompatible.
-        </p>
+      <div className="my-6 p-4 bg-amber-500/10 border border-amber-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">⚠️</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Important:</strong> Testnet tokens have NO real value and cannot be converted to mainnet KAS. Never send mainnet KAS to a testnet address or vice versa - they are incompatible.
+        </div>
       </div>
 
       <h2>Network Differences</h2>
 
-      <table className="w-full text-sm border-2 border-border not-prose">
+      <table className="w-full text-sm border border-border rounded-lg overflow-hidden my-6 not-prose">
         <thead>
           <tr className="bg-muted">
             <th className="p-3 text-left border-b-2 border-border">Feature</th>
@@ -107,16 +108,17 @@ export function NetworksContent() {
 
       <h3>When Creating Payment Links</h3>
       <ol>
-        <li>Go to <a href="/create" className="text-neo-cyan hover:underline">Create Payment</a></li>
+        <li>Go to <a href="/create" className="text-primary font-medium hover:underline">Create Payment</a></li>
         <li>If NOT connected to a wallet, you'll see a network selector</li>
         <li>Choose between Mainnet, Testnet-10, or Testnet-11</li>
         <li>Your payment link will use that network</li>
       </ol>
 
-      <div className="p-4 bg-blue-500/10 border-2 border-blue-500 rounded-lg not-prose">
-        <p className="text-sm">
-          <strong>💡 Tip:</strong> If you're connected to a wallet, KasFlow automatically uses your wallet's network. Disconnect to manually choose a different network.
-        </p>
+      <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
+        <div className="text-xl">💡</div>
+        <div className="text-sm text-foreground/80 leading-relaxed">
+          <strong>Tip:</strong> If you're connected to a wallet, KasFlow automatically uses your wallet's network. Disconnect to manually choose a different network.
+        </div>
       </div>
 
       <h3>With Your Wallet</h3>
@@ -140,7 +142,7 @@ export function NetworksContent() {
         <li>Copy your testnet address (starts with <code>kaspatest:</code>)</li>
         <li>Visit a Kaspa testnet faucet:
           <ul className="list-none pl-4 mt-2">
-            <li>• Join <a href="https://discord.gg/kaspa" target="_blank" rel="noopener noreferrer" className="text-neo-cyan hover:underline">Kaspa Discord</a></li>
+            <li>• Join <a href="https://discord.gg/kaspa" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">Kaspa Discord</a></li>
             <li>• Use the faucet bot in #testnet channel</li>
           </ul>
         </li>
@@ -150,18 +152,18 @@ export function NetworksContent() {
 
       <h2>Common Mistakes to Avoid</h2>
 
-      <div className="space-y-3 not-prose">
-        <div className="p-3 bg-red-500/10 border-2 border-red-500 rounded-lg">
+      <div className="space-y-3 my-6 not-prose">
+        <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
           <p className="text-sm"><strong>❌ Wrong:</strong> Sending mainnet KAS to a testnet address</p>
           <p className="text-xs text-muted-foreground mt-1">Result: Funds lost permanently</p>
         </div>
 
-        <div className="p-3 bg-red-500/10 border-2 border-red-500 rounded-lg">
+        <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
           <p className="text-sm"><strong>❌ Wrong:</strong> Sharing a testnet payment link when you want real payment</p>
           <p className="text-xs text-muted-foreground mt-1">Result: Customer pays with worthless testnet tokens</p>
         </div>
 
-        <div className="p-3 bg-red-500/10 border-2 border-red-500 rounded-lg">
+        <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
           <p className="text-sm"><strong>❌ Wrong:</strong> Testing on mainnet with real funds</p>
           <p className="text-xs text-muted-foreground mt-1">Result: Wasted money on failed test transactions</p>
         </div>
@@ -187,14 +189,14 @@ export function NetworksContent() {
         </li>
       </ul>
 
-      <div className="p-6 bg-gradient-to-r from-neo-yellow/20 to-neo-green/20 rounded-xl border-2 border-border not-prose mt-8">
-        <p className="text-lg font-bold mb-2">Ready to start testing?</p>
-        <p className="text-muted-foreground mb-4">
+      <div className="my-12 p-8 bg-gradient-to-r from-neo-yellow/10 to-neo-green/10 rounded-xl border border-border/50 not-prose">
+        <h3 className="text-2xl font-bold mb-3">Ready to start testing?</h3>
+        <p className="text-muted-foreground text-lg mb-6">
           Create your first testnet payment link with free testnet KAS.
         </p>
         <a
           href="/create"
-          className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-bold rounded-lg border-2 border-border hover:shadow-[4px_4px_0px_0px_var(--shadow-color)] transition-all"
+          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
           Create Payment Link →
         </a>
