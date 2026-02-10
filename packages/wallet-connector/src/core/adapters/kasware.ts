@@ -421,10 +421,21 @@ export class KaswareWalletAdapter extends BaseWalletAdapter {
 
       console.log('[KasWareAdapter] sendKaspa result:', result);
 
-      // KasWare may return the transaction ID as a string OR as an object with 'id' property
+      // KasWare returns a JSON string containing the full transaction object
+      // We need to parse it and extract just the 'id' field
       let txId: string;
       if (typeof result === 'string') {
-        txId = result;
+        // Check if it's a JSON string (starts with '{')
+        if (result.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(result);
+            txId = parsed.id || result;
+          } catch {
+            txId = result; // If parse fails, use as-is
+          }
+        } else {
+          txId = result; // Plain transaction ID string
+        }
       } else if (result && typeof result === 'object' && 'id' in result) {
         txId = (result as { id: string }).id;
       } else {
