@@ -3,6 +3,8 @@
 /**
  * WalletPopover - Popover showing wallet info and actions
  * Displays address, balance, copy, refresh, and disconnect options
+ *
+ * Uses @kasflow/wallet-connector for wallet state
  */
 
 import { useState, useEffect } from 'react';
@@ -14,29 +16,10 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useWalletStore, selectAddress, selectBalance } from '@/stores/wallet-store';
-import { sompiToKas, formatKas } from '@kasflow/passkey-wallet';
+import { useWallet, useAccount, useBalance, useNetwork } from '@kasflow/wallet-connector/react';
 import { toast } from 'sonner';
-import { NETWORK_NAMES, getExplorerAddressUrl } from '@/lib/constants/kaspa';
+import { getExplorerAddressUrl } from '@/lib/constants/kaspa';
 import { NetworkSwitcher } from './network-switcher';
-
-// =============================================================================
-// Helper Functions
-// =============================================================================
-
-const truncateAddress = (address: string): string => {
-  if (!address) return '';
-  return `${address.slice(0, 13)}...${address.slice(-8)}`;
-};
-
-const copyToClipboard = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 // =============================================================================
 // WalletPopover Component
@@ -46,10 +29,11 @@ export function WalletPopover() {
   const [copied, setCopied] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const address = useWalletStore(selectAddress);
-  const balance = useWalletStore(selectBalance);
-  const network = useWalletStore((state) => state.network);
-  const { disconnectWallet, refreshBalance } = useWalletStore();
+  // Use new wallet-connector hooks
+  const { disconnect } = useWallet();
+  const { address, shortAddress, copy: copyAddress } = useAccount();
+  const { formattedAvailable, refresh: refreshBalance } = useBalance();
+  const { network } = useNetwork();
 
   // Reset copied state after 2 seconds
   useEffect(() => {
@@ -65,7 +49,7 @@ export function WalletPopover() {
 
   const handleCopy = async () => {
     if (!address) return;
-    const success = await copyToClipboard(address);
+    const success = await copyAddress();
     if (success) {
       setCopied(true);
       toast.success('Address copied to clipboard');
@@ -79,15 +63,15 @@ export function WalletPopover() {
       setRefreshing(true);
       await refreshBalance();
       toast.success('Balance refreshed');
-    } catch (error) {
+    } catch {
       toast.error('Failed to refresh balance');
     } finally {
       setRefreshing(false);
     }
   };
 
-  const handleDisconnect = () => {
-    disconnectWallet();
+  const handleDisconnect = async () => {
+    await disconnect();
     toast.info('Wallet disconnected');
   };
 
@@ -103,13 +87,11 @@ export function WalletPopover() {
 
   if (!address) return null;
 
-  const balanceKas = balance ? formatKas(balance.available, 4) : '0';
-
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" className="font-mono">
-          {truncateAddress(address)}
+          {shortAddress}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
@@ -118,7 +100,7 @@ export function WalletPopover() {
           <div className="space-y-2">
             <h4 className="font-semibold leading-none">Your Wallet</h4>
             <p className="text-sm text-muted-foreground font-mono">
-              {truncateAddress(address)}
+              {shortAddress}
             </p>
           </div>
 
@@ -152,7 +134,7 @@ export function WalletPopover() {
               </Button>
             </div>
             <div className="text-2xl font-bold">
-              {balanceKas} <span className="text-sm font-normal text-muted-foreground">KAS</span>
+              {formattedAvailable} <span className="text-sm font-normal text-muted-foreground">KAS</span>
             </div>
           </div>
 

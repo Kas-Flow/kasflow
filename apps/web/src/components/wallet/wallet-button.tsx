@@ -3,13 +3,13 @@
 /**
  * WalletButton - Button to open wallet modal or show wallet info
  * Shows different states based on wallet connection status
+ *
+ * Now uses @kasflow/wallet-connector hooks for state management
  */
 
-import { useState } from 'react';
 import { Wallet, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useWalletStore, selectStatus, selectIsConnected } from '@/stores/wallet-store';
-import { WalletModal } from './wallet-modal';
+import { useConnect } from '@kasflow/wallet-connector/react';
 import { WalletPopover } from './wallet-popover';
 
 // =============================================================================
@@ -17,22 +17,15 @@ import { WalletPopover } from './wallet-popover';
 // =============================================================================
 
 export function WalletButton() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const status = useWalletStore(selectStatus);
-  const isConnected = useWalletStore(selectIsConnected);
+  const { connected, connecting, openModal } = useConnect();
 
   // If connected, show popover with wallet info
-  if (isConnected) {
-    return (
-      <>
-        <WalletPopover />
-        <WalletModal open={modalOpen} onOpenChange={setModalOpen} />
-      </>
-    );
+  if (connected) {
+    return <WalletPopover />;
   }
 
   // Show loading state
-  if (status === 'connecting') {
+  if (connecting) {
     return (
       <Button disabled variant="outline">
         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -41,14 +34,11 @@ export function WalletButton() {
     );
   }
 
-  // Show connect button
+  // Show connect button - openModal triggers the WalletModal from wallet-connector
   return (
-    <>
-      <Button onClick={() => setModalOpen(true)} variant="default">
-        <Wallet className="w-4 h-4 mr-2" />
-        Connect Wallet
-      </Button>
-      <WalletModal open={modalOpen} onOpenChange={setModalOpen} />
-    </>
+    <Button onClick={openModal} variant="default">
+      <Wallet className="w-4 h-4 mr-2" />
+      Connect Wallet
+    </Button>
   );
 }

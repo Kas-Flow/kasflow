@@ -12,20 +12,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { useWalletStore } from '@/stores/wallet-store';
-import { NETWORK_ID, type NetworkId } from '@kasflow/passkey-wallet';
+import { useNetwork, type NetworkId } from '@kasflow/wallet-connector/react';
 import { NETWORK_NAMES } from '@/lib/constants/kaspa';
 import { toast } from 'sonner';
 
 export function NetworkSwitcher() {
   const [open, setOpen] = useState(false);
-  const network = useWalletStore((state) => state.network);
-  const switching = useWalletStore((state) => state.switching);
-  const { switchNetwork } = useWalletStore();
+  const [switching, setSwitching] = useState(false);
+  const { network, switchNetwork } = useNetwork();
 
   const handleSwitchNetwork = async (newNetwork: string) => {
     if (switching) return;
 
+    setSwitching(true);
     const loadingToast = toast.loading(`Switching to ${NETWORK_NAMES[newNetwork as NetworkId]}...`);
 
     try {
@@ -43,13 +42,15 @@ export function NetworkSwitcher() {
           ? 'Authentication was cancelled'
           : `Could not connect. Reverted to ${NETWORK_NAMES[network]}.`,
       });
+    } finally {
+      setSwitching(false);
     }
   };
 
   // Network options: Mainnet and Testnet only (simplified)
   const networks = [
-    { id: NETWORK_ID.MAINNET, name: NETWORK_NAMES[NETWORK_ID.MAINNET] },
-    { id: NETWORK_ID.TESTNET_10, name: 'Testnet' },
+    { id: 'mainnet' as NetworkId, name: NETWORK_NAMES['mainnet'] },
+    { id: 'testnet-10' as NetworkId, name: 'Testnet' },
   ];
 
   return (
