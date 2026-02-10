@@ -74,15 +74,18 @@ export default async function DocPageContent(props: { params: Promise<{ slug: st
       </div>
 
       {/* Content */}
-      <div className="prose prose-lg prose-slate dark:prose-invert max-w-none 
-        prose-headings:font-bold prose-headings:tracking-tight 
+      <div className="prose prose-lg max-w-none
+        prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
         prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-3xl
         prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-2xl
-        prose-p:leading-relaxed prose-p:text-muted-foreground
+        prose-p:leading-relaxed prose-p:text-foreground/80
+        prose-strong:text-foreground prose-strong:font-bold
         prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-        prose-li:text-muted-foreground prose-li:marker:text-primary
+        prose-li:text-foreground/80 prose-li:marker:text-primary
+        prose-ul:text-foreground/80 prose-ol:text-foreground/80
         prose-img:rounded-xl prose-img:border prose-img:shadow-md
-        prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-mono prose-code:text-sm prose-code:font-semibold prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none">
+        prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-mono prose-code:text-sm prose-code:font-semibold prose-code:text-foreground prose-code:before:content-none prose-code:after:content-none
+        prose-blockquote:border-l-primary prose-blockquote:text-foreground/70">
         <ContentComponent />
       </div>
 
