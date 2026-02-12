@@ -21,6 +21,17 @@ export function ReceivePaymentContent() {
         <li>Generate and share the payment link</li>
       </ol>
 
+      <figure className="my-8">
+        <img
+          src="/3_create-payment-link.png"
+          alt="Payment link created with QR code ready to share"
+          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Your generated payment link with QR code
+        </figcaption>
+      </figure>
+
       <h2>Monitoring Incoming Payments</h2>
 
       <p>When a customer opens your payment link, they'll see:</p>
@@ -36,6 +47,17 @@ export function ReceivePaymentContent() {
       <h3>Real-Time Status Updates</h3>
 
       <p>The payment page automatically tracks three stages:</p>
+
+      <figure className="my-8">
+        <img
+          src="/4_pay-link.png"
+          alt="Payment page showing real-time status updates"
+          className="rounded-xl border border-border shadow-lg w-full max-w-2xl mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Real-time payment status tracking on the payment page
+        </figcaption>
+      </figure>
 
       <div className="space-y-4 my-8 not-prose">
         <div className="p-4 bg-card rounded-lg border border-border shadow-sm">

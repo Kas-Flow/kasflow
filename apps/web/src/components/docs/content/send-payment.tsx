@@ -25,6 +25,17 @@ export function SendPaymentContent() {
         </div>
       </div>
 
+      <figure className="my-8">
+        <img
+          src="/4_pay-link.png"
+          alt="Payment page with QR code, send button, and payment status"
+          className="rounded-xl border border-border shadow-lg w-full max-w-2xl mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          The payment page with QR code and wallet connection options
+        </figcaption>
+      </figure>
+
       <hr className="my-12 border-border" />
 
       <h2>Option 1: Pay with KasFlow Passkey Wallet</h2>
@@ -41,6 +52,17 @@ export function SendPaymentContent() {
         <li>Authenticate with Face ID, Touch ID, or device password</li>
         <li>Your wallet is created instantly!</li>
       </ol>
+
+      <figure className="my-8">
+        <img
+          src="/2_connet-wallet-modal.png"
+          alt="Wallet modal showing Passkey Wallet and KasWare options"
+          className="rounded-xl border border-border shadow-lg w-full max-w-md mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Select Passkey Wallet for biometric authentication
+        </figcaption>
+      </figure>
 
       <div className="my-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg not-prose flex gap-3">
         <div className="text-xl">✅</div>
@@ -80,6 +102,17 @@ export function SendPaymentContent() {
         </div>
       </div>
 
+      <figure className="my-8">
+        <img
+          src="/6_sign-with-passkey.png"
+          alt="Touch ID prompt for transaction signing"
+          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Authenticate with Touch ID or Face ID to approve the transaction
+        </figcaption>
+      </figure>
+
       <h3>After Payment</h3>
 
       <p>Once the transaction is sent, you'll see:</p>
@@ -92,6 +125,29 @@ export function SendPaymentContent() {
         <li>🔗 "View Explorer" button to see on blockchain</li>
         <li>📥 "Download Receipt" button for your records</li>
       </ul>
+
+      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+        <figure>
+          <img
+            src="/7_payment-sucess-modal.png"
+            alt="Payment successful modal"
+            className="rounded-xl border border-border shadow-lg w-full"
+          />
+          <figcaption className="text-center text-sm text-muted-foreground mt-3">
+            Payment confirmation with transaction details
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="/8_reciept.png"
+            alt="Payment receipt"
+            className="rounded-xl border border-border shadow-lg w-full"
+          />
+          <figcaption className="text-center text-sm text-muted-foreground mt-3">
+            Downloadable receipt for your records
+          </figcaption>
+        </figure>
+      </div>
 
       <hr className="my-12 border-border" />
 
@@ -108,6 +164,17 @@ export function SendPaymentContent() {
         <li>Wallet auto-fills recipient and amount</li>
         <li>Confirm and send</li>
       </ol>
+
+      <figure className="my-8">
+        <img
+          src="/5_sign-with-wallet.png"
+          alt="KasWare wallet transaction signing popup"
+          className="rounded-xl border border-border shadow-lg w-full max-w-md mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          KasWare browser extension transaction confirmation
+        </figcaption>
+      </figure>
 
       <h3>Manual Entry</h3>
 

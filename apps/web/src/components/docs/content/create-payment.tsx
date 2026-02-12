@@ -42,6 +42,17 @@ export function CreatePaymentContent() {
         </div>
       </div>
 
+      <figure className="my-8">
+        <img
+          src="/2_connet-wallet-modal.png"
+          alt="Connect wallet modal showing Passkey and KasWare options"
+          className="rounded-xl border border-border shadow-lg w-full max-w-md mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Connect your wallet to auto-fill your address
+        </figcaption>
+      </figure>
+
       <h3>3. Set the Amount</h3>
       <p>Enter the payment amount in KAS (Kaspa&apos;s native currency). Examples:</p>
       <ul>
@@ -66,6 +77,17 @@ export function CreatePaymentContent() {
 
       <h3>5. Generate Link</h3>
       <p>Click <strong>&quot;Generate Payment Link&quot;</strong> to create your unique payment URL.</p>
+
+      <figure className="my-8">
+        <img
+          src="/3_create-payment-link.png"
+          alt="Payment link created with QR code"
+          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Your generated payment link ready to share
+        </figcaption>
+      </figure>
 
       <h2>Sharing Your Payment Link</h2>
 

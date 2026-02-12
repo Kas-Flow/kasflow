@@ -29,6 +29,17 @@ export function PasskeyWalletContent() {
         <li>You authenticate with biometric to finalize</li>
       </ol>
 
+      <figure className="my-8">
+        <img
+          src="/2_connet-wallet-modal.png"
+          alt="Wallet connection modal showing Passkey Wallet option"
+          className="rounded-xl border border-border shadow-lg w-full max-w-md mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Select Passkey Wallet to create or unlock your biometric wallet
+        </figcaption>
+      </figure>
+
       <h3>2. Wallet Unlock</h3>
       <ol>
         <li>Click "Unlock Wallet"</li>
@@ -44,6 +55,17 @@ export function PasskeyWalletContent() {
         <li>Your approval cryptographically signs the transaction</li>
         <li>Transaction broadcasts to blockchain</li>
       </ol>
+
+      <figure className="my-8">
+        <img
+          src="/6_sign-with-passkey.png"
+          alt="Touch ID prompt for transaction signing"
+          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
+        />
+        <figcaption className="text-center text-sm text-muted-foreground mt-3">
+          Biometric authentication for each transaction
+        </figcaption>
+      </figure>
 
       <h2>Why Passkeys are Better</h2>
 
