@@ -73,6 +73,23 @@ export const DOCS_NAVIGATION: DocSection[] = [
     ],
   },
   {
+    title: 'SDK Reference',
+    pages: [
+      {
+        title: 'Passkey Wallet SDK',
+        slug: 'sdk-passkey-wallet',
+        description: 'Build with @kasflow/passkey-wallet',
+        icon: '📦',
+      },
+      {
+        title: 'Wallet Connector',
+        slug: 'sdk-wallet-connector',
+        description: 'Multi-wallet React integration',
+        icon: '🔌',
+      },
+    ],
+  },
+  {
     title: 'Help',
     pages: [
       {

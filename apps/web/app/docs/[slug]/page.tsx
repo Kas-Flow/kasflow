@@ -13,6 +13,8 @@ import { NetworksContent } from '@/components/docs/content/networks';
 import { FaqContent } from '@/components/docs/content/faq';
 import { SecurityContent } from '@/components/docs/content/security';
 import { TroubleshootingContent } from '@/components/docs/content/troubleshooting';
+import { SdkPasskeyWalletContent } from '@/components/docs/content/sdk-passkey-wallet';
+import { SdkWalletConnectorContent } from '@/components/docs/content/sdk-wallet-connector';
 
 // Map slugs to their content components
 const CONTENT_COMPONENTS: Record<string, React.ComponentType> = {
@@ -26,6 +28,8 @@ const CONTENT_COMPONENTS: Record<string, React.ComponentType> = {
   faq: FaqContent,
   security: SecurityContent,
   troubleshooting: TroubleshootingContent,
+  'sdk-passkey-wallet': SdkPasskeyWalletContent,
+  'sdk-wallet-connector': SdkWalletConnectorContent,
 };
 
 export function generateStaticParams() {
