@@ -133,16 +133,48 @@ export function SendPaymentContent() {
 
       <h2>Option 2: Pay with External Wallet</h2>
 
-      <p>If you already use a Kaspa wallet app (Kaspium, Kasware, etc.):</p>
+      <p>If you already use a Kaspa wallet app (Kaspium, Kasware, etc.), you have two options:</p>
 
-      <h3>Using QR Code</h3>
+      <h3>Using Mobile Wallet (QR Code Scan)</h3>
+
+      <p>Perfect for mobile wallets like Kaspium. Scan the QR code directly from the payment page:</p>
 
       <ol>
-        <li>Open your Kaspa wallet app on your phone</li>
-        <li>Tap "Send" or "Scan"</li>
-        <li>Scan the QR code on the KasFlow payment page</li>
-        <li>Wallet auto-fills recipient and amount</li>
-        <li>Confirm and send</li>
+        <li>Open the KasFlow payment link on your computer or share it to view on screen</li>
+        <li>Open your mobile Kaspa wallet app (e.g., Kaspium)</li>
+        <li>Find and tap the QR code scanner icon</li>
+        <li>Point your camera at the QR code on the payment page</li>
+        <li>Your wallet auto-fills the recipient and amount</li>
+        <li>Confirm and send the payment</li>
+      </ol>
+
+      <div className="grid md:grid-cols-3 gap-4 not-prose">
+        <DocImage
+          src="/1_scan-with-your-wallet.jpg"
+          alt="KasFlow payment page with QR code highlighted"
+          caption="Step 1: QR code on payment page"
+        />
+        <DocImage
+          src="/2_scan-find-qr-code-scanner.jpg"
+          alt="Mobile wallet app showing QR scanner icon"
+          caption="Step 2: Find QR scanner in wallet"
+        />
+        <DocImage
+          src="/3_scan-with-your-camera.jpg"
+          alt="Scanning QR code with mobile wallet"
+          caption="Step 3: Scan the QR code"
+        />
+      </div>
+
+      <h3>Using Browser Extension (KasWare)</h3>
+
+      <p>For browser-based wallets like KasWare, you can pay directly from the payment page:</p>
+
+      <ol>
+        <li>Click <strong>"Connect Wallet to Pay"</strong> on the payment page</li>
+        <li>Select <strong>KasWare</strong> from the wallet options</li>
+        <li>Review the transaction details in the KasWare popup</li>
+        <li>Click <strong>"Sign & Pay"</strong> to confirm</li>
       </ol>
 
       <DocImage
