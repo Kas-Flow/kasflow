@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/kasflow"
+    "url": "https://github.com/Kas-Flow/kasflow"
   },
   "devDependencies": {
     "@types/node": "^25.2.0",
