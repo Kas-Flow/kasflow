@@ -52,7 +52,7 @@
     }
   },
   "dependencies": {
-    "@kasflow/passkey-wallet": "workspace:*"
+    "@kasflow/passkey-wallet": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
