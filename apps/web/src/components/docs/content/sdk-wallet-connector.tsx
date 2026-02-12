@@ -7,7 +7,7 @@ export function SdkWalletConnectorContent() {
         Connect to multiple Kaspa wallets with pre-built React hooks and components. Supports passkey wallets and browser extensions.
       </p>
 
-      <div className="my-6 p-4 bg-card border border-border rounded-lg not-prose flex items-center justify-between">
+      <div className="my-6 p-4 bg-card border border-border rounded-lg not-prose flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
         <div>
           <span className="font-semibold">@kasflow/wallet-connector</span>
           <span className="text-muted-foreground ml-2">on npm</span>
@@ -246,7 +246,7 @@ try {
   WalletErrorCode,
 } from '@kasflow/wallet-connector';`}</code></pre>
 
-      <div className="my-12 p-8 bg-gradient-to-r from-neo-purple/10 to-neo-pink/10 rounded-xl border border-border/50 not-prose">
+      <div className="my-12 p-6 md:p-8 bg-gradient-to-r from-neo-purple/10 to-neo-pink/10 rounded-xl border border-border/50 not-prose">
         <h3 className="text-2xl font-bold mb-3">Using without React?</h3>
         <p className="text-muted-foreground text-lg mb-6">
           Use the Passkey Wallet SDK directly for framework-agnostic integration.

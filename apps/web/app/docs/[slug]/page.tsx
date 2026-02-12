@@ -73,15 +73,15 @@ export default async function DocPageContent(props: { params: Promise<{ slug: st
     <div className="space-y-8 pb-12">
       {/* Page Header */}
       <div className="space-y-4 border-b pb-8">
-        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">{page.title}</h1>
-        <p className="text-xl text-muted-foreground leading-relaxed">{page.description}</p>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight lg:text-5xl">{page.title}</h1>
+        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">{page.description}</p>
       </div>
 
       {/* Content */}
       <div className="prose prose-lg max-w-none
         prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
-        prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-3xl
-        prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-2xl
+        prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-2xl md:prose-h2:mt-12 md:prose-h2:mb-6 md:prose-h2:text-3xl
+        prose-h3:mt-6 prose-h3:mb-3 prose-h3:text-xl md:prose-h3:mt-8 md:prose-h3:mb-4 md:prose-h3:text-2xl
         prose-p:leading-relaxed prose-p:text-foreground/80
         prose-strong:text-foreground prose-strong:font-bold
         prose-a:text-primary prose-a:no-underline hover:prose-a:underline

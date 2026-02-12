@@ -7,7 +7,7 @@ export function SdkPasskeyWalletContent() {
         Build Kaspa applications with passkey-powered wallets. No seed phrases, no passwords - just biometrics.
       </p>
 
-      <div className="my-6 p-4 bg-card border border-border rounded-lg not-prose flex items-center justify-between">
+      <div className="my-6 p-4 bg-card border border-border rounded-lg not-prose flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
         <div>
           <span className="font-semibold">@kasflow/passkey-wallet</span>
           <span className="text-muted-foreground ml-2">on npm</span>
@@ -231,7 +231,7 @@ const display = formatKas(150000000n); // "1.5"`}</code></pre>
         <li>Platform authenticator (Touch ID, Face ID, Windows Hello)</li>
       </ul>
 
-      <div className="my-12 p-8 bg-gradient-to-r from-neo-cyan/10 to-neo-green/10 rounded-xl border border-border/50 not-prose">
+      <div className="my-12 p-6 md:p-8 bg-gradient-to-r from-neo-cyan/10 to-neo-green/10 rounded-xl border border-border/50 not-prose">
         <h3 className="text-2xl font-bold mb-3">Need React integration?</h3>
         <p className="text-muted-foreground text-lg mb-6">
           Check out the Wallet Connector for pre-built React hooks and components.
