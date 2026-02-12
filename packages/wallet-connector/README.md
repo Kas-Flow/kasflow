@@ -2,6 +2,10 @@
 
 A multi-wallet connector library for Kaspa dApps. Provides a unified interface for connecting to different wallet types with React hooks and components included.
 
+## Architecture
+
+![Wallet Connector Architecture](https://raw.githubusercontent.com/Kas-Flow/assets/master/wallet-connector-architecture.svg)
+
 ## Features
 
 - Multi-wallet support (Passkey biometric wallet, KasWare browser extension)

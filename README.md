@@ -2,6 +2,10 @@
 
 Open-source payment toolkit for Kaspa blockchain featuring the first passkey-powered wallet SDK.
 
+## Technical Overview
+
+![Technical Deep Dive](https://raw.githubusercontent.com/Kas-Flow/assets/master/technical-deep-dive.svg)
+
 ## Packages
 
 | Package | Description | npm |

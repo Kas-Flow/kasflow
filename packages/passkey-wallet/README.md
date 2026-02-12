@@ -2,6 +2,10 @@
 
 Passkey-powered wallet SDK for [Kaspa blockchain](https://kaspa.org). Create and manage Kaspa wallets using device biometrics (Face ID, Touch ID, Windows Hello, etc.) with no seed phrases to remember.
 
+## Architecture
+
+![Passkey Wallet Architecture](https://raw.githubusercontent.com/Kas-Flow/assets/master/passkey-wallet-architecture.svg)
+
 ## Features
 
 - **Passkey Authentication**: Secure wallet access using WebAuthn/FIDO2 device biometrics
