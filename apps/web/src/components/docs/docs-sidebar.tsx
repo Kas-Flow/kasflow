@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { DOCS_NAVIGATION } from '@/lib/constants/docs';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronLeft } from 'lucide-react';
+
+const HINT_STORAGE_KEY = 'kasflow_docs_menu_hint_seen';
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -47,13 +49,57 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function DocsSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    // Check if user has seen the hint before
+    const hasSeenHint = localStorage.getItem(HINT_STORAGE_KEY);
+    if (!hasSeenHint) {
+      // Small delay before showing hint
+      const showTimer = setTimeout(() => setShowHint(true), 500);
+      // Hide hint after 3 seconds and mark as seen
+      const hideTimer = setTimeout(() => {
+        setShowHint(false);
+        localStorage.setItem(HINT_STORAGE_KEY, 'true');
+      }, 3500);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, []);
+
+  const handleOpenMenu = () => {
+    setIsOpen(true);
+    setShowHint(false);
+    localStorage.setItem(HINT_STORAGE_KEY, 'true');
+  };
 
   return (
     <>
+      {/* Mobile Menu Hint - slides in from left edge */}
+      <div
+        className={cn(
+          'fixed top-1/2 -translate-y-1/2 left-0 z-40 md:hidden transition-transform duration-300 ease-out',
+          showHint ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
+        <button
+          onClick={handleOpenMenu}
+          className="flex items-center gap-1 bg-primary text-primary-foreground pl-3 pr-2 py-3 rounded-r-lg shadow-lg text-sm font-medium"
+        >
+          <span>Menu</span>
+          <ChevronLeft className="w-4 h-4 animate-pulse" />
+        </button>
+      </div>
+
       {/* Mobile Menu Button */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 md:hidden flex items-center justify-center w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-lg hover:opacity-90 transition-opacity"
+        onClick={handleOpenMenu}
+        className={cn(
+          'fixed bottom-6 right-6 z-40 md:hidden flex items-center justify-center w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-lg hover:opacity-90 transition-all',
+          showHint && 'animate-bounce'
+        )}
         aria-label="Open documentation menu"
       >
         <Menu className="w-6 h-6" />
