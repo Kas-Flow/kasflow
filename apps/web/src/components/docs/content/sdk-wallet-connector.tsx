@@ -7,6 +7,21 @@ export function SdkWalletConnectorContent() {
         Connect to multiple Kaspa wallets with pre-built React hooks and components. Supports passkey wallets and browser extensions.
       </p>
 
+      <div className="my-6 p-4 bg-card border border-border rounded-lg not-prose flex items-center justify-between">
+        <div>
+          <span className="font-semibold">@kasflow/wallet-connector</span>
+          <span className="text-muted-foreground ml-2">on npm</span>
+        </div>
+        <a
+          href="https://www.npmjs.com/package/@kasflow/wallet-connector"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity"
+        >
+          View on npm
+        </a>
+      </div>
+
       <h2>Installation</h2>
       <pre className="bg-muted p-4 rounded-lg overflow-x-auto"><code>npm install @kasflow/wallet-connector</code></pre>
 
