@@ -1,3 +1,5 @@
+import { DocImage } from '../doc-image';
+
 export function ReceivePaymentContent() {
   return (
     <>
@@ -21,16 +23,12 @@ export function ReceivePaymentContent() {
         <li>Generate and share the payment link</li>
       </ol>
 
-      <figure className="my-8">
-        <img
-          src="/3_create-payment-link.png"
-          alt="Payment link created with QR code ready to share"
-          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          Your generated payment link with QR code
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/3_create-payment-link.png"
+        alt="Payment link created with QR code ready to share"
+        caption="Your generated payment link with QR code"
+        className="max-w-lg mx-auto"
+      />
 
       <h2>Monitoring Incoming Payments</h2>
 
@@ -48,16 +46,12 @@ export function ReceivePaymentContent() {
 
       <p>The payment page automatically tracks three stages:</p>
 
-      <figure className="my-8">
-        <img
-          src="/4_pay-link.png"
-          alt="Payment page showing real-time status updates"
-          className="rounded-xl border border-border shadow-lg w-full max-w-2xl mx-auto"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          Real-time payment status tracking on the payment page
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/4_pay-link.png"
+        alt="Payment page showing real-time status updates"
+        caption="Real-time payment status tracking on the payment page"
+        className="max-w-2xl mx-auto"
+      />
 
       <div className="space-y-4 my-8 not-prose">
         <div className="p-4 bg-card rounded-lg border border-border shadow-sm">

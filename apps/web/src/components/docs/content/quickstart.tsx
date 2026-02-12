@@ -1,3 +1,5 @@
+import { DocImage } from '../doc-image';
+
 export function QuickstartContent() {
   return (
     <>
@@ -61,16 +63,12 @@ export function QuickstartContent() {
         <li>Share via text, email, or social media</li>
       </ol>
 
-      <figure className="my-8">
-        <img
-          src="/3_create-payment-link.png"
-          alt="Payment link created with QR code"
-          className="rounded-xl border border-border shadow-lg w-full max-w-lg mx-auto"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          Your generated payment link with shareable QR code
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/3_create-payment-link.png"
+        alt="Payment link created with QR code"
+        caption="Your generated payment link with shareable QR code"
+        className="max-w-lg mx-auto"
+      />
 
       <p>
         <strong>That's it!</strong> When someone pays, you'll see real-time confirmation on the payment page.
@@ -96,16 +94,12 @@ export function QuickstartContent() {
         <li>Click it to open the wallet authentication modal</li>
       </ol>
 
-      <figure className="my-8">
-        <img
-          src="/4_pay-link.png"
-          alt="Payment page with QR code and payment status"
-          className="rounded-xl border border-border shadow-lg w-full max-w-2xl mx-auto"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          The payment page showing QR code and real-time status
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/4_pay-link.png"
+        alt="Payment page with QR code and payment status"
+        caption="The payment page showing QR code and real-time status"
+        className="max-w-2xl mx-auto"
+      />
 
       <h3>Step 3: Create Your Passkey Wallet</h3>
       <ol>
@@ -115,16 +109,12 @@ export function QuickstartContent() {
         <li>Authenticate to create your wallet</li>
       </ol>
 
-      <figure className="my-8">
-        <img
-          src="/2_connet-wallet-modal.png"
-          alt="Wallet connection modal showing Passkey and KasWare options"
-          className="rounded-xl border border-border shadow-lg w-full max-w-md mx-auto"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          Choose Passkey Wallet for biometric authentication
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/2_connet-wallet-modal.png"
+        alt="Wallet connection modal showing Passkey and KasWare options"
+        caption="Choose Passkey Wallet for biometric authentication"
+        className="max-w-md mx-auto"
+      />
 
       <div className="my-6 p-4 bg-green-500/10 border border-green-500/50 rounded-lg not-prose flex gap-3">
         <div className="text-xl">✅</div>
@@ -148,27 +138,17 @@ export function QuickstartContent() {
         <li>Click <strong>"Download Receipt"</strong> to save a PDF-style receipt</li>
       </ol>
 
-      <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
-        <figure>
-          <img
-            src="/7_payment-sucess-modal.png"
-            alt="Payment successful modal with transaction details"
-            className="rounded-xl border border-border shadow-lg w-full"
-          />
-          <figcaption className="text-center text-sm text-muted-foreground mt-3">
-            Payment confirmation with details
-          </figcaption>
-        </figure>
-        <figure>
-          <img
-            src="/8_reciept.png"
-            alt="Payment receipt with QR code"
-            className="rounded-xl border border-border shadow-lg w-full"
-          />
-          <figcaption className="text-center text-sm text-muted-foreground mt-3">
-            Downloadable receipt for your records
-          </figcaption>
-        </figure>
+      <div className="grid md:grid-cols-2 gap-6 not-prose">
+        <DocImage
+          src="/7_payment-sucess-modal.png"
+          alt="Payment successful modal with transaction details"
+          caption="Payment confirmation with details"
+        />
+        <DocImage
+          src="/8_reciept.png"
+          alt="Payment receipt with QR code"
+          caption="Downloadable receipt for your records"
+        />
       </div>
 
       <hr className="my-12 border-border" />

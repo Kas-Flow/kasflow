@@ -1,3 +1,5 @@
+import { DocImage } from '../doc-image';
+
 export function IntroductionContent() {
   return (
     <>
@@ -93,16 +95,11 @@ export function IntroductionContent() {
         </li>
       </ol>
 
-      <figure className="my-8">
-        <img
-          src="/1_connect-wallet.jpg"
-          alt="KasFlow homepage with Connect Wallet button highlighted"
-          className="rounded-xl border border-border shadow-lg w-full"
-        />
-        <figcaption className="text-center text-sm text-muted-foreground mt-3">
-          Get started by connecting your wallet from the homepage
-        </figcaption>
-      </figure>
+      <DocImage
+        src="/1_connect-wallet.jpg"
+        alt="KasFlow homepage with Connect Wallet button highlighted"
+        caption="Get started by connecting your wallet from the homepage"
+      />
 
       <div className="my-12 p-8 bg-gradient-to-r from-neo-cyan/10 to-neo-green/10 rounded-xl border border-border/50 not-prose">
         <h3 className="text-2xl font-bold mb-3">Ready to get started?</h3>
