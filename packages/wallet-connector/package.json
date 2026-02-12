@@ -1,6 +1,6 @@
 {
   "name": "@kasflow/wallet-connector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wallet connection library for Kaspa - connect to passkey wallets and browser extensions",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
