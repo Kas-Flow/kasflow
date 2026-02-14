@@ -110,7 +110,7 @@ function PaymentPage() {
           <p className="text-muted-foreground mb-4">
             Biometric authentication with Face ID, Touch ID, or Windows Hello.
           </p>
-          <pre className="bg-muted p-3 rounded text-sm"><code>passkeyAdapter()</code></pre>
+          <CodeBlock code="passkeyAdapter()" filename="adapter.ts" />
         </div>
 
         <div className="p-6 bg-card rounded-xl border border-border">
@@ -118,7 +118,7 @@ function PaymentPage() {
           <p className="text-muted-foreground mb-4">
             Connect to KasWare browser extension wallet.
           </p>
-          <pre className="bg-muted p-3 rounded text-sm"><code>kaswareAdapter()</code></pre>
+          <CodeBlock code="kaswareAdapter()" filename="adapter.ts" />
         </div>
       </div>
 
@@ -126,14 +126,15 @@ function PaymentPage() {
 
       <h3>useWallet</h3>
       <p>Main hook for wallet state and actions.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`const {
+      <CodeBlock
+        code={`const {
   // State
   connected,        // boolean
   connecting,       // boolean
   address,          // string | null
   balance,          // { available, pending, total }
   network,          // 'mainnet' | 'testnet-10' | 'testnet-11'
-  
+
   // Actions
   connect,          // (adapterName?) => Promise<void>
   disconnect,       // () => Promise<void>
@@ -141,11 +142,14 @@ function PaymentPage() {
   signMessage,      // (params) => Promise<{ signature }>
   switchNetwork,    // (network) => Promise<void>
   openModal,        // () => void
-} = useWallet();`}</code></pre>
+} = useWallet();`}
+        filename="useWallet.ts"
+      />
 
       <h3>useBalance</h3>
       <p>Balance with formatting utilities.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`const {
+      <CodeBlock
+        code={`const {
   available,          // bigint
   pending,            // bigint
   total,              // bigint
@@ -154,51 +158,66 @@ function PaymentPage() {
   formattedTotal,
   loading,
   refresh,
-} = useBalance();`}</code></pre>
+} = useBalance();`}
+        filename="useBalance.ts"
+      />
 
       <h3>useAccount</h3>
       <p>Account utilities with clipboard support.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`const {
+      <CodeBlock
+        code={`const {
   address,      // full address
   shortAddress, // "kaspa:qr...xyz"
   publicKey,
   copy,         // () => Promise<boolean>
   copied,       // boolean (recently copied)
-} = useAccount();`}</code></pre>
+} = useAccount();`}
+        filename="useAccount.ts"
+      />
 
       <h3>useNetwork</h3>
       <p>Network information and switching.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`const {
+      <CodeBlock
+        code={`const {
   network,       // current network ID
   networkConfig, // { id, name, rpcUrl, explorerUrl }
   isMainnet,     // boolean
   isTestnet,     // boolean
   switchNetwork, // (network) => Promise<void>
-} = useNetwork();`}</code></pre>
+} = useNetwork();`}
+        filename="useNetwork.ts"
+      />
 
       <h3>useConnect</h3>
       <p>Connection controls and modal state.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`const {
+      <CodeBlock
+        code={`const {
   adapters,       // available wallet adapters
   currentAdapter, // currently connected adapter
   isModalOpen,
   openModal,
   closeModal,
-} = useConnect();`}</code></pre>
+} = useConnect();`}
+        filename="useConnect.ts"
+      />
 
       <h2>Components</h2>
 
       <h3>ConnectButton</h3>
       <p>Smart button that adapts to connection state.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`<ConnectButton
+      <CodeBlock
+        code={`<ConnectButton
   label="Connect Wallet"  // button text when disconnected
   showBalance={true}      // show balance when connected
   showNetwork={true}      // show network badge
   className="my-class"
-/>`}</code></pre>
+/>`}
+        filename="ConnectButton.tsx"
+      />
 
       <h4>Custom Rendering</h4>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`<ConnectButton.Custom>
+      <CodeBlock
+        code={`<ConnectButton.Custom>
   {({ connected, address, openModal, disconnect }) => (
     connected ? (
       <button onClick={disconnect}>{address}</button>
@@ -206,14 +225,20 @@ function PaymentPage() {
       <button onClick={openModal}>Connect</button>
     )
   )}
-</ConnectButton.Custom>`}</code></pre>
+</ConnectButton.Custom>`}
+        filename="CustomButton.tsx"
+      />
 
       <h3>WalletModal</h3>
       <p>Wallet selection modal with automatic state management.</p>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`<WalletModal title="Connect Wallet" />`}</code></pre>
+      <CodeBlock
+        code={`<WalletModal title="Connect Wallet" />`}
+        filename="WalletModal.tsx"
+      />
 
       <h2>Provider Config</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`<KaspaWalletProvider
+      <CodeBlock
+        code={`<KaspaWalletProvider
   config={{
     appName: 'My App',           // shown in wallet prompts
     network: 'mainnet',          // default network
@@ -230,10 +255,13 @@ function PaymentPage() {
   }}
 >
   {children}
-</KaspaWalletProvider>`}</code></pre>
+</KaspaWalletProvider>`}
+        filename="App.tsx"
+      />
 
       <h2>Error Handling</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import { WalletError, WalletErrorCode } from '@kasflow/wallet-connector';
+      <CodeBlock
+        code={`import { WalletError, WalletErrorCode } from '@kasflow/wallet-connector';
 
 try {
   await sendTransaction({ to, amount });
@@ -248,17 +276,22 @@ try {
         break;
     }
   }
-}`}</code></pre>
+}`}
+        filename="error-handling.ts"
+      />
 
       <h2>TypeScript Types</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import type {
+      <CodeBlock
+        code={`import type {
   NetworkId,            // 'mainnet' | 'testnet-10' | 'testnet-11'
   WalletBalance,        // { available, pending, total }
   SendTransactionParams,
   TransactionResult,    // { txId, network, fee }
   WalletError,
   WalletErrorCode,
-} from '@kasflow/wallet-connector';`}</code></pre>
+} from '@kasflow/wallet-connector';`}
+        filename="types.ts"
+      />
 
       <div className="my-12 p-6 md:p-8 bg-gradient-to-r from-neo-purple/10 to-neo-pink/10 rounded-xl border border-border/50 not-prose">
         <h3 className="text-2xl font-bold mb-3">Using without React?</h3>
