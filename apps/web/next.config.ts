@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   turbopack: {},
 
   // Webpack configuration for WASM support in client bundles
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     // Enable WASM support for client-side bundles
     if (!isServer) {
       config.experiments = {
@@ -23,25 +23,30 @@ const nextConfig: NextConfig = {
       // kaspa-wasm-web expects specific class names like 'Resolver'
       // If minified to random names like 'I6', WASM fails with:
       // "object constructor `I6` does not match expected class `Resolver`"
-      if (config.optimization) {
-        config.optimization.minimize = true;
 
-        // Find existing TerserPlugin and update it
-        const terserPluginIndex = config.optimization.minimizer?.findIndex(
-          (plugin: any) => plugin.constructor.name === 'TerserPlugin'
-        );
+      // Import TerserPlugin
+      const TerserPlugin = require('terser-webpack-plugin');
 
-        if (terserPluginIndex !== undefined && terserPluginIndex >= 0 && config.optimization.minimizer) {
-          // Update existing TerserPlugin options
-          const TerserPlugin = config.optimization.minimizer[terserPluginIndex].constructor;
-          config.optimization.minimizer[terserPluginIndex] = new TerserPlugin({
-            terserOptions: {
-              keep_classnames: true, // Preserve ALL class names for WASM compatibility
-              keep_fnames: true,     // Preserve ALL function names for WASM compatibility
+      // Replace the minimizer with our custom Terser configuration
+      config.optimization.minimizer = [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              // Enable compression but preserve what we need
+              drop_console: false,
+              drop_debugger: true,
             },
-          });
-        }
-      }
+            mangle: {
+              // Disable all mangling - this is the nuclear option but necessary for WASM
+              keep_classnames: true,
+              keep_fnames: true,
+            },
+            format: {
+              comments: false,
+            },
+          },
+        }),
+      ];
     }
 
     return config;
