@@ -8,7 +8,7 @@
   [![npm](https://img.shields.io/npm/v/@kasflow/passkey-wallet)](https://www.npmjs.com/package/@kasflow/passkey-wallet)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-  [Website](https://kasflow.app) • [Demo](https://kasflow.app) • [Documentation](https://kasflow.app/docs)
+  [Website](https://kas-flow.xyz) • [Demo](https://kas-flow.xyz) • [Documentation](https://kas-flow.xyz/docs)
 
 </div>
 
@@ -150,7 +150,7 @@ pnpm run typecheck
 
 ## Documentation
 
-Full documentation available at [kasflow.app/docs](https://kasflow.app/docs):
+Full documentation available at [kas-flow.xyz/docs](https://kas-flow.xyz/docs):
 
 - Getting Started
 - Create Payment Links
