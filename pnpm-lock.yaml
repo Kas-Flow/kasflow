@@ -14,11 +14,11 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.1(react@19.2.3))
       '@kasflow/passkey-wallet':
-        specifier: workspace:*
-        version: link:../../packages/passkey-wallet
+        specifier: ^0.1.2
+        version: 0.1.2
       '@kasflow/wallet-connector':
-        specifier: workspace:*
-        version: link:../../packages/wallet-connector
+        specifier: ^0.1.2
+        version: 0.1.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@kluster/kaspa-address':
         specifier: ^0.1.5
         version: 0.1.5
@@ -706,6 +706,17 @@ packages:
 
   '@kasflow/passkey-wallet@0.1.2':
     resolution: {integrity: sha512-jwBKHJnUVUD8IiusvNMKxu+YhAMgv7Ti6QXLWGhslWfsP/RbrbwImnj2jom9QKYlHP58ytXFB9ya0vZrBkT2NA==}
+
+  '@kasflow/wallet-connector@0.1.2':
+    resolution: {integrity: sha512-4mfSsKLeJQ73bT2Wj0nPiTrwyrlqGYsaQWxc8IIAi4im9AoNhHiQge941sqN4tyKrW/bGZUwro/wq7JZFM1Auw==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   '@kluster/kaspa-address@0.1.5':
     resolution: {integrity: sha512-JirWMhZNnePzHL+4cFRN0YNK0NRWBa0cS8M2iuuzRsFnKQ9aJVZd6jIQEeMAdJxMNnIOwjTKloceLjRV6PUhBw==}
@@ -3895,6 +3906,13 @@ snapshots:
       '@simplewebauthn/browser': 13.2.2
       cbor-x: 1.6.0
       idb-keyval: 6.2.2
+
+  '@kasflow/wallet-connector@0.1.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@kasflow/passkey-wallet': 0.1.2
+    optionalDependencies:
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   '@kluster/kaspa-address@0.1.5': {}
 
