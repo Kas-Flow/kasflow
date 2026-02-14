@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Turbopack has better WASM support out of the box
-  turbopack: {},
+  // IMPORTANT: We MUST use webpack (not Turbopack) for WASM builds
+  // Turbopack ignores webpack config and uses SWC minifier which mangles class names
+  // This causes "object constructor I6 does not match expected class Resolver" error
 
   // Webpack configuration for WASM support in client bundles
   webpack: (config, { isServer, webpack }) => {
