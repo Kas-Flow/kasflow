@@ -2,7 +2,7 @@
   "name": "kasflow",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@latest",
+  "packageManager": "pnpm@10.15.0",
   "description": "KasFlow - Instant Kaspa Payments with Passkey Wallet SDK",
   "workspaces": [
     "packages/*",
