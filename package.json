@@ -8,11 +8,12 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=apps/web",
-    "build": "npm run build --workspaces --if-present",
-    "build:sdk": "npm run build --workspace=packages/passkey-wallet",
-    "lint": "npm run lint --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "build:sdk": "pnpm --filter @kasflow/passkey-wallet build",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules"
   },
   "keywords": [
