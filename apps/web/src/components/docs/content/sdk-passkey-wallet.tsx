@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CodeBlock } from '@/components/docs/code-block';
 
 export function SdkPasskeyWalletContent() {
   return (
@@ -23,12 +24,17 @@ export function SdkPasskeyWalletContent() {
       </div>
 
       <h2>Installation</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto"><code>npm install @kasflow/passkey-wallet</code></pre>
+      <CodeBlock
+        code="npm install @kasflow/passkey-wallet"
+        language="bash"
+        filename="terminal"
+      />
 
       <h2>Quick Start</h2>
 
       <h3>Create a Wallet</h3>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import { PasskeyWallet } from '@kasflow/passkey-wallet';
+      <CodeBlock
+        code={`import { PasskeyWallet } from '@kasflow/passkey-wallet';
 
 // Check if browser supports passkeys
 if (!PasskeyWallet.isSupported()) {
@@ -44,10 +50,13 @@ const result = await PasskeyWallet.create({
 if (result.success) {
   const wallet = result.data;
   console.log('Address:', wallet.getAddress());
-}`}</code></pre>
+}`}
+        filename="create-wallet.ts"
+      />
 
       <h3>Unlock Existing Wallet</h3>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`// Check if wallet exists
+      <CodeBlock
+        code={`// Check if wallet exists
 const exists = await PasskeyWallet.exists();
 
 if (exists) {
@@ -56,18 +65,21 @@ if (exists) {
     const wallet = result.data;
     console.log('Welcome back!', wallet.getAddress());
   }
-}`}</code></pre>
+}`}
+        filename="unlock-wallet.ts"
+      />
 
       <h2>Sending Transactions</h2>
 
       <div className="my-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded-lg not-prose flex gap-3">
-        <div className="text-xl">i</div>
+        <div className="text-xl">ℹ️</div>
         <div className="text-sm text-foreground/80 leading-relaxed">
           <strong>Recommended:</strong> Use <code>sendWithAuth()</code> for per-transaction biometric confirmation - similar to hardware wallet security.
         </div>
       </div>
 
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import { kasToSompi } from '@kasflow/passkey-wallet';
+      <CodeBlock
+        code={`import { kasToSompi } from '@kasflow/passkey-wallet';
 
 // Connect to network first
 await wallet.connect({ network: 'mainnet' });
@@ -79,20 +91,26 @@ const result = await wallet.sendWithAuth({
 });
 
 console.log('Transaction ID:', result.transactionId);
-console.log('Fee paid:', result.fee);`}</code></pre>
+console.log('Fee paid:', result.fee);`}
+        filename="send-transaction.ts"
+      />
 
       <h2>Balance and Network</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`// Get balance
+      <CodeBlock
+        code={`// Get balance
 const balance = await wallet.getBalance();
 console.log('Available:', balance.available); // in sompi
 console.log('Pending:', balance.pending);
 
 // Switch network
 await wallet.switchNetwork('testnet-10');
-console.log('New address:', wallet.getAddress());`}</code></pre>
+console.log('New address:', wallet.getAddress());`}
+        filename="balance-network.ts"
+      />
 
       <h2>Utility Functions</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import {
+      <CodeBlock
+        code={`import {
   kasToSompi,
   sompiToKas,
   isValidAddress,
@@ -110,7 +128,9 @@ if (isValidAddress('kaspa:qr...')) {
 }
 
 // Format for display
-const display = formatKas(150000000n); // "1.5"`}</code></pre>
+const display = formatKas(150000000n); // "1.5"`}
+        filename="utilities.ts"
+      />
 
       <h2>API Reference</h2>
 

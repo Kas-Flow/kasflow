@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CodeBlock } from '@/components/docs/code-block';
 
 export function SdkWalletConnectorContent() {
   return (
@@ -23,12 +24,17 @@ export function SdkWalletConnectorContent() {
       </div>
 
       <h2>Installation</h2>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto"><code>npm install @kasflow/wallet-connector</code></pre>
+      <CodeBlock
+        code="npm install @kasflow/wallet-connector"
+        language="bash"
+        filename="terminal"
+      />
 
       <h2>Quick Start</h2>
 
       <h3>1. Set Up Provider</h3>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import {
+      <CodeBlock
+        code={`import {
   KaspaWalletProvider,
   passkeyAdapter,
   kaswareAdapter,
@@ -49,10 +55,13 @@ function App() {
       <WalletModal />
     </KaspaWalletProvider>
   );
-}`}</code></pre>
+}`}
+        filename="App.tsx"
+      />
 
       <h3>2. Add Connect Button</h3>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import { ConnectButton } from '@kasflow/wallet-connector/react';
+      <CodeBlock
+        code={`import { ConnectButton } from '@kasflow/wallet-connector/react';
 
 function Navbar() {
   return (
@@ -60,10 +69,13 @@ function Navbar() {
       <ConnectButton showBalance showNetwork />
     </nav>
   );
-}`}</code></pre>
+}`}
+        filename="Navbar.tsx"
+      />
 
       <h3>3. Use Wallet Hook</h3>
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm"><code>{`import { useWallet } from '@kasflow/wallet-connector/react';
+      <CodeBlock
+        code={`import { useWallet } from '@kasflow/wallet-connector/react';
 
 function PaymentPage() {
   const { connected, address, sendTransaction } = useWallet();
@@ -86,7 +98,9 @@ function PaymentPage() {
       <button onClick={handlePay}>Pay 1 KAS</button>
     </div>
   );
-}`}</code></pre>
+}`}
+        filename="PaymentPage.tsx"
+      />
 
       <h2>Available Adapters</h2>
 
