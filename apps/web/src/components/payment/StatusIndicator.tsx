@@ -1,8 +1,9 @@
 'use client';
 
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PAYMENT_STATUS, type PaymentStatus } from '@/lib/constants';
+import { LogoSpinner } from '@/components/ui/logo-spinner';
 
 interface StatusIndicatorProps {
   status: PaymentStatus;
@@ -18,12 +19,12 @@ export function StatusIndicator({
   // Status configurations
   const statusConfig = {
     [PAYMENT_STATUS.IDLE]: {
-      icon: <Loader2 className="h-6 w-6 text-muted" />,
+      icon: <LogoSpinner size="sm" />,
       text: 'Initializing...',
       color: 'text-muted-foreground',
     },
     [PAYMENT_STATUS.INITIALIZING]: {
-      icon: <Loader2 className="h-6 w-6 animate-spin text-kaspa-cyan" />,
+      icon: <LogoSpinner size="md" />,
       text: 'Connecting to network...',
       color: 'text-muted-foreground',
     },
@@ -47,7 +48,7 @@ export function StatusIndicator({
       color: 'text-warning',
     },
     [PAYMENT_STATUS.CONFIRMING]: {
-      icon: <Loader2 className="h-6 w-6 animate-spin text-success" />,
+      icon: <LogoSpinner size="md" />,
       text: 'Confirming...',
       color: 'text-success',
     },

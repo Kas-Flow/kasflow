@@ -8,10 +8,11 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { TransactionReceiptModal } from '@/components/payment/transaction-receipt-modal';
-import { Wallet, Copy, Check, Loader2, Send, Fingerprint } from 'lucide-react';
+import { Wallet, Copy, Check, Send, Fingerprint } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWallet, useConnect } from '@kasflow/wallet-connector/react';
 import { kasToSompi } from '@kasflow/passkey-wallet';
+import { LogoSpinner } from '@/components/ui/logo-spinner';
 
 interface PaymentActionsProps {
   address: string;
@@ -134,7 +135,7 @@ export function PaymentActions({ address, amount, network, memo, onPaymentSent }
     if (isSending) {
       return (
         <>
-          <Loader2 className="mr-2 w-6 h-6 animate-spin" />
+          <LogoSpinner size="sm" className="mr-2" />
           {walletType === 'passkey' ? 'Authenticate to Send...' : 'Confirm in Wallet...'}
         </>
       );

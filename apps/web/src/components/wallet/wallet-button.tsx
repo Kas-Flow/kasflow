@@ -7,10 +7,11 @@
  * Now uses @kasflow/wallet-connector hooks for state management
  */
 
-import { Wallet, Loader2 } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useConnect } from '@kasflow/wallet-connector/react';
 import { WalletPopover } from './wallet-popover';
+import { LogoSpinner } from '@/components/ui/logo-spinner';
 
 // =============================================================================
 // WalletButton Component
@@ -28,7 +29,7 @@ export function WalletButton() {
   if (connecting) {
     return (
       <Button disabled variant="outline">
-        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        <LogoSpinner size="sm" className="mr-2" />
         Connecting...
       </Button>
     );

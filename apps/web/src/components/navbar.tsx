@@ -7,6 +7,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Home, PlusCircle, BookOpen, Menu, X } from 'lucide-react';
 import { WalletButton } from '@/components/wallet';
@@ -39,8 +40,8 @@ export function Navbar() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-neo-green rounded-lg flex items-center justify-center border-2 border-border shadow-[3px_3px_0px_0px_var(--border)] group-hover:shadow-[4px_4px_0px_0px_var(--border)] group-hover:-translate-y-0.5 transition-all">
-                <span className="text-black font-black text-lg">K</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center group-hover:-translate-y-0.5 transition-all">
+                <Image src="/logo.svg" alt="KasFlow" width={40} height={40} className="w-10 h-10" />
               </div>
               <span className="text-xl font-black tracking-tight hidden sm:block">KasFlow</span>
             </Link>
@@ -100,8 +101,8 @@ export function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="flex items-center gap-3"
           >
-            <div className="w-10 h-10 bg-neo-green rounded-lg flex items-center justify-center border-2 border-border">
-              <span className="text-black font-black text-lg">K</span>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+              <Image src="/logo.svg" alt="KasFlow" width={40} height={40} className="w-10 h-10" />
             </div>
             <span className="text-xl font-black tracking-tight">KasFlow</span>
           </Link>

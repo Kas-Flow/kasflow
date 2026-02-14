@@ -1,0 +1,28 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inverted K - Using FILLED SHAPES for better PNG conversion -->
+
+  <!-- Main vertical bar of inverted K (LEFT SIDE) -->
+  <rect x="47" y="35" width="20" height="130" fill="#70C7BA" rx="10"/>
+
+  <!-- Upper diagonal (inverted K - top right stroke) -->
+  <!-- Using a thick line as a polygon/path with fill -->
+  <path d="M 55 90 L 67 95 L 125 40 L 125 50 L 67 105 L 55 100 Z" fill="#70C7BA"/>
+
+  <!-- Lower diagonal (inverted K - bottom right stroke) -->
+  <path d="M 55 100 L 67 95 L 125 150 L 125 160 L 67 105 L 55 110 Z" fill="#70C7BA"/>
+
+  <!-- Flow lines (representing fast payment flow) -->
+  <!-- Top flow line -->
+  <rect x="135" y="55" width="45" height="10" fill="#49A8E8" rx="5"/>
+  <rect x="138" y="67" width="30" height="7" fill="#49A8E8" rx="3.5" opacity="0.7"/>
+
+  <!-- Middle flow line with arrow -->
+  <rect x="135" y="95" width="50" height="10" fill="#49A8E8" rx="5"/>
+  <!-- Arrow tip -->
+  <path d="M 185 100 L 175 93 L 175 107 Z" fill="#49A8E8"/>
+  <rect x="138" y="107" width="30" height="7" fill="#49A8E8" rx="3.5" opacity="0.7"/>
+
+  <!-- Bottom flow line -->
+  <rect x="135" y="145" width="45" height="10" fill="#49A8E8" rx="5"/>
+  <rect x="138" y="130" width="30" height="7" fill="#49A8E8" rx="3.5" opacity="0.7"/>
+</svg>

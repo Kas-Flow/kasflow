@@ -1,6 +1,19 @@
-# @kasflow/wallet-connector
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/kasflow-logo.png" alt="KasFlow Logo" width="100" height="100"/>
 
-A multi-wallet connector library for Kaspa dApps. Provides a unified interface for connecting to different wallet types with React hooks and components included.
+  # @kasflow/wallet-connector
+
+  **Multi-wallet connector library for Kaspa dApps.**
+
+  Provides a unified interface for connecting to different wallet types with React hooks and components included.
+
+  [![npm version](https://img.shields.io/npm/v/@kasflow/wallet-connector)](https://www.npmjs.com/package/@kasflow/wallet-connector)
+  [![npm downloads](https://img.shields.io/npm/dm/@kasflow/wallet-connector)](https://www.npmjs.com/package/@kasflow/wallet-connector)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
+---
 
 ## Architecture
 

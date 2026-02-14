@@ -3,18 +3,18 @@
 
 :root {
   /* KasFlow Neo-Brutalism Palette (Light) */
-  --background: #fff5f0;        /* Warm Cream */
+  --background: #f0f9ff;        /* Very Light Sky Blue - Different from cream! */
   --foreground: #000000;        /* Black */
-  
+
   --neo-cyan: #22d3ee;          /* Vibrant Cyan */
   --neo-green: #bef264;         /* Lime Green */
   --neo-pink: #f472b6;          /* Hot Pink */
   --neo-yellow: #fde68a;        /* Yellow */
   --neo-purple: #a78bfa;        /* Purple */
-  
+
   --border: #000000;            /* Pitch Black Borders */
   --shadow-color: #000000;      /* Shadow Color */
-  
+
   --card: #ffffff;
   --card-foreground: #000000;
   --popover: #ffffff;
@@ -24,7 +24,7 @@
   --secondary: #22d3ee;
   --secondary-foreground: #000000;
   --muted: #f1f5f9;
-  --muted-foreground: #475569;  /* slate-600 for better contrast on cream */
+  --muted-foreground: #475569;
   --accent: #f472b6;
   --accent-foreground: #000000;
   --destructive: #ef4444;

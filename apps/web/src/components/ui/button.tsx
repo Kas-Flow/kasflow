@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-neo-cyan border-2 border-border text-black shadow-[4px_4px_0px_0px_var(--shadow-color)] hover:bg-neo-cyan/90 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[5px_5px_0px_0px_var(--shadow-color)]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        neo: "bg-black text-white border-2 border-border shadow-[4px_4px_0px_0px_#bef264] hover:shadow-[6px_6px_0px_0px_#bef264] hover:-translate-y-0.5 hover:-translate-x-0.5",
+        neo: "bg-black text-white border-2 border-border shadow-[4px_4px_0px_0px_#bef264] hover:bg-neo-pink hover:shadow-[6px_6px_0px_0px_#bef264] hover:-translate-y-0.5 hover:-translate-x-0.5",
       },
       size: {
         default: "h-10 px-5 py-2",

@@ -9,8 +9,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import { Loader2, Link as LinkIcon } from 'lucide-react';
+import { Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { LogoSpinner } from '@/components/ui/logo-spinner';
 import {
   Form,
   FormControl,
@@ -174,7 +175,7 @@ export function PaymentForm() {
         >
           {form.formState.isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <LogoSpinner size="sm" className="mr-2" />
               Creating Payment Link...
             </>
           ) : (

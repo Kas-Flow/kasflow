@@ -1,6 +1,18 @@
-# KasFlow
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/kasflow-logo.png" alt="KasFlow Logo" width="120" height="120"/>
 
-Open-source payment toolkit for Kaspa blockchain featuring the first passkey-powered wallet SDK.
+  # KasFlow
+
+  **Open-source payment toolkit for Kaspa blockchain featuring the first passkey-powered wallet SDK.**
+
+  [![npm](https://img.shields.io/npm/v/@kasflow/passkey-wallet)](https://www.npmjs.com/package/@kasflow/passkey-wallet)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+  [Website](https://kasflow.app) • [Demo](https://kasflow.app) • [Documentation](https://kasflow.app/docs)
+
+</div>
+
+---
 
 ## Technical Overview
 

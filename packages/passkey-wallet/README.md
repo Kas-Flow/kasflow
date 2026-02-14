@@ -1,6 +1,19 @@
-# @kasflow/passkey-wallet
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/kasflow-logo.png" alt="KasFlow Logo" width="100" height="100"/>
 
-Passkey-powered wallet SDK for [Kaspa blockchain](https://kaspa.org). Create and manage Kaspa wallets using device biometrics (Face ID, Touch ID, Windows Hello, etc.) with no seed phrases to remember.
+  # @kasflow/passkey-wallet
+
+  **Passkey-powered wallet SDK for [Kaspa blockchain](https://kaspa.org).**
+
+  Create and manage Kaspa wallets using device biometrics (Face ID, Touch ID, Windows Hello, etc.) with no seed phrases to remember.
+
+  [![npm version](https://img.shields.io/npm/v/@kasflow/passkey-wallet)](https://www.npmjs.com/package/@kasflow/passkey-wallet)
+  [![npm downloads](https://img.shields.io/npm/dm/@kasflow/passkey-wallet)](https://www.npmjs.com/package/@kasflow/passkey-wallet)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
+---
 
 ## Architecture
 
