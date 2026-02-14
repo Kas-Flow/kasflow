@@ -96,7 +96,7 @@ export function IntroductionContent() {
       </ol>
 
       <DocImage
-        src="/1_connect-wallet.jpg"
+        src="/1_connect-wallet.png"
         alt="KasFlow homepage with Connect Wallet button highlighted"
         caption="Get started by connecting your wallet from the homepage"
       />
