@@ -14,9 +14,15 @@
 
 ---
 
-## Technical Overview
+## Problem & Solution
 
-![Technical Deep Dive](https://raw.githubusercontent.com/Kas-Flow/assets/master/technical-deep-dive.svg)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/problem-diagram.svg" alt="Problem Diagram" width="100%"/>
+</div>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/solution-architecture.svg" alt="Solution Architecture" width="100%"/>
+</div>
 
 ## Packages
 
@@ -24,6 +30,20 @@
 |---------|-------------|-----|
 | [@kasflow/passkey-wallet](./packages/passkey-wallet) | Passkey-powered wallet SDK | [![npm](https://img.shields.io/npm/v/@kasflow/passkey-wallet)](https://www.npmjs.com/package/@kasflow/passkey-wallet) |
 | [@kasflow/wallet-connector](./packages/wallet-connector) | Multi-wallet connector with React hooks | [![npm](https://img.shields.io/npm/v/@kasflow/wallet-connector)](https://www.npmjs.com/package/@kasflow/wallet-connector) |
+
+## Architecture
+
+### Passkey Wallet SDK
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/passkey-wallet-architecture.svg" alt="Passkey Wallet Architecture" width="100%"/>
+</div>
+
+### Wallet Connector
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/wallet-connector-architecture.svg" alt="Wallet Connector Architecture" width="100%"/>
+</div>
 
 ## Installation
 
@@ -39,23 +59,17 @@ npm install @kasflow/wallet-connector
 
 ### Passkey Wallet
 
-Create and manage Kaspa wallets using device biometrics (Face ID, Touch ID, Windows Hello):
-
 ```typescript
 import { PasskeyWallet } from '@kasflow/passkey-wallet';
 
-// Create a new wallet
 const result = await PasskeyWallet.create({ network: 'mainnet' });
 const wallet = result.data;
 
-// Get address and send KAS
 console.log('Address:', wallet.getAddress());
 await wallet.sendWithAuth({ to: 'kaspa:qr...', amount: 100000000n });
 ```
 
 ### Wallet Connector (React)
-
-Connect to multiple wallet types with pre-built components:
 
 ```tsx
 import {
@@ -63,7 +77,6 @@ import {
   passkeyAdapter,
   kaswareAdapter,
   ConnectButton,
-  WalletModal,
 } from '@kasflow/wallet-connector/react';
 
 function App() {
@@ -76,11 +89,37 @@ function App() {
       }}
     >
       <ConnectButton />
-      <WalletModal />
     </KaspaWalletProvider>
   );
 }
 ```
+
+## Technical Deep Dive
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Kas-Flow/assets/master/technical-deep-dive.svg" alt="Technical Deep Dive" width="100%"/>
+</div>
+
+## Key Features
+
+- **Passkey Authentication**: WebAuthn-based wallet using device biometrics (Face ID, Touch ID, Windows Hello)
+- **Deterministic Key Derivation**: SHA-256 from passkey credentials to secp256k1 private keys
+- **Multi-Wallet Support**: Unified interface for passkey wallets and browser extensions (KasWare)
+- **React Integration**: Pre-built hooks and components for wallet connection
+- **Instant Confirmations**: Real-time payment detection using WebSocket connections
+- **Type-Safe**: Full TypeScript support with strict mode
+- **No Backend Required**: Client-side only, no data stored on servers
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript (strict mode)
+- TailwindCSS v4
+- Framer Motion
+- WebAuthn (FIDO2)
+- @kluster/kaspa-wasm-web
+- @noble/curves (secp256k1)
 
 ## Project Structure
 
@@ -108,6 +147,16 @@ pnpm run dev
 # Type check
 pnpm run typecheck
 ```
+
+## Documentation
+
+Full documentation available at [kasflow.app/docs](https://kasflow.app/docs):
+
+- Getting Started
+- Create Payment Links
+- Send Payments
+- Passkey Wallet SDK
+- Wallet Connector SDK
 
 ## License
 
