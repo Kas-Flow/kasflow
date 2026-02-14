@@ -1,11 +1,22 @@
-[phases.setup]
-nixPkgs = ["nodejs_22", "pnpm-9"]
-
+# Install phase - include all package.json files for workspace resolution
 [phases.install]
-cmd = "pnpm install --frozen-lockfile"
+cmds = ["pnpm install --frozen-lockfile"]
+cacheDirectories = ["node_modules", ".pnpm-store"]
+onlyIncludeFiles = [
+  "package.json",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "packages/passkey-wallet/package.json",
+  "packages/wallet-connector/package.json",
+  "apps/web/package.json"
+]
 
+# Build phase - build only the web app
 [phases.build]
-cmd = "pnpm --filter web build"
+dependsOn = ["install"]
+cmds = ["pnpm --filter web build"]
+cacheDirectories = [".next/cache"]
 
+# Start configuration
 [start]
-cmd = "pnpm --filter web start"
+cmd = "cd apps/web && pnpm start"
