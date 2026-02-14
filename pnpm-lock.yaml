@@ -181,8 +181,8 @@ importers:
   packages/wallet-connector:
     dependencies:
       '@kasflow/passkey-wallet':
-        specifier: workspace:*
-        version: link:../passkey-wallet
+        specifier: ^0.1.0
+        version: 0.1.2
     devDependencies:
       '@types/node':
         specifier: ^22.0.0
@@ -703,6 +703,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@kasflow/passkey-wallet@0.1.2':
+    resolution: {integrity: sha512-jwBKHJnUVUD8IiusvNMKxu+YhAMgv7Ti6QXLWGhslWfsP/RbrbwImnj2jom9QKYlHP58ytXFB9ya0vZrBkT2NA==}
 
   '@kluster/kaspa-address@0.1.5':
     resolution: {integrity: sha512-JirWMhZNnePzHL+4cFRN0YNK0NRWBa0cS8M2iuuzRsFnKQ9aJVZd6jIQEeMAdJxMNnIOwjTKloceLjRV6PUhBw==}
@@ -3883,6 +3886,15 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@kasflow/passkey-wallet@0.1.2':
+    dependencies:
+      '@kluster/kaspa-address': 0.1.5
+      '@noble/hashes': 1.8.0
+      '@onekeyfe/kaspa-wasm': 1.0.2
+      '@simplewebauthn/browser': 13.2.2
+      cbor-x: 1.6.0
+      idb-keyval: 6.2.2
 
   '@kluster/kaspa-address@0.1.5': {}
 
