@@ -19,4 +19,4 @@ cacheDirectories = [".next/cache"]
 
 # Start configuration
 [start]
-cmd = "cd apps/web && pnpm start"
+cmd = "pnpm --filter web start"
