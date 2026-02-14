@@ -10,8 +10,32 @@
 /** Relying Party name displayed to user during passkey registration */
 export const WEBAUTHN_RP_NAME = 'KasFlow';
 
-/** Relying Party ID - should match your domain in production */
-export const WEBAUTHN_RP_ID = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+/**
+ * Relying Party ID - determines passkey scope and wallet address consistency
+ *
+ * CRITICAL: This value determines which domains share the same passkey and wallet address.
+ * Different rpId = Different passkey = Different Kaspa address!
+ *
+ * Configuration:
+ * - Can be set via NEXT_PUBLIC_WEBAUTHN_RP_ID environment variable
+ * - Defaults to 'kas-flow.xyz' (KasFlow's production domain)
+ *
+ * Example:
+ * - Set NEXT_PUBLIC_WEBAUTHN_RP_ID=yourdomain.com to use your own domain
+ * - All yourdomain.com and *.yourdomain.com will share the same wallet
+ *
+ * IMPORTANT NOTES:
+ * 1. Users get the SAME wallet address on all subdomains of the rpId
+ *    (e.g., kas-flow.xyz, staging.kas-flow.xyz, app.kas-flow.xyz)
+ * 2. localhost CANNOT use a production domain as rpId (WebAuthn security)
+ * 3. Changing rpId after users create wallets = users lose access to old wallets!
+ * 4. Choose your rpId carefully and NEVER change it in production
+ *
+ * @see https://www.w3.org/TR/webauthn-2/#relying-party-identifier
+ */
+export const WEBAUTHN_RP_ID =
+  (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_WEBAUTHN_RP_ID) ||
+  'kas-flow.xyz';
 
 /** Timeout for WebAuthn operations in milliseconds */
 export const WEBAUTHN_TIMEOUT_MS = 60_000;

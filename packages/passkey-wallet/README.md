@@ -39,6 +39,43 @@ yarn add @kasflow/passkey-wallet
 
 That's it - all dependencies are bundled.
 
+## Configuration
+
+### WebAuthn Relying Party ID (rpId)
+
+**CRITICAL:** The `rpId` determines which domains share the same passkey and wallet address.
+
+**By default**, the SDK uses `kas-flow.xyz` as the rpId. You can customize this for your own domain:
+
+```bash
+# In your .env or .env.local file
+NEXT_PUBLIC_WEBAUTHN_RP_ID=yourdomain.com
+```
+
+**Important Notes:**
+
+1. **Same Wallet Across Subdomains**: All `yourdomain.com` and `*.yourdomain.com` will share the same wallet address
+2. **Different rpId = Different Wallet**: Changing the rpId creates a completely different wallet!
+3. **Production Warning**: NEVER change rpId after users create wallets - they'll lose access!
+4. **Localhost Limitation**: `localhost` CANNOT use a production domain as rpId (WebAuthn security requirement)
+
+**Example:**
+```env
+# All these domains share the same wallet:
+# - kas-flow.xyz
+# - app.kas-flow.xyz
+# - staging.kas-flow.xyz
+NEXT_PUBLIC_WEBAUTHN_RP_ID=kas-flow.xyz
+```
+
+**When to customize:**
+- You're building your own app and want wallets tied to YOUR domain
+- You need production and staging to share wallets (use parent domain)
+
+**When NOT to customize:**
+- You're integrating KasFlow into your app (use default)
+- You're testing locally (use default, localhost wallets are separate)
+
 ## Quick Start
 
 ### Create a New Wallet

@@ -1,6 +1,6 @@
 {
   "name": "@kasflow/passkey-wallet",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Passkey-powered wallet SDK for Kaspa blockchain",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
