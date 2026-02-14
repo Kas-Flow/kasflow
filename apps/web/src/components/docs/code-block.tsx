@@ -61,7 +61,7 @@ export function CodeBlock({ code, language = 'typescript', filename }: CodeBlock
       const segments: Array<{ start: number; end: number; type: string; value: string }> = [];
 
       // Find all keywords
-      let match;
+      let match: RegExpExecArray | null;
       while ((match = keywords.exec(line)) !== null) {
         segments.push({ start: match.index, end: match.index + match[0].length, type: 'keyword', value: match[0] });
       }
@@ -91,7 +91,7 @@ export function CodeBlock({ code, language = 'typescript', filename }: CodeBlock
       // Find all functions
       while ((match = functions.exec(line)) !== null) {
         // Check if it's not already a keyword or property
-        const isKeyword = segments.some(s => s.start <= match.index && s.end >= match.index + match[0].length && s.type === 'keyword');
+        const isKeyword = segments.some(s => s.start <= match!.index && s.end >= match!.index + match![0].length && s.type === 'keyword');
         if (!isKeyword) {
           segments.push({ start: match.index, end: match.index + match[0].length, type: 'function', value: match[0] });
         }
