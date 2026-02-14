@@ -58,7 +58,7 @@
   --secondary: #06b6d4;
   --secondary-foreground: #000000;
   --muted: #27272a;
-  --muted-foreground: #b4b4b4;  /* Light gray for good visibility on dark cards */
+  --muted-foreground: #e5e5e5;  /* Much lighter gray for better visibility on dark cards */
   --accent: #db2777;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
