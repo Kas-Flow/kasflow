@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DocImage } from '../doc-image';
+import { CodeBlock } from '../code-block';
 
 export function CreatePaymentContent() {
   return (
@@ -113,7 +114,11 @@ export function CreatePaymentContent() {
       <h2>Understanding Payment URLs</h2>
 
       <p>KasFlow payment links look like this:</p>
-      <pre className="text-sm"><code>https://kasflow.app/pay/eyJ0byI6Imthc3BhOnFyLi4uIn0</code></pre>
+      <CodeBlock
+        code="https://kasflow.app/pay/eyJ0byI6Imthc3BhOnFyLi4uIn0"
+        language="bash"
+        filename="payment-url"
+      />
 
       <p>The URL encodes:</p>
       <ul>
