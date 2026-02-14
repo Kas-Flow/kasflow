@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Check, Copy } from 'lucide-react';
 
 interface CodeBlockProps {
@@ -44,7 +44,7 @@ export function CodeBlock({ code, language = 'typescript', filename }: CodeBlock
       }
 
       // Parse and highlight the line
-      const tokens: JSX.Element[] = [];
+      const tokens: ReactNode[] = [];
       let currentPos = 0;
 
       // Keywords
@@ -101,7 +101,7 @@ export function CodeBlock({ code, language = 'typescript', filename }: CodeBlock
       segments.sort((a, b) => a.start - b.start);
 
       // Build the highlighted line
-      const result: JSX.Element[] = [];
+      const result: ReactNode[] = [];
       let pos = 0;
 
       for (const segment of segments) {
