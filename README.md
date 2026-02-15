@@ -158,6 +158,10 @@ Full documentation available at [kas-flow.xyz/docs](https://kas-flow.xyz/docs):
 - Passkey Wallet SDK
 - Wallet Connector SDK
 
+## AI Attribution
+
+Claude (Anthropic) assisted with code generation, debugging WASM bundling issues, and documentation.
+
 ## License
 
 MIT
