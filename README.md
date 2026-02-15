@@ -162,6 +162,8 @@ Full documentation available at [kas-flow.xyz/docs](https://kas-flow.xyz/docs):
 
 Claude (Anthropic) assisted with code generation, debugging WASM bundling issues, and documentation.
 
+**Methodology**: Iterative development with AI pair programming - human-driven design decisions, AI-assisted implementation and debugging.
+
 ## License
 
 MIT
